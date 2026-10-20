@@ -1,0 +1,129 @@
+import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { Menu, X, PlayCircle } from "lucide-react";
+
+export function Header() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const location = useLocation();
+  const isHome = location.pathname === "/";
+
+  const closeMobileMenu = () => setMobileMenuOpen(false);
+
+  return (
+    <header className="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/95 backdrop-blur-md">
+      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        {/* Brand Wordmark */}
+        <Link
+          to="/"
+          className="group flex items-center gap-3 transition-opacity hover:opacity-90 focus-visible:rounded-md"
+          aria-label="Back to Basics with Big Ron — Home"
+          onClick={closeMobileMenu}
+        >
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#0A3161] text-white shadow-sm transition-transform group-hover:scale-105">
+            <PlayCircle className="h-6 w-6 text-white" aria-hidden="true" />
+          </div>
+          <div className="flex flex-col">
+            <span className="font-heading text-2xl sm:text-3xl tracking-wider text-[#0A3161] uppercase leading-none">
+              Back to Basics
+            </span>
+            <span className="text-xs font-semibold uppercase tracking-widest text-[#B31942]">
+              with Big Ron
+            </span>
+          </div>
+        </Link>
+
+        {/* Desktop Navigation */}
+        <nav
+          className="hidden md:flex items-center gap-8"
+          aria-label="Main Navigation"
+        >
+          <a
+            href={isHome ? "#watch" : "/#watch"}
+            className="text-sm font-semibold text-slate-700 transition-colors hover:text-[#0A3161] focus-visible:rounded-md"
+          >
+            Watch the Series
+          </a>
+          <a
+            href={isHome ? "#about" : "/#about"}
+            className="text-sm font-semibold text-slate-700 transition-colors hover:text-[#0A3161] focus-visible:rounded-md"
+          >
+            Meet Big Ron
+          </a>
+          <a
+            href={isHome ? "#join" : "/#join"}
+            className="text-sm font-semibold text-slate-700 transition-colors hover:text-[#0A3161] focus-visible:rounded-md"
+          >
+            Join the List
+          </a>
+          <Link
+            to="/chest-day/"
+            className="inline-flex items-center justify-center rounded-md bg-[#0A3161] px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:bg-[#08274d] hover:shadow focus-visible:ring-2 focus-visible:ring-[#0A3161]"
+          >
+            Watch Ep. 1
+          </Link>
+        </nav>
+
+        {/* Mobile menu trigger */}
+        <div className="flex items-center gap-3 md:hidden">
+          <Link
+            to="/chest-day/"
+            className="inline-flex items-center justify-center rounded-md bg-[#0A3161] px-3 py-1.5 text-xs font-semibold text-white"
+          >
+            Watch Ep. 1
+          </Link>
+          <button
+            type="button"
+            className="inline-flex items-center justify-center rounded-md p-2 text-slate-700 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#0A3161]"
+            aria-expanded={mobileMenuOpen}
+            aria-label="Toggle navigation menu"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? (
+              <X className="h-6 w-6" aria-hidden="true" />
+            ) : (
+              <Menu className="h-6 w-6" aria-hidden="true" />
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Drawer */}
+      {mobileMenuOpen && (
+        <div className="md:hidden border-b border-slate-200 bg-white px-4 pt-3 pb-6 shadow-xl animate-in slide-in-from-top-2 duration-200">
+          <nav className="flex flex-col space-y-4">
+            <a
+              href={isHome ? "#watch" : "/#watch"}
+              className="text-base font-semibold text-slate-800 hover:text-[#0A3161] py-1 border-b border-slate-100"
+              onClick={closeMobileMenu}
+            >
+              Watch the Series
+            </a>
+            <a
+              href={isHome ? "#about" : "/#about"}
+              className="text-base font-semibold text-slate-800 hover:text-[#0A3161] py-1 border-b border-slate-100"
+              onClick={closeMobileMenu}
+            >
+              Meet Big Ron
+            </a>
+            <a
+              href={isHome ? "#join" : "/#join"}
+              className="text-base font-semibold text-slate-800 hover:text-[#0A3161] py-1 border-b border-slate-100"
+              onClick={closeMobileMenu}
+            >
+              Join the List
+            </a>
+            <div className="pt-2">
+              <Link
+                to="/chest-day/"
+                className="flex w-full items-center justify-center rounded-md bg-[#0A3161] py-2.5 text-sm font-bold text-white shadow"
+                onClick={closeMobileMenu}
+              >
+                Watch Episode 1 →
+              </Link>
+            </div>
+          </nav>
+        </div>
+      )}
+    </header>
+  );
+}
