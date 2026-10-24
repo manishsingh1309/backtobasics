@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, PlayCircle } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -19,9 +19,11 @@ export function Header() {
           aria-label="Back to Basics with Big Ron — Home"
           onClick={closeMobileMenu}
         >
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#0A3161] text-white shadow-sm transition-transform group-hover:scale-105">
-            <PlayCircle className="h-6 w-6 text-white" aria-hidden="true" />
-          </div>
+          <img
+            src="/images/ron/bigronjones.png"
+            alt="Big Ron Jones"
+            className="h-10 w-10 select-none rounded-full ring-2 ring-[#be1e2f] object-cover object-center shadow-sm transition-transform group-hover:scale-105"
+          />
           <div className="flex flex-col">
             <span className="font-heading text-2xl sm:text-3xl tracking-wider text-[#0A3161] uppercase leading-none">
               Back to Basics

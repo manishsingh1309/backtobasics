@@ -23,6 +23,28 @@ declare global {
 // Global in-memory log of events for QA inspection bar
 export const eventLog: AnalyticsEvent[] = [];
 
+const CENTRAL_ENDPOINT = "https://bigronjones-2ah1.onrender.com/api/track/event";
+
+function getVid(): string {
+  if (typeof window === "undefined") return "server";
+  let v = localStorage.getItem("brj_visitor_id");
+  if (!v) {
+    v = `vid_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+    localStorage.setItem("brj_visitor_id", v);
+  }
+  return v;
+}
+
+function getSid(): string {
+  if (typeof window === "undefined") return "server";
+  let s = localStorage.getItem("brj_tracking_session_id");
+  if (!s) {
+    s = `sid_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+    localStorage.setItem("brj_tracking_session_id", s);
+  }
+  return s;
+}
+
 function recordEvent(name: string, payload: Record<string, unknown> = {}) {
   const item: AnalyticsEvent = {
     event: name,
@@ -45,6 +67,41 @@ function recordEvent(name: string, payload: Record<string, unknown> = {}) {
 
     // Dispatch DOM custom event for live QA debugger
     window.dispatchEvent(new CustomEvent("b2b_analytics", { detail: item }));
+
+    // Send to central BigRonJones telemetry endpoint
+    try {
+      const centralPayload = {
+        event_id: `evt_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`,
+        event_name: name,
+        event_timestamp: item.timestamp,
+        anonymous_visitor_id: getVid(),
+        session_id: getSid(),
+        site_id: "backtobasicswithbigron.com",
+        page_path: window.location.pathname,
+        page_title: document.title,
+        event_source: "browser",
+        consent_state: "granted",
+        schema_version: "2.0",
+        siteOrigin: "backtobasicswithbigron.com",
+        eventName: name,
+        metadata: {
+          ...payload,
+          url: window.location.href,
+        },
+      };
+
+      const jsonStr = JSON.stringify(centralPayload);
+      if (typeof navigator !== "undefined" && typeof navigator.sendBeacon === "function") {
+        const blob = new Blob([jsonStr], { type: "application/json" });
+        if (!navigator.sendBeacon(CENTRAL_ENDPOINT, blob)) {
+          fetch(CENTRAL_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: jsonStr, keepalive: true }).catch(() => {});
+        }
+      } else {
+        fetch(CENTRAL_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: jsonStr, keepalive: true }).catch(() => {});
+      }
+    } catch {
+      // Telemetry error must never disrupt video playback
+    }
   }
 
   // Developer console notification
