@@ -2,6 +2,7 @@ import { useState, useId } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { CheckCircle2, AlertCircle, Mail, User, Eye, X } from "lucide-react";
 import { trackSignupAccepted, trackSubscriptionConfirmed } from "@/lib/analytics";
+import BrandName from "@/components/shared/BrandName";
 
 interface EmailSignupSectionProps {
   pageContext?: string;
@@ -65,8 +66,21 @@ export function EmailSignupSection({
       }
       localStorage.setItem("b2b_subscribers", JSON.stringify(existingList));
 
-      // Network latency simulation
-      await new Promise((resolve) => setTimeout(resolve, 600));
+      // If an email provider webhook URL is configured, POST the subscriber payload
+      const webhookUrl = import.meta.env.VITE_EMAIL_WEBHOOK_URL;
+      if (webhookUrl) {
+        const res = await fetch(webhookUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(subscriber),
+        });
+        if (!res.ok) {
+          throw new Error("Provider rejected subscription");
+        }
+      } else {
+        // Network latency simulation for preview mode
+        await new Promise((resolve) => setTimeout(resolve, 500));
+      }
 
       // Fire analytics: ONLY fire on accepted signup, NEVER send email/name
       trackSignupAccepted(pageContext || location.pathname, "back-to-basics");
@@ -264,7 +278,7 @@ export function EmailSignupSection({
             {/* Email Headers */}
             <div className="bg-slate-50 border-b border-slate-200 px-6 py-3 text-xs text-slate-600 space-y-1">
               <div>
-                <strong className="text-slate-800">From:</strong> Big Ron Jones &lt;ron@thebigronjones.com&gt;
+                <strong className="text-slate-800">From:</strong> Big Ron Jones &lt;RonJones@BigRonJones.com&gt;
               </div>
               <div>
                 <strong className="text-slate-800">Subject:</strong> Welcome to Back to Basics with Big Ron
@@ -296,7 +310,7 @@ export function EmailSignupSection({
               <p className="font-semibold text-slate-900 pt-2">Big Ron</p>
 
               <div className="mt-8 pt-4 border-t border-slate-200 text-[11px] text-slate-400">
-                <p>BIGRONJONES® • Practical Advice for Your Real World Goals.®</p>
+                <p><BrandName variant="upper" /> • PRACTICAL ADVICE FOR YOUR REAL WORLD GOALS.®</p>
                 <p className="mt-1">
                   You received this email because you subscribed on backtobasicswithbigron.com.{" "}
                   <span className="underline cursor-pointer">Unsubscribe</span> anytime.

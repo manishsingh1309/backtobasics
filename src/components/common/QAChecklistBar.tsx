@@ -125,6 +125,20 @@ export function QAChecklistBar() {
 
   const verifiedCount = checklist.filter((i) => i.verified).length;
 
+  // Show on preview/development hosts (localhost, Vercel, Netlify previews) or when ?qa=1 is passed
+  const isPreviewHost =
+    typeof window !== "undefined" &&
+    (window.location.hostname.includes("localhost") ||
+      window.location.hostname.includes("127.0.0.1") ||
+      window.location.hostname.includes("vercel.app") ||
+      window.location.hostname.includes("netlify.app") ||
+      window.location.hostname.includes("preview") ||
+      window.location.search.includes("qa=1"));
+
+  if (!isPreviewHost && typeof window !== "undefined" && window.location.hostname === "backtobasicswithbigron.com") {
+    return null;
+  }
+
   return (
     <aside
       className="fixed bottom-4 right-4 z-50 max-w-lg font-sans"

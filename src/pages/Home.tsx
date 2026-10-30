@@ -3,6 +3,7 @@ import { Play, ArrowRight, ExternalLink, Dumbbell } from "lucide-react";
 import { SEO } from "@/components/common/SEO";
 import { EpisodeCard } from "@/components/common/EpisodeCard";
 import { EmailSignupSection } from "@/components/common/EmailSignupSection";
+import BrandName from "@/components/shared/BrandName";
 import { EPISODES, PLAYLIST_URL, CHANNEL_URL } from "@/data/seriesData";
 import { trackYouTubeOutboundClick, trackWatchEpisodeClick } from "@/lib/analytics";
 
@@ -17,9 +18,9 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-b from-slate-50 via-white to-white py-16 sm:py-24 lg:py-28 border-b border-slate-100">
-        {/* Subtle decorative background pattern */}
+        {/* Subtle decorative athletic grid pattern */}
         <div
-          className="pointer-events-none absolute inset-0 -z-10 opacity-30 [mask-image:radial-gradient(ellipse_at_center,white,transparent)]"
+          className="pointer-events-none absolute inset-0 -z-10 opacity-25 [mask-image:radial-gradient(ellipse_at_center,white,transparent)]"
           style={{
             backgroundImage: `radial-gradient(circle at 1px 1px, #0A3161 1px, transparent 0)`,
             backgroundSize: "32px 32px",
@@ -28,23 +29,23 @@ export default function Home() {
         />
 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-8">
+          <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-10">
             {/* Left copy column */}
             <div className="lg:col-span-7 text-center lg:text-left">
               {/* Eyebrow badge */}
-              <div className="inline-flex items-center gap-2 rounded-full bg-[#eff6ff] px-3.5 py-1.5 text-xs font-mono font-bold tracking-wider text-[#0A3161] border border-blue-200/60 mb-6">
-                <Dumbbell className="h-3.5 w-3.5 text-[#0A3161]" />
-                <span>OFFICIAL FOUR-PART WORKOUT SERIES</span>
+              <div className="inline-flex items-center gap-2 rounded-full bg-[#eff6ff] px-4 py-1.5 text-xs font-mono font-bold tracking-wider text-[#0A3161] border border-blue-200/70 mb-6 shadow-sm">
+                <Dumbbell className="h-3.5 w-3.5 text-[#B31942]" />
+                <span>OFFICIAL 4-PART WORKOUT SERIES</span>
               </div>
 
-              {/* Wordmark / H1 (Single H1 on page as strictly required) */}
+              {/* Wordmark / H1 (Single H1 on page verbatim) */}
               <h1 className="font-heading text-5xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight text-[#0A3161] uppercase leading-[0.95]">
                 Back to Basics <br />
                 <span className="text-[#B31942]">with Big Ron</span>
               </h1>
 
               {/* Subtitle verbatim */}
-              <p className="mt-4 text-xl sm:text-2xl font-bold tracking-tight text-slate-900">
+              <p className="mt-5 text-xl sm:text-2xl font-bold tracking-tight text-slate-900">
                 Build muscle. Make the basics count.
               </p>
 
@@ -53,14 +54,14 @@ export default function Home() {
                 You don’t need to make training more complicated to take it seriously. Join me for a four-part workout series covering chest, back and shoulders, legs, and arms. Watch the videos, learn from the demonstrations, and bring a clear focus to your next workout.
               </p>
 
-              {/* Action Buttons: Prominent Watch Episode 1 on mobile + Secondary Join */}
+              {/* Action Buttons: Prominent Watch Episode 1 on mobile + Secondary Join List */}
               <div className="mt-8 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
                 <Link
                   to="/chest-day/"
                   onClick={() => trackWatchEpisodeClick(1, "Episode 1: Chest Day")}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-[#0A3161] px-8 py-4 text-base sm:text-lg font-bold text-white shadow-lg transition-all hover:bg-[#08274d] hover:shadow-xl active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0A3161]"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 rounded-lg bg-[#0A3161] px-8 py-4 text-base sm:text-lg font-bold text-white shadow-lg transition-all hover:bg-[#08274d] hover:shadow-xl active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0A3161]"
                 >
-                  <Play className="h-5 w-5 fill-current" aria-hidden="true" />
+                  <Play className="h-5 w-5 fill-current text-white" aria-hidden="true" />
                   <span>Watch Episode 1</span>
                   <ArrowRight className="h-5 w-5" aria-hidden="true" />
                 </Link>
@@ -76,11 +77,11 @@ export default function Home() {
 
             {/* Right visual featured card */}
             <div className="lg:col-span-5">
-              <div className="relative mx-auto max-w-md lg:max-w-none rounded-2xl bg-slate-900 p-2 shadow-2xl ring-1 ring-slate-900/10">
+              <div className="relative mx-auto max-w-md lg:max-w-none rounded-2xl bg-white p-2.5 shadow-2xl ring-1 ring-slate-900/10 border border-slate-100">
                 <Link
                   to="/chest-day/"
                   onClick={() => trackWatchEpisodeClick(1, "Episode 1: Chest Day")}
-                  className="group relative block aspect-video overflow-hidden rounded-xl bg-slate-800"
+                  className="group relative block aspect-video overflow-hidden rounded-xl bg-slate-900"
                 >
                   <img
                     src="/thumbnails/ep1-chest.jpg"
@@ -98,7 +99,7 @@ export default function Home() {
                   </div>
                   <div className="absolute bottom-3 left-3 right-3 text-white">
                     <p className="font-heading text-xl">Episode 1: Chest Day</p>
-                    <p className="text-xs text-slate-300">5 Exercises to Build Your Chest (9:59)</p>
+                    <p className="text-xs text-slate-300 font-mono">5 Exercises to Build Your Chest (9:59)</p>
                   </div>
                 </Link>
               </div>
@@ -133,14 +134,14 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Playlist Link (verbatim text) */}
+          {/* Playlist Link (verbatim text: Watch the Full Series on YouTube) */}
           <div className="mt-12 text-center">
             <a
               href={PLAYLIST_URL}
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => trackYouTubeOutboundClick("playlist", PLAYLIST_URL)}
-              className="inline-flex items-center gap-2 rounded-lg border border-[#0A3161] bg-white px-6 py-3 text-sm font-bold text-[#0A3161] transition-all hover:bg-[#eff6ff] hover:shadow-sm"
+              className="inline-flex items-center gap-2 rounded-lg border-2 border-[#0A3161] bg-white px-7 py-3 text-sm font-bold text-[#0A3161] transition-all hover:bg-[#eff6ff] hover:shadow"
             >
               <span>Watch the Full Series on YouTube</span>
               <ExternalLink className="h-4 w-4" aria-hidden="true" />
@@ -159,19 +160,19 @@ export default function Home() {
           <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
             {/* Approved portrait photo */}
             <div className="lg:col-span-5 order-2 lg:order-1">
-              <div className="relative mx-auto max-w-sm overflow-hidden rounded-2xl bg-white p-2 shadow-xl border border-slate-200">
+              <div className="relative mx-auto max-w-sm overflow-hidden rounded-2xl bg-white p-3 shadow-xl border border-slate-200">
                 <img
-                  src="/ron/ron-portrait.webp"
+                  src="/ron/meetbigronjones.png"
                   alt="Big Ron Jones"
                   loading="lazy"
                   className="h-auto w-full rounded-xl object-cover"
                 />
                 <div className="mt-3 px-3 py-2 text-center border-t border-slate-100">
-                  <p className="font-heading text-xl text-[#0A3161] uppercase tracking-wide">
+                  <p className="font-heading text-2xl text-[#0A3161] uppercase tracking-wide">
                     Big Ron Jones
                   </p>
                   <p className="text-xs font-mono uppercase tracking-wider text-[#B31942]">
-                    BIGRONJONES®
+                    <BrandName variant="upper" />
                   </p>
                 </div>
               </div>
@@ -179,7 +180,7 @@ export default function Home() {
 
             {/* Content verbatim */}
             <div className="lg:col-span-7 order-1 lg:order-2 text-center lg:text-left">
-              <div className="inline-flex items-center gap-2 rounded-full bg-blue-100/70 px-3 py-1 text-xs font-mono font-bold uppercase tracking-wider text-[#0A3161] mb-4">
+              <div className="inline-flex items-center gap-2 rounded-full bg-blue-100/70 px-3.5 py-1 text-xs font-mono font-bold uppercase tracking-wider text-[#0A3161] mb-4">
                 THE COACH & PHILOSOPHY
               </div>
 
@@ -202,7 +203,7 @@ export default function Home() {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => trackYouTubeOutboundClick("channel", CHANNEL_URL)}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-[#B31942] px-6 py-3.5 text-base font-bold text-white shadow transition-colors hover:bg-[#8e1032]"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-[#B31942] px-7 py-3.5 text-base font-bold text-white shadow transition-colors hover:bg-[#8e1032]"
                 >
                   <span>Visit My YouTube Channel</span>
                   <ExternalLink className="h-4 w-4" aria-hidden="true" />
@@ -210,7 +211,7 @@ export default function Home() {
 
                 <Link
                   to="/chest-day/"
-                  className="w-full sm:w-auto inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-6 py-3.5 text-base font-bold text-slate-800 transition-colors hover:border-[#0A3161] hover:text-[#0A3161]"
+                  className="w-full sm:w-auto inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-7 py-3.5 text-base font-bold text-slate-800 transition-colors hover:border-[#0A3161] hover:text-[#0A3161]"
                 >
                   Start With Episode 1
                 </Link>

@@ -13,7 +13,7 @@
 
 The official home for Big Ron Jones’ existing four-part workout series has been built from the ground up to provide a clean, high-performance, athletic-luxury digital home. The entire site strictly adheres to:
 1. **Verbatim Copy:** Zero improvised headlines, claims, offers, or exercise advice.
-2. **Official Branding:** Direct adherence to `BRAND_DECK.md` with Old Glory Blue (`#0A3161`), Old Glory Red (`#B31942`), Pure White (`#FFFFFF`), and slate neutrals.
+2. **Official Branding:** Direct 1:1 adherence to `BIGRONJONES®` branding with Old Glory Blue (`#0A3161`), Crimson / Old Glory Red (`#B31942`), Pure White (`#FFFFFF`), and slate neutrals.
 3. **Typography:** `Bebas Neue` for titles/impact, `DM Sans` for body copy, and `DM Mono` for metadata/eyebrows.
 4. **Focused Scope:** Dedicated solely to the four-part series and email signup (no store, no paid funnel, no custom accounts).
 5. **Mobile-First Experience:** 100% fluid and responsive from 375px viewport to 4K displays, with zero horizontal overflow and touch-friendly controls.
@@ -93,6 +93,7 @@ The navigation paths strictly follow Page 4 of the brief:
 - **Success State Message:** *"You’re on the list. Start watching Back to Basics below."* with action button *"Watch Episode 1 →"*.
 
 ### Exact Welcome Email (Configured & Tested in Preview Modal):
+- **Sender:** `Big Ron Jones <RonJones@BigRonJones.com>`
 - **Subject:** `Welcome to Back to Basics with Big Ron`
 - **Preview text:** `Four episodes. A clear place to start.`
 - **Body:**
@@ -140,6 +141,26 @@ Start here: https://backtobasicswithbigron.com/
 
 - **Hosting / Platform:** Vite / React 19 static bundle ready for Vercel, Netlify, Cloudflare Pages, or Render.
 - **Domain:** Awaiting Ron’s confirmation of `backtobasicswithbigron.com` DNS registrar.
-- **Email Platform:** Configured for Ron's current email provider (ConvertKit / Mailchimp / Resend) using single audience tagging: `source: back-to-basics`.
+- **Email Platform:** Configured for Ron's email provider (ConvertKit / Mailchimp / Klaviyo / Resend) using single audience tagging: `source: back-to-basics`.
 - **Recurring Costs:** $0 hosting on standard static CDN tier; standard domain renewal cost (~$12–15/year).
-- **Admin Access:** Direct repository access and DNS management should remain strictly in Ron’s name; invitations will be sent directly to Ron’s email.
+- **Admin Access:** Direct repository access and DNS management will remain strictly in Ron’s name; invitations will be sent directly to Ron’s email (`RonJones@BigRonJones.com`).
+
+---
+
+## 10. Simple Editing Instructions for Ron
+
+All series content, video IDs, chapters, and timestamps are centralized in a single configuration file:
+- **File Location:** `src/data/seriesData.ts`
+- **To update a YouTube Video ID:** Update the `videoId` string (e.g., `"K9P5o6ehE0Y"`). The embed URL, watch URL, and schema are generated automatically.
+- **To update episode notes or exercises:** Modify the `movements` array or `summary` property for that episode.
+- **To update timestamps/chapters:** Edit the `chapters` array with the `{ time: "MM:SS", title: "..." }` entries.
+- **To update email copy:** The welcome email copy is defined in `src/components/common/EmailSignupSection.tsx`.
+
+---
+
+## 11. Final Action Items for Ron Before Public Launch
+
+1. **Domain Purchase & DNS Access:** Confirm purchase of `backtobasicswithbigron.com` and invite Manish to DNS or point `A` / `CNAME` records.
+2. **Email Provider Connection:** Confirm whether ConvertKit, Mailchimp, or Resend is preferred for the live webhook endpoint.
+3. **Episode Notes Approval:** Review the included workout notes and timestamps for each episode.
+4. **Google Search Console:** Add Ron's Google Account as owner once the domain goes live.

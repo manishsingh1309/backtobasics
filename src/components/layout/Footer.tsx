@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import BrandName from "@/components/shared/BrandName";
 import { CHANNEL_URL } from "@/data/seriesData";
 import { trackYouTubeOutboundClick } from "@/lib/analytics";
 
@@ -6,61 +7,121 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-slate-200 bg-slate-900 text-slate-300">
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="flex flex-col items-center justify-between gap-8 md:flex-row">
-          {/* Brand info */}
-          <div className="flex flex-col items-center md:items-start text-center md:text-left">
-            <span className="font-heading text-2xl tracking-widest text-white uppercase">
-              Back to Basics with Big Ron
-            </span>
-            <span className="text-xs font-mono tracking-widest uppercase text-slate-400 mt-1">
-              A BIGRONJONES® Production • PRACTICAL ADVICE FOR YOUR REAL WORLD GOALS.®
-            </span>
+    <footer className="relative overflow-hidden border-t border-slate-200 bg-[#FFFFFF] pt-14 pb-12 text-slate-900">
+      {/* Signature BigRonJones® Background Watermark (Identical to bigronjones site) */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute bottom-2 left-0 right-0 select-none whitespace-nowrap text-center font-heading leading-none text-slate-200/40"
+        style={{
+          fontSize: "clamp(3.5rem, 14vw, 16rem)",
+          letterSpacing: "0.02em",
+        }}
+      >
+        BIGRONJONES
+        <span
+          style={{
+            fontSize: "0.30em",
+            verticalAlign: "0.82em",
+            fontWeight: 800,
+            marginLeft: "0.06em",
+            fontFamily: "system-ui, -apple-system, sans-serif",
+          }}
+        >
+          ®
+        </span>
+      </span>
+
+      <div className="relative z-[2] mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+          {/* Brand Col */}
+          <div>
+            <div className="flex items-center gap-3 mb-4">
+              <img
+                src="/brand/main.png"
+                alt="BigRonJones®"
+                className="h-11 w-11 select-none rounded-full ring-2 ring-[#B31942] object-cover object-center shadow-sm"
+              />
+              <div>
+                <span className="font-heading text-2xl tracking-[0.08em] text-[#0A3161] block leading-none">
+                  Back to Basics with Big Ron
+                </span>
+                <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#B31942] font-bold">
+                  A <BrandName variant="upper" /> PRODUCTION
+                </span>
+              </div>
+            </div>
+            <p className="text-sm text-slate-600 leading-relaxed mb-2 font-sans uppercase font-medium tracking-wide">
+              PRACTICAL ADVICE FOR YOUR REAL WORLD GOALS.
+              <span
+                style={{
+                  fontSize: "0.78em",
+                  verticalAlign: "super",
+                  fontWeight: 700,
+                  marginLeft: "0.08em",
+                }}
+              >
+                ®
+              </span>
+            </p>
+            <p className="text-xs text-slate-500 font-mono">
+              Big Ron Jones LLC · 10845 Griffith Peak Dr, Las Vegas, NV 89135
+            </p>
           </div>
 
-          {/* Footer Navigation Links */}
-          <nav
-            className="flex flex-wrap items-center justify-center gap-6 text-sm font-medium"
-            aria-label="Footer Navigation"
-          >
-            <a
-              href={CHANNEL_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-slate-300 transition-colors hover:text-white"
-              onClick={() => trackYouTubeOutboundClick("channel", CHANNEL_URL)}
-            >
-              YouTube
-            </a>
-            <span className="text-slate-600" aria-hidden="true">•</span>
-            <Link
-              to="/privacy/"
-              className="text-slate-300 transition-colors hover:text-white"
-            >
-              Privacy Policy
-            </Link>
-            <span className="text-slate-600" aria-hidden="true">•</span>
-            <a
-              href="mailto:ron@thebigronjones.com?subject=Back%20to%20Basics%20Inquiry"
-              className="text-slate-300 transition-colors hover:text-white"
-            >
-              Contact
-            </a>
-          </nav>
+          {/* Links & Contact Col */}
+          <div className="md:text-right flex flex-col md:items-end justify-between">
+            <div>
+              <h4 className="font-mono text-xs font-bold uppercase tracking-widest text-slate-900 mb-2">
+                Questions & Training Support
+              </h4>
+              <a
+                href="mailto:RonJones@BigRonJones.com?subject=Back%20to%20Basics%20Inquiry"
+                className="text-sm text-[#0A3161] hover:text-[#B31942] font-mono font-medium transition-colors"
+              >
+                RonJones@BigRonJones.com
+              </a>
+            </div>
+
+            {/* Verbatim Footer Links: YouTube | Privacy Policy | Contact */}
+            <div className="mt-6 flex flex-wrap items-center md:justify-end gap-3 text-sm font-semibold text-slate-700">
+              <a
+                href={CHANNEL_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackYouTubeOutboundClick("channel", CHANNEL_URL)}
+                className="hover:text-[#0A3161] transition-colors"
+              >
+                YouTube
+              </a>
+              <span className="text-slate-300" aria-hidden="true">|</span>
+              <Link
+                to="/privacy/"
+                className="hover:text-[#0A3161] transition-colors"
+              >
+                Privacy Policy
+              </Link>
+              <span className="text-slate-300" aria-hidden="true">|</span>
+              <a
+                href="mailto:RonJones@BigRonJones.com?subject=Back%20to%20Basics%20Contact"
+                className="hover:text-[#0A3161] transition-colors"
+              >
+                Contact
+              </a>
+            </div>
+          </div>
         </div>
 
-        {/* Exercise Note */}
-        <div className="mt-8 rounded-lg border border-slate-800 bg-slate-800/60 p-4 text-center">
-          <p className="text-xs leading-relaxed text-slate-400 italic">
+        {/* Exercise Note verbatim from brief */}
+        <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-center">
+          <p className="text-xs leading-relaxed text-slate-600 italic">
             “These videos are educational. Choose exercises and loads appropriate to your experience and health. Stop if you experience pain.”
           </p>
         </div>
 
         {/* Copyright notice */}
-        <div className="mt-8 text-center text-xs text-slate-500">
+        <div className="mt-8 border-t border-slate-200/80 pt-6 text-center text-xs text-slate-500 font-mono">
           <p>
-            © {currentYear} BIGRONJONES®. All rights reserved. Registered Trademark.
+            © {currentYear} Big Ron Jones LLC. All rights reserved. <BrandName variant="upper" /> is a registered trademark of Big Ron Jones LLC.
           </p>
         </div>
       </div>

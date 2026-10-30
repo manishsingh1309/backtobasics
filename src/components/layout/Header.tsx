@@ -1,34 +1,40 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Play } from "lucide-react";
+import BrandName from "@/components/shared/BrandName";
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
-  const isHome = location.pathname === "/";
+  const isHome = location.pathname === "/" || location.pathname === "";
 
   const closeMobileMenu = () => setMobileMenuOpen(false);
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/95 backdrop-blur-md">
+      {/* Top subtle utility strip */}
+      <div className="bg-[#0A3161] px-4 py-1 text-center text-[11px] font-mono font-bold tracking-widest text-white/90 uppercase sm:px-6">
+        <span>A <BrandName variant="upper" /> PRODUCTION · PRACTICAL ADVICE FOR YOUR REAL WORLD GOALS.®</span>
+      </div>
+
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* Brand Wordmark */}
+        {/* Brand Wordmark & Logo */}
         <Link
           to="/"
-          className="group flex items-center gap-3 transition-opacity hover:opacity-90 focus-visible:rounded-md"
+          className="group flex items-center gap-3 transition-opacity hover:opacity-95 focus-visible:rounded-md"
           aria-label="Back to Basics with Big Ron — Home"
           onClick={closeMobileMenu}
         >
           <img
-            src="/images/ron/bigronjones.png"
+            src="/brand/main.png"
             alt="Big Ron Jones"
-            className="h-10 w-10 select-none rounded-full ring-2 ring-[#be1e2f] object-cover object-center shadow-sm transition-transform group-hover:scale-105"
+            className="h-11 w-11 select-none rounded-full ring-2 ring-[#B31942] object-cover object-center shadow-sm transition-transform duration-300 group-hover:scale-105"
           />
           <div className="flex flex-col">
             <span className="font-heading text-2xl sm:text-3xl tracking-wider text-[#0A3161] uppercase leading-none">
               Back to Basics
             </span>
-            <span className="text-xs font-semibold uppercase tracking-widest text-[#B31942]">
+            <span className="text-xs font-bold uppercase tracking-widest text-[#B31942]">
               with Big Ron
             </span>
           </div>
@@ -41,41 +47,43 @@ export function Header() {
         >
           <a
             href={isHome ? "#watch" : "/#watch"}
-            className="text-sm font-semibold text-slate-700 transition-colors hover:text-[#0A3161] focus-visible:rounded-md"
+            className="text-sm font-bold uppercase tracking-wider text-slate-700 transition-colors hover:text-[#0A3161] focus-visible:rounded-md"
           >
             Watch the Series
           </a>
           <a
             href={isHome ? "#about" : "/#about"}
-            className="text-sm font-semibold text-slate-700 transition-colors hover:text-[#0A3161] focus-visible:rounded-md"
+            className="text-sm font-bold uppercase tracking-wider text-slate-700 transition-colors hover:text-[#0A3161] focus-visible:rounded-md"
           >
             Meet Big Ron
           </a>
           <a
             href={isHome ? "#join" : "/#join"}
-            className="text-sm font-semibold text-slate-700 transition-colors hover:text-[#0A3161] focus-visible:rounded-md"
+            className="text-sm font-bold uppercase tracking-wider text-slate-700 transition-colors hover:text-[#0A3161] focus-visible:rounded-md"
           >
             Join the List
           </a>
           <Link
             to="/chest-day/"
-            className="inline-flex items-center justify-center rounded-md bg-[#0A3161] px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:bg-[#08274d] hover:shadow focus-visible:ring-2 focus-visible:ring-[#0A3161]"
+            className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#0A3161] px-5 py-2.5 text-sm font-bold text-white shadow-sm transition-all hover:bg-[#08274d] hover:shadow-md active:scale-95 focus-visible:ring-2 focus-visible:ring-[#0A3161]"
           >
-            Watch Ep. 1
+            <Play className="h-3.5 w-3.5 fill-current text-white" aria-hidden="true" />
+            <span>Watch Episode 1</span>
           </Link>
         </nav>
 
-        {/* Mobile menu trigger */}
-        <div className="flex items-center gap-3 md:hidden">
+        {/* Mobile menu trigger + prominent Watch Episode 1 button */}
+        <div className="flex items-center gap-2.5 md:hidden">
           <Link
             to="/chest-day/"
-            className="inline-flex items-center justify-center rounded-md bg-[#0A3161] px-3 py-1.5 text-xs font-semibold text-white"
+            className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-[#0A3161] px-3.5 py-2 text-xs font-bold text-white shadow-sm"
           >
-            Watch Ep. 1
+            <Play className="h-3 w-3 fill-current text-white" aria-hidden="true" />
+            <span>Watch Ep. 1</span>
           </Link>
           <button
             type="button"
-            className="inline-flex items-center justify-center rounded-md p-2 text-slate-700 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#0A3161]"
+            className="inline-flex items-center justify-center rounded-lg p-2 text-slate-700 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#0A3161]"
             aria-expanded={mobileMenuOpen}
             aria-label="Toggle navigation menu"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -91,25 +99,25 @@ export function Header() {
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-b border-slate-200 bg-white px-4 pt-3 pb-6 shadow-xl animate-in slide-in-from-top-2 duration-200">
+        <div className="md:hidden border-b border-slate-200 bg-white px-5 pt-4 pb-6 shadow-xl animate-in slide-in-from-top-2 duration-200">
           <nav className="flex flex-col space-y-4">
             <a
               href={isHome ? "#watch" : "/#watch"}
-              className="text-base font-semibold text-slate-800 hover:text-[#0A3161] py-1 border-b border-slate-100"
+              className="text-base font-bold uppercase tracking-wider text-slate-800 hover:text-[#0A3161] py-1 border-b border-slate-100"
               onClick={closeMobileMenu}
             >
               Watch the Series
             </a>
             <a
               href={isHome ? "#about" : "/#about"}
-              className="text-base font-semibold text-slate-800 hover:text-[#0A3161] py-1 border-b border-slate-100"
+              className="text-base font-bold uppercase tracking-wider text-slate-800 hover:text-[#0A3161] py-1 border-b border-slate-100"
               onClick={closeMobileMenu}
             >
               Meet Big Ron
             </a>
             <a
               href={isHome ? "#join" : "/#join"}
-              className="text-base font-semibold text-slate-800 hover:text-[#0A3161] py-1 border-b border-slate-100"
+              className="text-base font-bold uppercase tracking-wider text-slate-800 hover:text-[#0A3161] py-1 border-b border-slate-100"
               onClick={closeMobileMenu}
             >
               Join the List
@@ -117,10 +125,11 @@ export function Header() {
             <div className="pt-2">
               <Link
                 to="/chest-day/"
-                className="flex w-full items-center justify-center rounded-md bg-[#0A3161] py-2.5 text-sm font-bold text-white shadow"
+                className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#0A3161] py-3 text-sm font-bold text-white shadow-md active:bg-[#08274d]"
                 onClick={closeMobileMenu}
               >
-                Watch Episode 1 →
+                <Play className="h-4 w-4 fill-current text-white" aria-hidden="true" />
+                <span>Watch Episode 1 → /chest-day/</span>
               </Link>
             </div>
           </nav>

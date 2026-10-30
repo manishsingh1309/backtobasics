@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft, Shield, Mail, Video, Eye, Lock } from "lucide-react";
 import { SEO } from "@/components/common/SEO";
+import BrandName from "@/components/shared/BrandName";
 
 export default function Privacy() {
   return (
@@ -35,14 +36,14 @@ export default function Privacy() {
                 Privacy Policy
               </h1>
               <p className="mt-2 text-sm text-slate-500 font-mono">
-                Last updated: October 2026 • BIGRONJONES®
+                Last updated: October 2026 • Big Ron Jones LLC · <BrandName variant="upper" />
               </p>
             </div>
 
             {/* Introduction */}
             <div className="prose prose-slate max-w-none text-slate-700 space-y-6 text-sm sm:text-base leading-relaxed">
               <p>
-                This privacy policy describes how <strong>Back to Basics with Big Ron</strong>, an official production of <strong>BIGRONJONES®</strong>, collects, uses, and protects your information when you visit this website (backtobasicswithbigron.com) or subscribe to our email updates.
+                This privacy policy describes how <strong>Back to Basics with Big Ron</strong>, an official production of <strong>Big Ron Jones LLC (<BrandName variant="upper" />)</strong>, collects, uses, and protects your information when you visit this website (backtobasicswithbigron.com) or subscribe to our email updates.
               </p>
               <p>
                 Our philosophy is simple: we collect only what is strictly necessary to share practical training content and provide a clean viewing experience. We never sell, rent, or trade your personal information.
@@ -55,17 +56,21 @@ export default function Privacy() {
                   <span>1. Website Operator & Contact</span>
                 </h2>
                 <p className="text-sm text-slate-700">
-                  This site is operated by <strong>BIGRONJONES®</strong>. If you have questions about your information or wish to be removed from our records, you can contact us at:
+                  This website is operated by:
                 </p>
-                <p className="mt-2 text-sm font-medium text-slate-900">
-                  Email:{" "}
-                  <a
-                    href="mailto:ron@thebigronjones.com"
-                    className="text-[#0A3161] underline hover:text-[#08274d]"
-                  >
-                    ron@thebigronjones.com
-                  </a>
-                </p>
+                <div className="mt-2 text-sm text-slate-900 font-mono space-y-1">
+                  <p className="font-bold">Big Ron Jones LLC</p>
+                  <p>10845 Griffith Peak Dr, Las Vegas, NV 89135</p>
+                  <p>
+                    Email:{" "}
+                    <a
+                      href="mailto:RonJones@BigRonJones.com"
+                      className="text-[#0A3161] font-semibold underline hover:text-[#08274d]"
+                    >
+                      RonJones@BigRonJones.com
+                    </a>
+                  </p>
+                </div>
               </div>
 
               {/* 2. Collected Fields & Email Purpose */}
@@ -84,7 +89,7 @@ export default function Privacy() {
                   <strong>First Name (Optional):</strong> Used to personalize communication if provided.
                 </li>
                 <li>
-                  <strong>Signup Source & Context:</strong> We record which page or episode you signed up on (e.g. <code>source: back-to-basics</code>) so we know where our audience discovers the series.
+                  <strong>Signup Source & Context:</strong> We record which page or episode you signed up on (e.g. <code>source: back-to-basics</code>, <code>page: /chest-day/</code>) so we know where our audience discovers the series.
                 </li>
               </ul>
               <p>
@@ -97,7 +102,7 @@ export default function Privacy() {
                 <span>3. Embedded YouTube Videos</span>
               </h2>
               <p>
-                The workout series is hosted on YouTube and embedded on our episode pages using YouTube’s privacy-enhanced domain (<code>youtube-nocookie.com</code>). According to YouTube’s documentation, this mode means YouTube does not set tracking cookies on your device when you load the page until you actively press play on the video player.
+                The workout series is hosted on YouTube and embedded on our episode pages using YouTube’s privacy-enhanced domain (<code>youtube-nocookie.com</code>). In accordance with YouTube’s documentation, this mode means YouTube does not set tracking cookies on your device when you load the page until you actively press play on the video player.
               </p>
               <p>
                 When you choose to play a video, your browser communicates directly with YouTube’s servers, subject to Google’s standard Privacy Policy.
@@ -125,10 +130,10 @@ export default function Privacy() {
               <p>
                 Alternatively, you may email{" "}
                 <a
-                  href="mailto:ron@thebigronjones.com"
+                  href="mailto:RonJones@BigRonJones.com?subject=Unsubscribe%20Request"
                   className="text-[#0A3161] underline hover:text-[#08274d]"
                 >
-                  ron@thebigronjones.com
+                  RonJones@BigRonJones.com
                 </a>{" "}
                 with "Unsubscribe" in the subject line, and we will remove your email address from our database promptly.
               </p>
