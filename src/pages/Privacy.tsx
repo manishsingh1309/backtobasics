@@ -43,7 +43,7 @@ export default function Privacy() {
             {/* Introduction */}
             <div className="prose prose-slate max-w-none text-slate-700 space-y-6 text-sm sm:text-base leading-relaxed">
               <p>
-                This privacy policy describes how <strong>Back to Basics with Big Ron</strong>, an official production of <strong>Big Ron Jones LLC (<BrandName variant="upper" />)</strong>, collects, uses, and protects your information when you visit this website (backtobasicswithbigron.com) or subscribe to our email updates.
+                This privacy policy describes how <strong>Back to Basics with Big Ron</strong>, an official production of <strong>Big Ron Jones LLC (<BrandName variant="upper" />)</strong>, collects, uses, and protects your information when you visit this website (backtobasics.fit) or subscribe to our email updates.
               </p>
               <p>
                 Our philosophy is simple: we collect only what is strictly necessary to share practical training content and provide a clean viewing experience. We never sell, rent, or trade your personal information.

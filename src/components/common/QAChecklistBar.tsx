@@ -135,7 +135,13 @@ export function QAChecklistBar() {
       window.location.hostname.includes("preview") ||
       window.location.search.includes("qa=1"));
 
-  if (!isPreviewHost && typeof window !== "undefined" && window.location.hostname === "backtobasicswithbigron.com") {
+  const isProductionDomain =
+    typeof window !== "undefined" &&
+    (window.location.hostname.includes("backtobasics.fit") ||
+     window.location.hostname.includes("backtobasics.com") ||
+     window.location.hostname.includes("backtobasicswithbigron.com"));
+
+  if (!isPreviewHost && isProductionDomain) {
     return null;
   }
 

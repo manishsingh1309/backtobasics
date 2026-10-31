@@ -24,7 +24,7 @@ services:
 
     envVars:
       - key: VITE_SITE_URL
-        value: https://backtobasicswithbigron.com
+        value: https://backtobasics.fit
       # Optional email provider webhook / API endpoint (e.g. https://bigronjones-2ah1.onrender.com/api/newsletter)
       - key: VITE_EMAIL_WEBHOOK_URL
         sync: false

@@ -140,18 +140,18 @@ const sitemapContent = fs.readFileSync(path.join(ROOT, "public/sitemap.xml"), "u
 const robotsContent = fs.readFileSync(path.join(ROOT, "public/robots.txt"), "utf8");
 
 const requiredUrls = [
-  "https://backtobasicswithbigron.com/",
-  "https://backtobasicswithbigron.com/chest-day/",
-  "https://backtobasicswithbigron.com/back-and-shoulders/",
-  "https://backtobasicswithbigron.com/leg-day/",
-  "https://backtobasicswithbigron.com/arm-day/",
-  "https://backtobasicswithbigron.com/privacy/",
+  "https://backtobasics.fit/",
+  "https://backtobasics.fit/chest-day/",
+  "https://backtobasics.fit/back-and-shoulders/",
+  "https://backtobasics.fit/leg-day/",
+  "https://backtobasics.fit/arm-day/",
+  "https://backtobasics.fit/privacy/",
 ];
 
 for (const url of requiredUrls) {
   assert(sitemapContent.includes(url), `Sitemap includes: ${url}`);
 }
-assert(robotsContent.includes("Sitemap: https://backtobasicswithbigron.com/sitemap.xml"), "robots.txt references sitemap.xml");
+assert(robotsContent.includes("Sitemap: https://backtobasics.fit/sitemap.xml"), "robots.txt references sitemap.xml");
 
 // 7. Check Local HTTP Server Response
 console.log("\n7. Checking Dev Server HTTP Response:");

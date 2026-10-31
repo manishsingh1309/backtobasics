@@ -308,7 +308,7 @@ export function EmailSignupSection({
                   onClick={() => setShowWelcomePreview(false)}
                   className="text-[#0A3161] underline font-medium"
                 >
-                  https://backtobasicswithbigron.com/#watch
+                  https://backtobasics.fit/#watch
                 </Link>
               </p>
               <p>
@@ -319,7 +319,7 @@ export function EmailSignupSection({
               <div className="mt-8 pt-4 border-t border-slate-200 text-[11px] text-slate-400">
                 <p><BrandName variant="upper" /> • PRACTICAL ADVICE FOR YOUR REAL WORLD GOALS.®</p>
                 <p className="mt-1">
-                  You received this email because you subscribed on backtobasicswithbigron.com.{" "}
+                  You received this email because you subscribed on backtobasics.fit.{" "}
                   <span className="underline cursor-pointer">Unsubscribe</span> anytime.
                 </p>
               </div>

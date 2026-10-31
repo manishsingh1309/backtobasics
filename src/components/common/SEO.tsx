@@ -10,7 +10,7 @@ interface SEOProps {
   episode?: Episode;
 }
 
-const BASE_URL = "https://backtobasicswithbigron.com";
+const BASE_URL = import.meta.env.VITE_SITE_URL || "https://backtobasics.fit";
 
 export function SEO({ title, description, canonicalPath, episode }: SEOProps) {
   const location = useLocation();
