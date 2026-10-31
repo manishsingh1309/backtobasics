@@ -66,19 +66,26 @@ export function EmailSignupSection({
       }
       localStorage.setItem("b2b_subscribers", JSON.stringify(existingList));
 
-      // If an email provider webhook URL is configured, POST the subscriber payload
-      const webhookUrl = import.meta.env.VITE_EMAIL_WEBHOOK_URL;
+      // If an email provider webhook URL is configured or running on production, POST subscriber payload
+      const webhookUrl =
+        import.meta.env.VITE_EMAIL_WEBHOOK_URL ||
+        (typeof window !== "undefined" &&
+        window.location.hostname !== "localhost" &&
+        window.location.hostname !== "127.0.0.1"
+          ? "/api/newsletter"
+          : "");
+
       if (webhookUrl) {
         const res = await fetch(webhookUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(subscriber),
         });
-        if (!res.ok) {
+        if (!res.ok && res.status !== 200) {
           throw new Error("Provider rejected subscription");
         }
       } else {
-        // Network latency simulation for preview mode
+        // Network latency simulation for local dev preview mode
         await new Promise((resolve) => setTimeout(resolve, 500));
       }
 
