@@ -47,7 +47,7 @@ export default function EpisodeDetail({ episode }: EpisodeDetailProps) {
           {/* Header & Exact Intro */}
           <header className="mb-8">
             <div className="flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-[#B31942] mb-2">
-              <span>Back to Basics</span>
+              <span>Back to Basics with Big Ron Jones®</span>
               <span>•</span>
               <span>Episode {episode.id} of 4</span>
             </div>
@@ -68,7 +68,7 @@ export default function EpisodeDetail({ episode }: EpisodeDetailProps) {
             <div className="video-responsive-container shadow-2xl ring-1 ring-slate-900/10">
               <iframe
                 src={`${episode.embedUrl}?rel=0&modestbranding=1&playsinline=1`}
-                title={`${episode.h1} - Back to Basics with Big Ron`}
+                title={`${episode.h1} - Back to Basics with Big Ron Jones`}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
                 loading="eager"

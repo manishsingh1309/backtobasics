@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
-import { Play, ArrowRight, ExternalLink, Dumbbell } from "lucide-react";
+import { Play, ArrowRight, ExternalLink, Dumbbell, ShieldCheck } from "lucide-react";
 import { SEO } from "@/components/common/SEO";
 import { EpisodeCard } from "@/components/common/EpisodeCard";
 import { EmailSignupSection } from "@/components/common/EmailSignupSection";
+import { CredibilityStrip } from "@/components/common/CredibilityStrip";
 import BrandName from "@/components/shared/BrandName";
 import { EPISODES, PLAYLIST_URL, CHANNEL_URL } from "@/data/seriesData";
 import { trackYouTubeOutboundClick, trackWatchEpisodeClick } from "@/lib/analytics";
@@ -38,10 +39,12 @@ export default function Home() {
                 <span>OFFICIAL 4-PART WORKOUT SERIES</span>
               </div>
 
-              {/* Wordmark / H1 (Single H1 on page verbatim) */}
+              {/* Wordmark / H1 */}
               <h1 className="font-heading text-5xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight text-[#0A3161] uppercase leading-[0.95]">
                 Back to Basics <br />
-                <span className="text-[#B31942]">with Big Ron</span>
+                <span className="text-[#B31942]">
+                  with <BrandName variant="upper" />
+                </span>
               </h1>
 
               {/* Subtitle verbatim */}
@@ -54,7 +57,7 @@ export default function Home() {
                 You don’t need to make training more complicated to take it seriously. Join me for a four-part workout series covering chest, back and shoulders, legs, and arms. Watch the videos, learn from the demonstrations, and bring a clear focus to your next workout.
               </p>
 
-              {/* Action Buttons: Prominent Watch Episode 1 on mobile + Secondary Join List */}
+              {/* Action Buttons */}
               <div className="mt-8 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
                 <Link
                   to="/chest-day/"
@@ -72,6 +75,18 @@ export default function Home() {
                 >
                   Join the Email List
                 </a>
+              </div>
+
+              {/* Trust Subtext */}
+              <div className="mt-6 flex flex-wrap items-center justify-center lg:justify-start gap-3 text-xs font-mono font-medium text-slate-500">
+                <span className="inline-flex items-center gap-1">
+                  <ShieldCheck className="h-3.5 w-3.5 text-[#0A3161]" />
+                  20+ Years Coaching
+                </span>
+                <span>•</span>
+                <span>4 Free Complete Sessions</span>
+                <span>•</span>
+                <span>No Subscription Required</span>
               </div>
             </div>
 
@@ -107,6 +122,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Credibility Strip */}
+      <CredibilityStrip />
 
       {/* Series Section / #watch */}
       <section
@@ -167,12 +185,15 @@ export default function Home() {
                   loading="lazy"
                   className="h-auto w-full rounded-xl object-cover"
                 />
-                <div className="mt-3 px-3 py-2 text-center border-t border-slate-100">
+                <div className="mt-4 px-3 py-2 text-center border-t border-slate-100">
                   <p className="font-heading text-2xl text-[#0A3161] uppercase tracking-wide">
                     Big Ron Jones
                   </p>
-                  <p className="text-xs font-mono uppercase tracking-wider text-[#B31942]">
-                    <BrandName variant="upper" />
+                  <p className="text-xs font-mono uppercase tracking-wider text-[#B31942] font-bold">
+                    <BrandName variant="upper" /> · FOUNDER & HEAD COACH
+                  </p>
+                  <p className="mt-1 text-[11px] font-mono text-slate-500">
+                    Big Ron Jones LLC · Las Vegas, NV
                   </p>
                 </div>
               </div>
@@ -195,6 +216,23 @@ export default function Home() {
                 <p>
                   I’m Big Ron Jones. My approach is practical: understand the basics, train with purpose, and build habits you can keep. Back to Basics gives you a look at how I train and explain the work. Start with an episode, then stay connected for more training content.
                 </p>
+              </div>
+
+              {/* Coaching pillars */}
+              <div className="mt-6 grid grid-cols-2 gap-3 text-left">
+                <div className="rounded-lg bg-white border border-slate-200 p-3 shadow-xs">
+                  <p className="font-mono text-xs font-bold text-[#0A3161] uppercase tracking-wider">Experience</p>
+                  <p className="text-sm text-slate-700 font-medium mt-0.5">20+ Years Coaching Adults 35+</p>
+                </div>
+                <div className="rounded-lg bg-white border border-slate-200 p-3 shadow-xs">
+                  <p className="font-mono text-xs font-bold text-[#0A3161] uppercase tracking-wider">Direct Access</p>
+                  <a
+                    href="mailto:RonJones@BigRonJones.com"
+                    className="text-sm text-[#0A3161] hover:text-[#B31942] font-medium mt-0.5 block truncate"
+                  >
+                    RonJones@BigRonJones.com
+                  </a>
+                </div>
               </div>
 
               <div className="mt-8 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">

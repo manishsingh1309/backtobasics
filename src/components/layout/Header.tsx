@@ -12,9 +12,11 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/95 backdrop-blur-md">
-      {/* Top subtle utility strip */}
-      <div className="bg-[#0A3161] px-4 py-1 text-center text-[11px] font-mono font-bold tracking-widest text-white/90 uppercase sm:px-6">
-        <span>A <BrandName variant="upper" /> PRODUCTION · PRACTICAL ADVICE FOR YOUR REAL WORLD GOALS.®</span>
+      {/* Top utility strip — Practical Advice for Your Real World Goals.® only */}
+      <div className="bg-[#0A3161] py-1.5 px-4 text-center">
+        <p className="font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.25em] text-white font-medium">
+          PRACTICAL ADVICE FOR YOUR REAL WORLD GOALS.<span style={{ fontSize: "0.78em", verticalAlign: "super", fontWeight: 700, marginLeft: "0.08em" }}>®</span>
+        </p>
       </div>
 
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -22,20 +24,20 @@ export function Header() {
         <Link
           to="/"
           className="group flex items-center gap-3 transition-opacity hover:opacity-95 focus-visible:rounded-md"
-          aria-label="Back to Basics with Big Ron — Home"
+          aria-label="Back to Basics with Big Ron Jones — Home"
           onClick={closeMobileMenu}
         >
           <img
-            src="/brand/main.png"
+            src="/ron/profiles-headshot.jpg"
             alt="Big Ron Jones"
-            className="h-11 w-11 select-none rounded-full ring-2 ring-[#B31942] object-cover object-center shadow-sm transition-transform duration-300 group-hover:scale-105"
+            className="h-11 w-11 sm:h-12 sm:w-12 select-none rounded-full ring-2 ring-[#0A3161] object-cover object-center shadow-sm transition-transform duration-300 group-hover:scale-105"
           />
           <div className="flex flex-col">
             <span className="font-heading text-2xl sm:text-3xl tracking-wider text-[#0A3161] uppercase leading-none">
               Back to Basics
             </span>
-            <span className="text-xs font-bold uppercase tracking-widest text-[#B31942]">
-              with Big Ron
+            <span className="font-mono text-[10px] sm:text-[11.5px] font-bold uppercase tracking-[0.16em] text-[#B31942] leading-tight flex items-center gap-1">
+              WITH <BrandName variant="upper" />
             </span>
           </div>
         </Link>
@@ -55,7 +57,7 @@ export function Header() {
             href={isHome ? "#about" : "/#about"}
             className="text-sm font-bold uppercase tracking-wider text-slate-700 transition-colors hover:text-[#0A3161] focus-visible:rounded-md"
           >
-            Meet Big Ron
+            Meet Big Ron Jones
           </a>
           <a
             href={isHome ? "#join" : "/#join"}
@@ -113,7 +115,7 @@ export function Header() {
               className="text-base font-bold uppercase tracking-wider text-slate-800 hover:text-[#0A3161] py-1 border-b border-slate-100"
               onClick={closeMobileMenu}
             >
-              Meet Big Ron
+              Meet Big Ron Jones
             </a>
             <a
               href={isHome ? "#join" : "/#join"}

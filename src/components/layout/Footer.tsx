@@ -37,16 +37,16 @@ export function Footer() {
           <div>
             <div className="flex items-center gap-3 mb-4">
               <img
-                src="/brand/main.png"
+                src="/ron/profiles-headshot.jpg"
                 alt="BigRonJones®"
-                className="h-11 w-11 select-none rounded-full ring-2 ring-[#B31942] object-cover object-center shadow-sm"
+                className="h-11 w-11 select-none rounded-full ring-2 ring-[#0A3161] object-cover object-center shadow-sm"
               />
               <div>
                 <span className="font-heading text-2xl tracking-[0.08em] text-[#0A3161] block leading-none">
-                  Back to Basics with Big Ron
+                  Back to Basics with <BrandName variant="upper" />
                 </span>
                 <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#B31942] font-bold">
-                  A <BrandName variant="upper" /> PRODUCTION
+                  OFFICIAL WORKOUT SERIES · LAS VEGAS, NV
                 </span>
               </div>
             </div>
