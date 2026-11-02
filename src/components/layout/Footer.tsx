@@ -20,11 +20,12 @@ export function Footer() {
         BIGRONJONES
         <span
           style={{
-            fontSize: "0.30em",
-            verticalAlign: "0.82em",
-            fontWeight: 800,
+            fontSize: "0.22em",
+            verticalAlign: "2.25em",
+            fontWeight: 700,
             marginLeft: "0.06em",
             fontFamily: "system-ui, -apple-system, sans-serif",
+            display: "inline-block",
           }}
         >
           ®
@@ -54,10 +55,11 @@ export function Footer() {
               PRACTICAL ADVICE FOR YOUR REAL WORLD GOALS.
               <span
                 style={{
-                  fontSize: "0.78em",
-                  verticalAlign: "super",
+                  fontSize: "0.45em",
+                  verticalAlign: "1.4em",
                   fontWeight: 700,
                   marginLeft: "0.08em",
+                  display: "inline-block",
                 }}
               >
                 ®

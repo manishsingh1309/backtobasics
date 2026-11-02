@@ -167,7 +167,7 @@ export function EmailSignupSection({
 
               {isConfirmationRequired ? (
                 <p className="mt-4 text-base font-medium text-emerald-900">
-                  Check your inbox to confirm your email address. Once confirmed, you’ll be on the BigRonJones® list.
+                  Check your inbox to confirm your email address. Once confirmed, you’ll be on the <BrandName variant="mixed" /> list.
                 </p>
               ) : (
                 <p className="mt-4 text-base font-medium text-emerald-900">
@@ -332,14 +332,16 @@ export function EmailSignupSection({
                 <button
                   type="submit"
                   disabled={loading}
+                  aria-label="JOIN THE BIGRONJONES® LIST"
                   className="w-full rounded-lg bg-[#0A3161] py-3.5 px-6 text-base font-bold text-white shadow-md transition-all hover:bg-[#08274d] active:bg-[#061f3d] disabled:opacity-70 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0A3161]"
                 >
-                  {loading ? "Joining..." : "JOIN THE BIGRONJONES® LIST"}
+                  {loading ? "Joining..." : <>JOIN THE <BrandName variant="upper" /> LIST</>}
                 </button>
 
                 {/* Consent text */}
                 <p className="text-xs text-slate-500 leading-relaxed text-center sm:text-left mt-3">
-                  By subscribing, you agree to receive Back to Basics updates and training emails from BigRonJones®. You can unsubscribe anytime. Read our{" "}
+                  {/* By subscribing, you agree to receive Back to Basics updates and training emails from BigRonJones®. You can unsubscribe anytime. Read our */}
+                  By subscribing, you agree to receive Back to Basics updates and training emails from <BrandName variant="mixed" />. You can unsubscribe anytime. Read our{" "}
                   <Link
                     to="/privacy/"
                     className="text-[#0A3161] underline hover:text-[#08274d] font-medium"
@@ -384,10 +386,11 @@ export function EmailSignupSection({
             {/* Email Headers */}
             <div className="bg-slate-50 border-b border-slate-200 px-6 py-3 text-xs text-slate-600 space-y-1">
               <div>
-                <strong className="text-slate-800">From:</strong> BigRonJones® &lt;Coaching@BigRonJones.com&gt;
+                <strong className="text-slate-800">From:</strong> <BrandName variant="mixed" /> &lt;Coaching@BigRonJones.com&gt;
               </div>
               <div>
-                <strong className="text-slate-800">Subject:</strong> Welcome to Back to Basics with BigRonJones®
+                {/* Welcome to Back to Basics with BigRonJones® */}
+                <strong className="text-slate-800">Subject:</strong> Welcome to Back to Basics with <BrandName variant="mixed" />
               </div>
               <div>
                 <strong className="text-slate-800">Preview text:</strong> Four episodes. A clear place to start.

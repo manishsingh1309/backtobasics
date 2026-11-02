@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Play, Clock, ExternalLink, X, Users2 } from "lucide-react";
 import { HIS_AND_HER_VIDEOS, HIS_AND_HER_PLAYLIST_URL, BonusVideo } from "@/data/seriesData";
 import { trackYouTubeOutboundClick } from "@/lib/analytics";
+import BrandName from "@/components/shared/BrandName";
 
 export function HisAndHerSection() {
   const [activeVideo, setActiveVideo] = useState<BonusVideo | null>(null);
@@ -25,7 +26,7 @@ export function HisAndHerSection() {
             className="font-heading text-3xl sm:text-4xl lg:text-5xl text-[#0A3161] uppercase tracking-wide leading-tight"
           >
             HIS & HER WORKOUT ROUTINE <br className="hidden sm:inline" />
-            <span className="text-[#B31942]">| BigRonJones® & Sue</span>
+            <span className="text-[#B31942]">| <BrandName variant="mixed" /> & Sue</span>
           </h2>
 
           <p className="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">

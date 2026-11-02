@@ -16,7 +16,7 @@ export function Header() {
       {/* Top utility strip — Practical Advice for Your Real World Goals.® only */}
       <div className="bg-[#0A3161] py-1.5 px-4 text-center">
         <p className="font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.25em] text-white font-medium">
-          PRACTICAL ADVICE FOR YOUR REAL WORLD GOALS.<span style={{ fontSize: "0.78em", verticalAlign: "super", fontWeight: 700, marginLeft: "0.08em" }}>®</span>
+          PRACTICAL ADVICE FOR YOUR REAL WORLD GOALS.<span style={{ fontSize: "0.45em", verticalAlign: "1.4em", fontWeight: 700, marginLeft: "0.08em", display: "inline-block" }}>®</span>
         </p>
       </div>
 
@@ -162,7 +162,7 @@ export function Header() {
               className="text-base font-bold uppercase tracking-wider text-slate-800 hover:text-[#0A3161] py-1 border-b border-slate-100"
               onClick={closeMobileMenu}
             >
-              Meet BigRonJones®
+              Meet <BrandName variant="mixed" />
             </a>
             <a
               href={isHome ? "#join" : "/#join"}

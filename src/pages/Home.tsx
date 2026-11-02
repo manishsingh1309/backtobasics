@@ -253,8 +253,9 @@ export default function Home() {
               </h2>
 
               <div className="mt-6 space-y-4 text-base sm:text-lg text-slate-700 leading-relaxed">
+                {/* I’m BigRonJones®. */}
                 <p>
-                  I’m BigRonJones®. My approach is practical: understand the basics, train with purpose, and build habits you can keep. Back to Basics gives you a look at how I train and explain the work. Start with an episode, then stay connected for more training content.
+                  I’m <BrandName variant="mixed" />. My approach is practical: understand the basics, train with purpose, and build habits you can keep. Back to Basics gives you a look at how I train and explain the work. Start with an episode, then stay connected for more training content.
                 </p>
               </div>
 

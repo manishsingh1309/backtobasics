@@ -175,7 +175,7 @@ export default function EpisodeDetail({ episode }: EpisodeDetailProps) {
               </h2>
 
               <p className="mt-4 text-base sm:text-lg text-slate-700 max-w-2xl mx-auto leading-relaxed">
-                You've completed all four foundational episodes. Now keep building your momentum — watch our partner workout collection, join the BigRonJones® email list for training content, or get personalized guidance for your unique goals.
+                You've completed all four foundational episodes. Now keep building your momentum — watch our partner workout collection, join the <BrandName variant="mixed" /> email list for training content, or get personalized guidance for your unique goals.
               </p>
 
               {/* Three CTA Buttons */}
@@ -249,7 +249,7 @@ export default function EpisodeDetail({ episode }: EpisodeDetailProps) {
                     className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-lg border-2 border-[#0A3161] bg-[#eff6ff] px-5 py-3 text-sm font-bold text-[#0A3161] hover:bg-blue-100 transition"
                   >
                     <Mail className="h-4 w-4" />
-                    <span>Join the BigRonJones® List</span>
+                    <span>Join the <BrandName variant="mixed" /> List</span>
                   </a>
                 </div>
               )}

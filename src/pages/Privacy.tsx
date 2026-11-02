@@ -43,7 +43,7 @@ export default function Privacy() {
             {/* Introduction */}
             <div className="prose prose-slate max-w-none text-slate-700 space-y-6 text-sm sm:text-base leading-relaxed">
               <p>
-                This privacy policy describes how <strong>Back to Basics with BigRonJones®</strong>, an official production of <strong>BigRonJonesLLC (<BrandName variant="upper" />)</strong>, collects, uses, and protects your information when you visit this website (backtobasics.fit) or subscribe to our email updates.
+                This privacy policy describes how <strong>Back to Basics with <BrandName variant="mixed" /></strong>, an official production of <strong>BigRonJonesLLC (<BrandName variant="upper" />)</strong>, collects, uses, and protects your information when you visit this website (backtobasics.fit) or subscribe to our email updates.
               </p>
               <p>
                 Our philosophy is simple: we collect only what is strictly necessary to share practical training content and provide a clean viewing experience. We never sell, rent, or trade your personal information.
@@ -79,14 +79,14 @@ export default function Privacy() {
                 <span>2. Information We Collect and Why</span>
               </h2>
               <p>
-                When you choose to join BigRonJones®’ email list, we collect:
+                When you choose to join <BrandName variant="mixed" />’ email list, we collect:
               </p>
               <ul className="list-disc pl-5 space-y-1 text-slate-700">
                 <li>
                   <strong>First Name & Last Name:</strong> Used to address you properly in training communications and coaching inquiries.
                 </li>
                 <li>
-                  <strong>Email Address:</strong> Used to deliver the Back to Basics welcome email, series updates, and practical training content from BigRonJones®.
+                  <strong>Email Address:</strong> Used to deliver the Back to Basics welcome email, series updates, and practical training content from <BrandName variant="mixed" />.
                 </li>
                 <li>
                   <strong>Mobile Number:</strong> Provided to allow direct SMS updates, program reminders, and coaching notifications from BigRonJonesLLC.
@@ -128,7 +128,7 @@ export default function Privacy() {
                 5. How to Unsubscribe or Delete Your Data
               </h2>
               <p>
-                You can unsubscribe at any time. Every email sent by BigRonJones® includes a direct, one-click unsubscribe link in the footer.
+                You can unsubscribe at any time. Every email sent by <BrandName variant="mixed" /> includes a direct, one-click unsubscribe link in the footer.
               </p>
               <p>
                 Alternatively, you may email{" "}
