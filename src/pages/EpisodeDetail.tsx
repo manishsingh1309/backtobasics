@@ -71,7 +71,7 @@ export default function EpisodeDetail({ episode }: EpisodeDetailProps) {
             <div className="video-responsive-container shadow-2xl ring-1 ring-slate-900/10">
               <iframe
                 src={`${episode.embedUrl}?rel=0&modestbranding=1&playsinline=1`}
-                title={`${episode.h1} - Back to Basics with Big Ron Jones`}
+                title={`${episode.h1} - Back to Basics with BigRonJones®`}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
                 loading="eager"

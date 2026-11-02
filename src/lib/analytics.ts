@@ -68,6 +68,17 @@ function recordEvent(name: string, payload: Record<string, unknown> = {}) {
     // Dispatch DOM custom event for live QA debugger
     window.dispatchEvent(new CustomEvent("b2b_analytics", { detail: item }));
 
+    // Persist event in localStorage for Back to Basics Admin Dashboard tracking
+    try {
+      const stored = localStorage.getItem("b2b_analytics_events");
+      const list: AnalyticsEvent[] = stored ? JSON.parse(stored) : [];
+      list.unshift(item);
+      if (list.length > 500) list.length = 500;
+      localStorage.setItem("b2b_analytics_events", JSON.stringify(list));
+    } catch {
+      // Non-fatal
+    }
+
     // Send to central BigRonJones telemetry endpoint
     try {
       const centralPayload = {

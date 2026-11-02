@@ -162,7 +162,7 @@ export function Header() {
               className="text-base font-bold uppercase tracking-wider text-slate-800 hover:text-[#0A3161] py-1 border-b border-slate-100"
               onClick={closeMobileMenu}
             >
-              Meet Big Ron Jones
+              Meet BigRonJones®
             </a>
             <a
               href={isHome ? "#join" : "/#join"}

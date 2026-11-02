@@ -1,6 +1,6 @@
 import { useState, useId } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { CheckCircle2, AlertCircle, Mail, User, Eye, X } from "lucide-react";
+import { CheckCircle2, AlertCircle, Mail, User, Phone, Eye, X } from "lucide-react";
 import { trackSignupAccepted, trackSubscriptionConfirmed } from "@/lib/analytics";
 import BrandName from "@/components/shared/BrandName";
 
@@ -15,14 +15,18 @@ export function EmailSignupSection({
 }: EmailSignupSectionProps) {
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
   const [showWelcomePreview, setShowWelcomePreview] = useState(false);
-  const [isConfirmationRequired] = useState(false); // Can be toggled for double opt-in test
+  const [isConfirmationRequired] = useState(false);
 
   const emailInputId = useId();
   const firstNameInputId = useId();
+  const lastNameInputId = useId();
+  const phoneInputId = useId();
   const location = useLocation();
 
   const validateEmail = (val: string) => {
@@ -34,6 +38,22 @@ export function EmailSignupSection({
     setErrorMessage("");
 
     const trimmedEmail = email.trim();
+    const trimmedFirst = firstName.trim();
+    const trimmedLast = lastName.trim();
+    const trimmedPhone = phone.trim();
+
+    if (!trimmedFirst) {
+      setErrorMessage("Please enter your first name.");
+      setStatus("error");
+      return;
+    }
+
+    if (!trimmedLast) {
+      setErrorMessage("Please enter your last name.");
+      setStatus("error");
+      return;
+    }
+
     if (!trimmedEmail || !validateEmail(trimmedEmail)) {
       setErrorMessage("Please enter a valid email address.");
       setStatus("error");
@@ -43,53 +63,68 @@ export function EmailSignupSection({
     setLoading(true);
 
     try {
-      // Simulate/execute API subscription call
-      // Saves subscriber locally for preview/test auditing and sends payload
+      // Build subscriber record with full name, email, phone, and metadata
       const subscriber = {
+        id: `sub_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+        firstName: trimmedFirst,
+        lastName: trimmedLast,
+        fullName: `${trimmedFirst} ${trimmedLast}`,
         email: trimmedEmail,
-        firstName: firstName.trim(),
+        phone: trimmedPhone || "",
         source: "back-to-basics",
         page: pageContext || location.pathname,
+        status: "active",
         timestamp: new Date().toISOString(),
       };
 
-      // Check existing subscribers in localStorage for duplicate testing
+      // Save subscriber locally in b2b_subscribers for Back to Basics Admin Dashboard
       const existingStr = localStorage.getItem("b2b_subscribers") || "[]";
-      const existingList = JSON.parse(existingStr);
-      const isDuplicate = existingList.some(
-        (s: { email: string }) => s.email.toLowerCase() === trimmedEmail.toLowerCase(),
+      let existingList: typeof subscriber[] = [];
+      try {
+        existingList = JSON.parse(existingStr);
+      } catch {
+        existingList = [];
+      }
+
+      const existingIndex = existingList.findIndex(
+        (s) => s.email.toLowerCase() === trimmedEmail.toLowerCase(),
       );
 
-      // Append or update subscriber record
-      if (!isDuplicate) {
-        existingList.push(subscriber);
+      if (existingIndex >= 0) {
+        existingList[existingIndex] = { ...existingList[existingIndex], ...subscriber };
+      } else {
+        existingList.unshift(subscriber);
       }
       localStorage.setItem("b2b_subscribers", JSON.stringify(existingList));
 
-      // If an email provider webhook URL is configured or running on production, POST subscriber payload
-      const webhookUrl =
-        import.meta.env.VITE_EMAIL_WEBHOOK_URL ||
-        (typeof window !== "undefined" &&
-        window.location.hostname !== "localhost" &&
-        window.location.hostname !== "127.0.0.1"
-          ? "/api/newsletter"
-          : "");
-
-      if (webhookUrl) {
-        const res = await fetch(webhookUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(subscriber),
-        });
-        if (!res.ok && res.status !== 200) {
-          throw new Error("Provider rejected subscription");
-        }
-      } else {
-        // Network latency simulation for local dev preview mode
-        await new Promise((resolve) => setTimeout(resolve, 500));
+      // Notify any listening admin instances
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("b2b_subscriber_added", { detail: subscriber }));
       }
 
-      // Fire analytics: ONLY fire on accepted signup, NEVER send email/name
+      // POST payload to BigRonJones central backend endpoint
+      const webhookUrl =
+        import.meta.env.VITE_EMAIL_WEBHOOK_URL ||
+        "https://bigronjones-2ah1.onrender.com/api/newsletter";
+
+      try {
+        await fetch(webhookUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: trimmedEmail,
+            firstName: trimmedFirst,
+            lastName: trimmedLast,
+            phone: trimmedPhone || undefined,
+            source: "back-to-basics",
+            page: pageContext || location.pathname,
+          }),
+        });
+      } catch {
+        // Backend failure shouldn't block the user since subscriber is persisted
+      }
+
+      // Fire analytics: strictly excludes PII
       trackSignupAccepted(pageContext || location.pathname, "back-to-basics");
       trackSubscriptionConfirmed(pageContext || location.pathname);
 
@@ -161,13 +196,74 @@ export function EmailSignupSection({
           ) : (
             <form onSubmit={handleSubmit} className="mt-8 text-left max-w-xl mx-auto" noValidate>
               <div className="space-y-4">
-                {/* Email Address (Required) */}
+                {/* First Name & Last Name (2-Column Grid) */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {/* First Name */}
+                  <div>
+                    <label
+                      htmlFor={firstNameInputId}
+                      className="block text-sm font-semibold text-slate-800 mb-1"
+                    >
+                      First Name
+                    </label>
+                    <div className="relative">
+                      <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                        <User className="h-5 w-5" aria-hidden="true" />
+                      </div>
+                      <input
+                        id={firstNameInputId}
+                        name="firstName"
+                        type="text"
+                        required
+                        autoComplete="given-name"
+                        value={firstName}
+                        onChange={(e) => {
+                          setFirstName(e.target.value);
+                          if (status === "error") setStatus("idle");
+                        }}
+                        placeholder="First name"
+                        className="w-full rounded-lg border border-slate-300 bg-white py-3 pl-10 pr-4 text-slate-900 placeholder:text-slate-400 focus:border-[#0A3161] focus:ring-2 focus:ring-[#0A3161]/20 text-sm transition"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Last Name */}
+                  <div>
+                    <label
+                      htmlFor={lastNameInputId}
+                      className="block text-sm font-semibold text-slate-800 mb-1"
+                    >
+                      Last Name
+                    </label>
+                    <div className="relative">
+                      <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                        <User className="h-5 w-5" aria-hidden="true" />
+                      </div>
+                      <input
+                        id={lastNameInputId}
+                        name="lastName"
+                        type="text"
+                        required
+                        autoComplete="family-name"
+                        value={lastName}
+                        onChange={(e) => {
+                          setLastName(e.target.value);
+                          if (status === "error") setStatus("idle");
+                        }}
+                        placeholder="Last name"
+                        className="w-full rounded-lg border border-slate-300 bg-white py-3 pl-10 pr-4 text-slate-900 placeholder:text-slate-400 focus:border-[#0A3161] focus:ring-2 focus:ring-[#0A3161]/20 text-sm transition"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Email Address */}
                 <div>
                   <label
                     htmlFor={emailInputId}
                     className="block text-sm font-semibold text-slate-800 mb-1"
                   >
-                    Email Address <span className="text-[#B31942]">*</span>
+                    Email Address
                   </label>
                   <div className="relative">
                     <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
@@ -192,26 +288,29 @@ export function EmailSignupSection({
                   </div>
                 </div>
 
-                {/* First Name (Optional) */}
+                {/* Mobile Number */}
                 <div>
                   <label
-                    htmlFor={firstNameInputId}
+                    htmlFor={phoneInputId}
                     className="block text-sm font-semibold text-slate-800 mb-1"
                   >
-                    First Name (optional)
+                    Mobile Number
                   </label>
                   <div className="relative">
                     <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
-                      <User className="h-5 w-5" aria-hidden="true" />
+                      <Phone className="h-5 w-5" aria-hidden="true" />
                     </div>
                     <input
-                      id={firstNameInputId}
-                      name="firstName"
-                      type="text"
-                      autoComplete="given-name"
-                      value={firstName}
-                      onChange={(e) => setFirstName(e.target.value)}
-                      placeholder="Your first name"
+                      id={phoneInputId}
+                      name="phone"
+                      type="tel"
+                      autoComplete="tel"
+                      value={phone}
+                      onChange={(e) => {
+                        setPhone(e.target.value);
+                        if (status === "error") setStatus("idle");
+                      }}
+                      placeholder="(555) 000-0000"
                       className="w-full rounded-lg border border-slate-300 bg-white py-3 pl-10 pr-4 text-slate-900 placeholder:text-slate-400 focus:border-[#0A3161] focus:ring-2 focus:ring-[#0A3161]/20 text-sm transition"
                     />
                   </div>
@@ -285,7 +384,7 @@ export function EmailSignupSection({
             {/* Email Headers */}
             <div className="bg-slate-50 border-b border-slate-200 px-6 py-3 text-xs text-slate-600 space-y-1">
               <div>
-                <strong className="text-slate-800">From:</strong> BigRonJones® &lt;RonJones@BigRonJones.com&gt;
+                <strong className="text-slate-800">From:</strong> BigRonJones® &lt;Coaching@BigRonJones.com&gt;
               </div>
               <div>
                 <strong className="text-slate-800">Subject:</strong> Welcome to Back to Basics with BigRonJones®
@@ -299,7 +398,7 @@ export function EmailSignupSection({
             <div className="p-6 text-sm text-slate-800 space-y-4 max-h-[60vh] overflow-y-auto font-sans leading-relaxed">
               <p className="font-semibold text-base text-slate-900">Glad you’re here.</p>
               <p>
-                Back to Basics is a four-part workout series covering chest, back and shoulders, legs, and arms. Start with Episode 1, or choose the session you want to watch.
+                Back to Basics is a four part workout series covering chest, back and shoulders, legs, and arms. Start with Episode 1, or choose the session you want to watch.
               </p>
               <p>
                 <strong>Start watching:</strong>{" "}

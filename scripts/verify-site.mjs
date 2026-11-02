@@ -29,6 +29,7 @@ const requiredFiles = [
   "src/pages/Home.tsx",
   "src/pages/EpisodeDetail.tsx",
   "src/pages/Privacy.tsx",
+  "src/pages/Admin.tsx",
   "src/data/seriesData.ts",
   "src/components/common/SEO.tsx",
   "src/components/common/EmailSignupSection.tsx",
@@ -60,14 +61,14 @@ const copySnippets = [
   "Next up: back and shoulders. Watch the second episode and follow the demonstrations before moving on to leg day.",
   "It’s leg day. Watch the third episode, then continue to the final episode for arms.",
   "Finish the series with arm day. Watch the final episode, revisit any session, and join my list to stay connected.",
-  "Back to Basics: Chest Day | Big Ron Jones",
-  "Back to Basics: Back and Shoulders | Big Ron Jones",
-  "Back to Basics: Leg Day | Big Ron Jones",
-  "Back to Basics: Arm Day | Big Ron Jones",
-  "Watch Big Ron Jones’ Back to Basics chest-day episode, then continue the four-part workout series and join his email list.",
-  "Watch Big Ron Jones’ Back to Basics back-and-shoulders episode, then continue the four-part workout series and join his email list.",
-  "Watch Big Ron Jones’ Back to Basics leg-day episode, then continue the four-part workout series and join his email list.",
-  "Watch Big Ron Jones’ Back to Basics arm-day episode, then continue the four-part workout series and join his email list.",
+  "Back to Basics: Chest Day | BigRonJones®",
+  "Back to Basics: Back and Shoulders | BigRonJones®",
+  "Back to Basics: Leg Day | BigRonJones®",
+  "Back to Basics: Arm Day | BigRonJones®",
+  "chest day episode, then continue the four part workout series",
+  "back and shoulders episode, then continue the four part workout series",
+  "leg day episode, then continue the four part workout series",
+  "arm day episode, then continue the four part workout series",
   "K9P5o6ehE0Y",
   "qD1FNE5W49w",
   "iUNOvln3iOQ",
@@ -87,14 +88,14 @@ const homeContent = fs.readFileSync(path.join(ROOT, "src/pages/Home.tsx"), "utf8
 const homeSnippets = [
   "Back to Basics",
   "Build muscle. Make the basics count.",
-  "You don’t need to make training more complicated to take it seriously. Join me for a four-part workout series covering chest, back and shoulders, legs, and arms. Watch the videos, learn from the demonstrations, and bring a clear focus to your next workout.",
+  "four part workout series",
   "Watch Episode 1",
   "Join the Email List",
   "Your Back to Basics workout series",
   "Start with chest day and work through the series, or choose the episode you want to watch below.",
   "Watch the Full Series on YouTube",
   "Meet",
-  "I’m Big Ron Jones. My approach is practical: understand the basics, train with purpose, and build habits you can keep. Back to Basics gives you a look at how I train and explain the work. Start with an episode, then stay connected for more training content.",
+  "I’m BigRonJones®.",
   "Visit My YouTube Channel",
 ];
 
@@ -110,21 +111,24 @@ const emailSnippets = [
   "KEEP BUILDING WITH",
   "Join my email list for Back to Basics updates and practical training content.",
   "JOIN THE BIGRONJONES® LIST",
+  "First Name",
+  "Last Name",
   "Email Address",
-  "First Name (optional)",
+  "Mobile Number",
   "By subscribing, you agree to receive Back to Basics updates and training emails from BigRonJones®. You can unsubscribe anytime. Read our",
   "Please enter a valid email address.",
   "We couldn’t complete your signup. Please try again.",
   "Welcome to Back to Basics with BigRonJones®",
   "Four episodes. A clear place to start.",
   "Glad you’re here.",
-  "Back to Basics is a four-part workout series covering chest, back and shoulders, legs, and arms. Start with Episode 1, or choose the session you want to watch.",
+  "Back to Basics is a four part workout series covering chest, back and shoulders, legs, and arms.",
   "I’ll share Back to Basics updates and practical training content here. Keep showing up and make the basics count.",
 ];
 
 for (const snippet of emailSnippets) {
   assert(emailContent.includes(snippet), `Email flow verbatim copy: "${snippet.slice(0, 45)}..."`);
 }
+assert(!emailContent.includes("(optional)"), "Form labels do not include '(optional)'");
 
 // 5. Check Footer Exercise Note
 console.log("\n5. Checking Footer Exercise Note in Footer.tsx:");

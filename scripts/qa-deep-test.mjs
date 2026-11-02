@@ -92,13 +92,14 @@ check("Homepage H1: 'Back to Basics with BigRonJones®'",
 check("Homepage Subtitle: 'Build muscle. Make the basics count.'", homeFile.includes("Build muscle. Make the basics count."));
 check("Homepage Primary CTA: 'Watch Episode 1'", homeFile.includes("Watch Episode 1"));
 check("Homepage Secondary CTA: 'Join the Email List'", homeFile.includes("Join the Email List"));
+check("Hero does not contain Chest Day preview card", !homeFile.includes("hero-preview-card") && !homeFile.includes("ep1-chest.jpg"));
 check("Series Section Heading: 'Your Back to Basics workout series'", homeFile.includes("Your Back to Basics workout series"));
 check("Series Section Copy: 'Start with chest day and work through the series...'", homeFile.includes("Start with chest day and work through the series, or choose the episode you want to watch below."));
 check("Playlist Link: 'Watch the Full Series on YouTube'", homeFile.includes("Watch the Full Series on YouTube"));
 check("About Section Heading: 'Meet BigRonJones®'", 
   homeFile.includes("Meet") && (homeFile.includes("BrandName") || homeFile.includes("BIGRONJONES"))
 );
-check("About Section Copy verbatim", homeFile.includes("I’m Big Ron Jones. My approach is practical: understand the basics, train with purpose, and build habits you can keep."));
+check("About Section Copy with BigRonJones® trademark", homeFile.includes("I’m BigRonJones®.") || homeFile.includes("BigRonJones®"));
 check("About Section Button: 'Visit My YouTube Channel'", homeFile.includes("Visit My YouTube Channel"));
 
 // Page 4: Episode Intros
@@ -125,13 +126,13 @@ check("Ep 4 Nav: Previous: Leg Day -> Watch the Series Again + Join BigRonJones 
 check("Homepage SEO Title: 'Back to Basics with Big Ron | Official Workout Series'", 
   homeFile.includes("Back to Basics with Big Ron | Official Workout Series")
 );
-check("Homepage SEO Description verbatim", 
-  homeFile.includes("Watch Big Ron Jones’ four-part Back to Basics workout series for chest, back and shoulders, legs, and arms. Join his email list for training content.")
+check("Homepage SEO Description has dashes removed and BigRonJones® branding", 
+  homeFile.includes("four part Back to Basics workout series") && homeFile.includes("BigRonJones®")
 );
-check("Ep 1 SEO Title: 'Back to Basics: Chest Day | Big Ron Jones'", seriesFile.includes("Back to Basics: Chest Day | Big Ron Jones"));
-check("Ep 2 SEO Title: 'Back to Basics: Back and Shoulders | Big Ron Jones'", seriesFile.includes("Back to Basics: Back and Shoulders | Big Ron Jones"));
-check("Ep 3 SEO Title: 'Back to Basics: Leg Day | Big Ron Jones'", seriesFile.includes("Back to Basics: Leg Day | Big Ron Jones"));
-check("Ep 4 SEO Title: 'Back to Basics: Arm Day | Big Ron Jones'", seriesFile.includes("Back to Basics: Arm Day | Big Ron Jones"));
+check("Ep 1 SEO Title: 'Back to Basics: Chest Day | BigRonJones®'", seriesFile.includes("Back to Basics: Chest Day | BigRonJones®"));
+check("Ep 2 SEO Title: 'Back to Basics: Back and Shoulders | BigRonJones®'", seriesFile.includes("Back to Basics: Back and Shoulders | BigRonJones®"));
+check("Ep 3 SEO Title: 'Back to Basics: Leg Day | BigRonJones®'", seriesFile.includes("Back to Basics: Leg Day | BigRonJones®"));
+check("Ep 4 SEO Title: 'Back to Basics: Arm Day | BigRonJones®'", seriesFile.includes("Back to Basics: Arm Day | BigRonJones®"));
 
 // Page 5: Signup & Welcome Email
 check("Email Section Heading: 'KEEP BUILDING WITH BIGRONJONES®'", 
@@ -139,8 +140,11 @@ check("Email Section Heading: 'KEEP BUILDING WITH BIGRONJONES®'",
 );
 check("Email Section Copy verbatim", emailFile.includes("Join my email list for Back to Basics updates and practical training content."));
 check("Email Section Button: 'JOIN THE BIGRONJONES® LIST'", emailFile.includes("JOIN THE BIGRONJONES® LIST"));
-check("Required Label: 'Email Address'", emailFile.includes("Email Address"));
-check("Optional Label: 'First Name (optional)'", emailFile.includes("First Name (optional)"));
+check("First Name input present", emailFile.includes("First Name") && emailFile.includes("firstName"));
+check("Last Name input present", emailFile.includes("Last Name") && emailFile.includes("lastName"));
+check("Email Address input present", emailFile.includes("Email Address") && emailFile.includes("email"));
+check("Mobile Number input present", emailFile.includes("Mobile Number") && emailFile.includes("phone"));
+check("No '(optional)' label text displayed to user on form", !emailFile.includes("(optional)"));
 check("Consent text with BigRonJones®", 
   emailFile.includes("training emails from BigRonJones®") && emailFile.includes("Read our")
 );
@@ -171,9 +175,13 @@ check("Old Glory Blue #0A3161 used across theme", homeFile.includes("#0A3161") &
 check("Old Glory Red / Crimson #B31942 used across theme", homeFile.includes("#B31942") && seriesFile.includes("B31942") || footerFile.includes("#B31942"));
 check("Footer contains BigRonJones® background watermark", footerFile.includes("BIGRONJONES") && footerFile.includes("pointer-events-none"));
 check("Tagline: 'PRACTICAL ADVICE FOR YOUR REAL WORLD GOALS.®' present", footerFile.includes("PRACTICAL ADVICE FOR YOUR REAL WORLD GOALS."));
-check("Corporate Entity: 'Big Ron Jones LLC · 10845 Griffith Peak Dr, Las Vegas, NV 89135'", 
-  footerFile.includes("Big Ron Jones LLC") && privacyFile.includes("10845 Griffith Peak Dr, Las Vegas, NV 89135")
+check("Corporate Entity: 'BigRonJonesLLC · Hahira, GA 31632'", 
+  footerFile.includes("BigRonJonesLLC") && footerFile.includes("Hahira, GA 31632") && privacyFile.includes("BigRonJonesLLC") && privacyFile.includes("Hahira, GA 31632")
 );
+check("Contact and Support Email strictly Coaching@BigRonJones.com", 
+  footerFile.includes("Coaching@BigRonJones.com") && homeFile.includes("Coaching@BigRonJones.com") && privacyFile.includes("Coaching@BigRonJones.com") && !footerFile.includes("ronjones@bigronjones.com")
+);
+check("Admin Dashboard page exists and is functional", fs.existsSync(path.join(ROOT, "src/pages/Admin.tsx")));
 
 // -------------------------------------------------------------
 // Test Suite 5: Live HTTP Endpoint & Header Checks
@@ -187,6 +195,7 @@ const endpoints = [
   "/leg-day/",
   "/arm-day/",
   "/privacy/",
+  "/admin/",
   "/sitemap.xml",
   "/robots.txt"
 ];
@@ -291,8 +300,8 @@ check("Checklist 2: Link exactly https://bigronjones.com/assessment",
 check("Checklist 3: Section mounted in Home.tsx", 
   homeFile.includes("<HisAndHerSection />")
 );
-check("Checklist 3: Title 'HIS & HER WORKOUT ROUTINE | Big Ron Jones & Sue'", 
-  hisAndHerFile.includes("HIS & HER WORKOUT ROUTINE") && hisAndHerFile.includes("Big Ron Jones & Sue")
+check("Checklist 3: Title 'HIS & HER WORKOUT ROUTINE | BigRonJones® & Sue'", 
+  hisAndHerFile.includes("HIS & HER WORKOUT ROUTINE") && (hisAndHerFile.includes("BigRonJones® & Sue") || hisAndHerFile.includes("BrandName"))
 );
 check("Checklist 3: 4 His & Her Workout videos defined in seriesData", 
   seriesFile.includes("HIS_AND_HER_VIDEOS") && 

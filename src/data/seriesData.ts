@@ -66,7 +66,7 @@ export const HIS_AND_HER_VIDEOS: BonusVideo[] = [
     durationFormatted: "10:28",
     thumbnail: "https://img.youtube.com/vi/V68GFImxqYE/hqdefault.jpg",
     summary:
-      "Ron and Sue demonstrate back exercise variations, showing how partners can train side-by-side with appropriate adjustments for height, grip, and loading.",
+      "Ron and Sue demonstrate back exercise variations, showing how partners can train side by side with appropriate adjustments for height, grip, and loading.",
     focus: "Back Width & Thickness",
   },
   {
@@ -92,7 +92,7 @@ export const HIS_AND_HER_VIDEOS: BonusVideo[] = [
     durationFormatted: "9:42",
     thumbnail: "https://img.youtube.com/vi/taqb7rxwwuU/hqdefault.jpg",
     summary:
-      "Detailed breakdown of the most effective triceps movements to maximize lock-out strength, elbow stability, and arm definition.",
+      "Detailed breakdown of the most effective triceps movements to maximize lockout strength, elbow stability, and arm definition.",
     focus: "Triceps Lockout & Strength",
   },
   {
@@ -117,9 +117,9 @@ export const EPISODES: Episode[] = [
     path: "/chest-day/",
     title: "Episode 1: Chest Day",
     h1: "Episode 1: Chest Day",
-    seoTitle: "Back to Basics: Chest Day | Big Ron Jones",
+    seoTitle: "Back to Basics: Chest Day | BigRonJones®",
     seoDescription:
-      "Watch Big Ron Jones’ Back to Basics chest-day episode, then continue the four-part workout series and join his email list.",
+      "Watch BigRonJones®’ Back to Basics chest day episode, then continue the four part workout series and join his email list.",
     intro:
       "Start with chest day. Watch the first episode, follow the demonstrations, and continue through the series at your own pace.",
     videoId: "K9P5o6ehE0Y",
@@ -145,7 +145,7 @@ export const EPISODES: Episode[] = [
       "Cable fly",
     ],
     chapters: [
-      { time: "00:00", title: "Build your chest-training foundation" },
+      { time: "00:00", title: "Build your chest training foundation" },
       { time: "01:34", title: "Incline barbell press: setup and grip" },
       { time: "03:09", title: "Flat barbell press: reps and progression" },
       { time: "05:31", title: "Incline dumbbell press" },
@@ -154,7 +154,7 @@ export const EPISODES: Episode[] = [
       { time: "09:19", title: "The Big Five recap" },
     ],
     summary:
-      "Build your chest-training foundation with Big Ron Jones’ Big Five: five barbell, dumbbell, and cable exercises explained step by step, covering incline and flat presses, exercise setup, and a common cable-fly mistake.",
+      "Build your chest training foundation with BigRonJones®’ Big Five: five barbell, dumbbell, and cable exercises explained step by step, covering incline and flat presses, exercise setup, and a common cable fly mistake.",
   },
   {
     id: 2,
@@ -162,9 +162,9 @@ export const EPISODES: Episode[] = [
     path: "/back-and-shoulders/",
     title: "Episode 2: Back and Shoulders",
     h1: "Episode 2: Back and Shoulders",
-    seoTitle: "Back to Basics: Back and Shoulders | Big Ron Jones",
+    seoTitle: "Back to Basics: Back and Shoulders | BigRonJones®",
     seoDescription:
-      "Watch Big Ron Jones’ Back to Basics back-and-shoulders episode, then continue the four-part workout series and join his email list.",
+      "Watch BigRonJones®’ Back to Basics back and shoulders episode, then continue the four part workout series and join his email list.",
     intro:
       "Next up: back and shoulders. Watch the second episode and follow the demonstrations before moving on to leg day.",
     videoId: "qD1FNE5W49w",
@@ -192,7 +192,7 @@ export const EPISODES: Episode[] = [
       "Machine overhead press",
     ],
     chapters: [
-      { time: "00:00", title: "Build your back-and-shoulder foundation" },
+      { time: "00:00", title: "Build your back and shoulder foundation" },
       { time: "01:09", title: "Seated cable row" },
       { time: "02:26", title: "Lat pulldown: grip and setup" },
       { time: "03:25", title: "Lat pulldown: torso position" },
@@ -204,7 +204,7 @@ export const EPISODES: Episode[] = [
       { time: "11:26", title: "Workout recap and recovery" },
     ],
     summary:
-      "Build your back-and-shoulder training foundation with Big Ron Jones: seven exercises covering rows, lat pulldowns, rear delts, raises, and an overhead press, focusing on muscle engagement and proper setup.",
+      "Build your back and shoulder training foundation with BigRonJones®: seven exercises covering rows, lat pulldowns, rear delts, raises, and an overhead press, focusing on muscle engagement and proper setup.",
   },
   {
     id: 3,
@@ -212,9 +212,9 @@ export const EPISODES: Episode[] = [
     path: "/leg-day/",
     title: "Episode 3: Leg Day",
     h1: "Episode 3: Leg Day",
-    seoTitle: "Back to Basics: Leg Day | Big Ron Jones",
+    seoTitle: "Back to Basics: Leg Day | BigRonJones®",
     seoDescription:
-      "Watch Big Ron Jones’ Back to Basics leg-day episode, then continue the four-part workout series and join his email list.",
+      "Watch BigRonJones®’ Back to Basics leg day episode, then continue the four part workout series and join his email list.",
     intro:
       "It’s leg day. Watch the third episode, then continue to the final episode for arms.",
     videoId: "iUNOvln3iOQ",
@@ -248,10 +248,10 @@ export const EPISODES: Episode[] = [
       { time: "07:02", title: "Leg extension technique discussion" },
       { time: "08:10", title: "Calf development discussion" },
       { time: "09:23", title: "Standing calf raises" },
-      { time: "10:15", title: "Leg-day recap" },
+      { time: "10:15", title: "Leg day recap" },
     ],
     summary:
-      "Build your leg-training foundation with Big Ron Jones: machine-based workout covering hamstring curls, leg presses, leg extensions, and standing calf raises with setup and foot position details.",
+      "Build your leg training foundation with BigRonJones®: machine-based workout covering hamstring curls, leg presses, leg extensions, and standing calf raises with setup and foot position details.",
   },
   {
     id: 4,
@@ -259,9 +259,9 @@ export const EPISODES: Episode[] = [
     path: "/arm-day/",
     title: "Episode 4: Arm Day",
     h1: "Episode 4: Arm Day",
-    seoTitle: "Back to Basics: Arm Day | Big Ron Jones",
+    seoTitle: "Back to Basics: Arm Day | BigRonJones®",
     seoDescription:
-      "Watch Big Ron Jones’ Back to Basics arm-day episode, then continue the four-part workout series and join his email list.",
+      "Watch BigRonJones®’ Back to Basics arm day episode, then continue the four part workout series and join his email list.",
     intro:
       "Finish the series with arm day. Watch the final episode, revisit any session, and join my list to stay connected.",
     videoId: "MYiq-aRNtSA",
@@ -297,7 +297,7 @@ export const EPISODES: Episode[] = [
       { time: "05:18", title: "Single-arm underhand triceps pushdown" },
       { time: "06:10", title: "Overhead rope triceps extension" },
       { time: "07:05", title: "Overhead extension: keep the handles apart" },
-      { time: "07:26", title: "Four-day series wrap-up" },
+      { time: "07:26", title: "Four day series wrap up" },
     ],
     summary:
       "Complete the Back to Basics series with arm day: three biceps movements and three cable triceps movements explained step by step, covering grip, weight progression, and movement control.",

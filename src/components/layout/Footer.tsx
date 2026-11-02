@@ -46,7 +46,7 @@ export function Footer() {
                   Back to Basics with <BrandName variant="upper" />
                 </span>
                 <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#B31942] font-bold">
-                  OFFICIAL WORKOUT SERIES · LAS VEGAS, NV
+                  OFFICIAL WORKOUT SERIES · HAHIRA, GA
                 </span>
               </div>
             </div>
@@ -64,7 +64,7 @@ export function Footer() {
               </span>
             </p>
             <p className="text-xs text-slate-500 font-mono">
-              Big Ron Jones LLC · 10845 Griffith Peak Dr, Las Vegas, NV 89135
+              BigRonJonesLLC · Hahira, GA 31632
             </p>
           </div>
 
@@ -75,10 +75,10 @@ export function Footer() {
                 Questions & Training Support
               </h4>
               <a
-                href="mailto:RonJones@BigRonJones.com?subject=Back%20to%20Basics%20Inquiry"
+                href="mailto:Coaching@BigRonJones.com?subject=Back%20to%20Basics%20Inquiry"
                 className="text-sm text-[#0A3161] hover:text-[#B31942] font-mono font-medium transition-colors"
               >
-                RonJones@BigRonJones.com
+                Coaching@BigRonJones.com
               </a>
             </div>
 
@@ -127,7 +127,7 @@ export function Footer() {
               </Link>
               <span className="text-slate-300" aria-hidden="true">|</span>
               <a
-                href="mailto:RonJones@BigRonJones.com?subject=Back%20to%20Basics%20Contact"
+                href="mailto:Coaching@BigRonJones.com?subject=Back%20to%20Basics%20Contact"
                 className="hover:text-[#0A3161] transition-colors"
               >
                 Contact
@@ -146,7 +146,7 @@ export function Footer() {
         {/* Copyright notice */}
         <div className="mt-8 border-t border-slate-200/80 pt-6 text-center text-xs text-slate-500 font-mono">
           <p>
-            © {currentYear} Big Ron Jones LLC. All rights reserved. <BrandName variant="upper" /> is a registered trademark of Big Ron Jones LLC.
+            © {currentYear} BigRonJonesLLC. All rights reserved. <BrandName variant="upper" /> is a registered trademark of BigRonJonesLLC.
           </p>
         </div>
       </div>

@@ -36,14 +36,14 @@ export default function Privacy() {
                 Privacy Policy
               </h1>
               <p className="mt-2 text-sm text-slate-500 font-mono">
-                Last updated: October 2026 • Big Ron Jones LLC · <BrandName variant="upper" />
+                Last updated: October 2026 • BigRonJonesLLC · <BrandName variant="upper" />
               </p>
             </div>
 
             {/* Introduction */}
             <div className="prose prose-slate max-w-none text-slate-700 space-y-6 text-sm sm:text-base leading-relaxed">
               <p>
-                This privacy policy describes how <strong>Back to Basics with Big Ron</strong>, an official production of <strong>Big Ron Jones LLC (<BrandName variant="upper" />)</strong>, collects, uses, and protects your information when you visit this website (backtobasics.fit) or subscribe to our email updates.
+                This privacy policy describes how <strong>Back to Basics with BigRonJones®</strong>, an official production of <strong>BigRonJonesLLC (<BrandName variant="upper" />)</strong>, collects, uses, and protects your information when you visit this website (backtobasics.fit) or subscribe to our email updates.
               </p>
               <p>
                 Our philosophy is simple: we collect only what is strictly necessary to share practical training content and provide a clean viewing experience. We never sell, rent, or trade your personal information.
@@ -59,15 +59,15 @@ export default function Privacy() {
                   This website is operated by:
                 </p>
                 <div className="mt-2 text-sm text-slate-900 font-mono space-y-1">
-                  <p className="font-bold">Big Ron Jones LLC</p>
-                  <p>10845 Griffith Peak Dr, Las Vegas, NV 89135</p>
+                  <p className="font-bold">BigRonJonesLLC</p>
+                  <p>Hahira, GA 31632</p>
                   <p>
                     Email:{" "}
                     <a
-                      href="mailto:RonJones@BigRonJones.com"
+                      href="mailto:Coaching@BigRonJones.com"
                       className="text-[#0A3161] font-semibold underline hover:text-[#08274d]"
                     >
-                      RonJones@BigRonJones.com
+                      Coaching@BigRonJones.com
                     </a>
                   </p>
                 </div>
@@ -79,21 +79,24 @@ export default function Privacy() {
                 <span>2. Information We Collect and Why</span>
               </h2>
               <p>
-                When you choose to join Big Ron’s email list, we collect:
+                When you choose to join BigRonJones®’ email list, we collect:
               </p>
               <ul className="list-disc pl-5 space-y-1 text-slate-700">
                 <li>
-                  <strong>Email Address (Required):</strong> Used to deliver the Back to Basics welcome email, series updates, and practical training content from Big Ron Jones.
+                  <strong>First Name & Last Name:</strong> Used to address you properly in training communications and coaching inquiries.
                 </li>
                 <li>
-                  <strong>First Name (Optional):</strong> Used to personalize communication if provided.
+                  <strong>Email Address:</strong> Used to deliver the Back to Basics welcome email, series updates, and practical training content from BigRonJones®.
+                </li>
+                <li>
+                  <strong>Mobile Number:</strong> Provided to allow direct SMS updates, program reminders, and coaching notifications from BigRonJonesLLC.
                 </li>
                 <li>
                   <strong>Signup Source & Context:</strong> We record which page or episode you signed up on (e.g. <code>source: back-to-basics</code>, <code>page: /chest-day/</code>) so we know where our audience discovers the series.
                 </li>
               </ul>
               <p>
-                We do not collect payment details, credit cards, billing addresses, or create password-protected member accounts on this website.
+                We do not collect payment details, credit cards, or billing addresses on this educational website.
               </p>
 
               {/* 3. Embedded Video Services */}
@@ -125,15 +128,15 @@ export default function Privacy() {
                 5. How to Unsubscribe or Delete Your Data
               </h2>
               <p>
-                You can unsubscribe at any time. Every email sent by Big Ron includes a direct, one-click unsubscribe link in the footer.
+                You can unsubscribe at any time. Every email sent by BigRonJones® includes a direct, one-click unsubscribe link in the footer.
               </p>
               <p>
                 Alternatively, you may email{" "}
                 <a
-                  href="mailto:RonJones@BigRonJones.com?subject=Unsubscribe%20Request"
+                  href="mailto:Coaching@BigRonJones.com?subject=Unsubscribe%20Request"
                   className="text-[#0A3161] underline hover:text-[#08274d]"
                 >
-                  RonJones@BigRonJones.com
+                  Coaching@BigRonJones.com
                 </a>{" "}
                 with "Unsubscribe" in the subject line, and we will remove your email address from our database promptly.
               </p>

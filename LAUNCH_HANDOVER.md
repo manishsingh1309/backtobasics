@@ -93,8 +93,8 @@ The navigation paths strictly follow Page 4 of the brief:
 - **Success State Message:** *"You’re on the list. Start watching Back to Basics below."* with action button *"Watch Episode 1 →"*.
 
 ### Exact Welcome Email (Configured & Tested in Preview Modal):
-- **Sender:** `Big Ron Jones <RonJones@BigRonJones.com>`
-- **Subject:** `Welcome to Back to Basics with Big Ron`
+- **Sender:** `BigRonJones® <Coaching@BigRonJones.com>`
+- **Subject:** `Welcome to Back to Basics with BigRonJones®`
 - **Preview text:** `Four episodes. A clear place to start.`
 - **Body:**
   ```text
@@ -102,11 +102,11 @@ The navigation paths strictly follow Page 4 of the brief:
 
   Back to Basics is a four-part workout series covering chest, back and shoulders, legs, and arms. Start with Episode 1, or choose the session you want to watch.
 
-  Start watching: https://backtobasicswithbigron.com/#watch
+  Start watching: https://backtobasics.fit/#watch
 
   I’ll share Back to Basics updates and practical training content here. Keep showing up and make the basics count.
 
-  Big Ron
+  BigRonJones®
   ```
 
 ---
@@ -116,7 +116,7 @@ The navigation paths strictly follow Page 4 of the brief:
 - **Sitemap:** Clean XML sitemap published at `/sitemap.xml` covering all six canonical URLs.
 - **Robots:** `robots.txt` published allowing crawling of all public routes and referencing the sitemap.
 - **Schema.org:**
-  - Homepage: `WebSite` and `Person` JSON-LD schema linking Big Ron Jones to his official profiles.
+  - Homepage: `WebSite` and `Person` JSON-LD schema linking BigRonJones® to his official profiles.
   - Episode Pages: Full `VideoObject` JSON-LD schema with verified `name`, `description`, `thumbnailUrl`, `uploadDate`, `embedUrl`, and `duration`.
 
 ---
@@ -127,12 +127,12 @@ The navigation paths strictly follow Page 4 of the brief:
 ```text
 Back to Basics has a new home. Chest, back and shoulders, legs, and arms, all in one place. Watch the four-part series and join my email list for more practical training content.
 
-Start here: https://backtobasicswithbigron.com/
+Start here: https://backtobasics.fit/
 ```
 
 ### YouTube Description / Pinned Comment:
 ```text
-“Watch the full Back to Basics series and join my email list here: https://backtobasicswithbigron.com/”
+“Watch the full Back to Basics series and join my email list here: https://backtobasics.fit/”
 ```
 
 ---
@@ -140,10 +140,10 @@ Start here: https://backtobasicswithbigron.com/
 ## 9. Platform & Operational Details for Ron
 
 - **Hosting / Platform:** Vite / React 19 static bundle ready for Vercel, Netlify, Cloudflare Pages, or Render.
-- **Domain:** Awaiting Ron’s confirmation of `backtobasicswithbigron.com` DNS registrar.
-- **Email Platform:** Configured for Ron's email provider (ConvertKit / Mailchimp / Klaviyo / Resend) using single audience tagging: `source: back-to-basics`.
+- **Domain:** Configured for `backtobasics.fit`.
+- **Email Platform:** Configured for Ron's email provider using single audience tagging: `source: back-to-basics`.
 - **Recurring Costs:** $0 hosting on standard static CDN tier; standard domain renewal cost (~$12–15/year).
-- **Admin Access:** Direct repository access and DNS management will remain strictly in Ron’s name; invitations will be sent directly to Ron’s email (`RonJones@BigRonJones.com`).
+- **Admin Access:** Direct Back to Basics Admin Dashboard is located at `/admin` (credentials: `admin@bigronjones.com` / `BigRonJones2026!`). Inquiries to Ron: `Coaching@BigRonJones.com`.
 
 ---
 

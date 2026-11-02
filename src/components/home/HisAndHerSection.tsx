@@ -25,11 +25,11 @@ export function HisAndHerSection() {
             className="font-heading text-3xl sm:text-4xl lg:text-5xl text-[#0A3161] uppercase tracking-wide leading-tight"
           >
             HIS & HER WORKOUT ROUTINE <br className="hidden sm:inline" />
-            <span className="text-[#B31942]">| Big Ron Jones & Sue</span>
+            <span className="text-[#B31942]">| BigRonJones® & Sue</span>
           </h2>
 
           <p className="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
-            Train side-by-side. Watch Ron and Sue demonstrate real-world exercise variations, proper setup adjustments for height and strength differences, and form cues for back, shoulders, triceps, and biceps.
+            Train side by side. Watch Ron and Sue demonstrate real world exercise variations, proper setup adjustments for height and strength differences, and form cues for back, shoulders, triceps, and biceps.
           </p>
         </div>
 
@@ -161,7 +161,7 @@ export function HisAndHerSection() {
             <div className="flex items-center justify-between pb-3 text-white">
               <div className="pr-4">
                 <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#B31942]">
-                  His & Her Workout Routine • Big Ron Jones & Sue
+                  His & Her Workout Routine • BigRonJones® & Sue
                 </span>
                 <h3 id="video-modal-title" className="font-heading text-lg sm:text-2xl text-white truncate">
                   {activeVideo.title}

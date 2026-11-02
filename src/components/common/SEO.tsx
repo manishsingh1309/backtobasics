@@ -5,14 +5,15 @@ import { trackPageView } from "@/lib/analytics";
 
 interface SEOProps {
   title: string;
-  description: string;
+  description?: string;
   canonicalPath?: string;
   episode?: Episode;
+  noIndex?: boolean;
 }
 
 const BASE_URL = import.meta.env.VITE_SITE_URL || "https://backtobasics.fit";
 
-export function SEO({ title, description, canonicalPath, episode }: SEOProps) {
+export function SEO({ title, description = "", canonicalPath, episode, noIndex }: SEOProps) {
   const location = useLocation();
   const currentPath = canonicalPath || location.pathname;
   const canonicalUrl = `${BASE_URL}${currentPath.endsWith("/") || currentPath.includes(".") ? currentPath : currentPath + "/"}`;
@@ -20,6 +21,19 @@ export function SEO({ title, description, canonicalPath, episode }: SEOProps) {
   useEffect(() => {
     // 1. Update Title
     document.title = title;
+
+    // Robots meta tag for noIndex
+    let robotsMeta = document.querySelector('meta[name="robots"]');
+    if (noIndex) {
+      if (!robotsMeta) {
+        robotsMeta = document.createElement("meta");
+        robotsMeta.setAttribute("name", "robots");
+        document.head.appendChild(robotsMeta);
+      }
+      robotsMeta.setAttribute("content", "noindex, nofollow");
+    } else if (robotsMeta) {
+      robotsMeta.setAttribute("content", "index, follow");
+    }
 
     // 2. Update Meta Description
     let metaDesc = document.querySelector('meta[name="description"]');
@@ -106,7 +120,7 @@ export function SEO({ title, description, canonicalPath, episode }: SEOProps) {
         embedUrl: episode.embedUrl,
         publisher: {
           "@type": "Person",
-          name: "Big Ron Jones",
+          name: "BigRonJones®",
           url: "https://www.youtube.com/@Bigronjones",
         },
       };
@@ -120,19 +134,19 @@ export function SEO({ title, description, canonicalPath, episode }: SEOProps) {
             "@type": "WebSite",
             "@id": `${BASE_URL}/#website`,
             url: BASE_URL,
-            name: "Back to Basics with Big Ron",
+            name: "Back to Basics with BigRonJones®",
             description:
-              "Watch Big Ron Jones’ four-part Back to Basics workout series for chest, back and shoulders, legs, and arms. Join his email list for training content.",
+              "Watch BigRonJones®’ four part Back to Basics workout series for chest, back and shoulders, legs, and arms. Join his email list for training content.",
             publisher: {
               "@type": "Person",
-              name: "Big Ron Jones",
+              name: "BigRonJones®",
               url: "https://www.youtube.com/@Bigronjones",
             },
           },
           {
             "@type": "Person",
             "@id": `${BASE_URL}/#person`,
-            name: "Big Ron Jones",
+            name: "BigRonJones®",
             url: "https://thebigronjones.com",
             sameAs: [
               "https://www.youtube.com/@Bigronjones",
