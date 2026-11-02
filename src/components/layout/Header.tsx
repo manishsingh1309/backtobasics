@@ -24,20 +24,21 @@ export function Header() {
         {/* Brand Wordmark & Logo */}
         <Link
           to="/"
-          className="group flex items-center gap-3 transition-opacity hover:opacity-95 focus-visible:rounded-md"
-          aria-label="Back to Basics with Big Ron Jones — Home"
+          className="group flex items-center gap-3 transition-opacity hover:opacity-95 focus-visible:rounded-md shrink-0"
+          aria-label="Back to Basics with BigRonJones®"
           onClick={closeMobileMenu}
         >
           <img
-            src="/ron/profiles-headshot.jpg"
-            alt="Big Ron Jones"
-            className="h-11 w-11 sm:h-12 sm:w-12 select-none rounded-full ring-2 ring-[#0A3161] object-cover object-center shadow-sm transition-transform duration-300 group-hover:scale-105"
+            src="/brand/main.png"
+            alt="BigRonJones®"
+            className="h-10 w-10 sm:h-11 sm:w-11 select-none rounded-full border-2 border-[#0A3161]/70 object-cover object-center shadow-sm transition-transform duration-300 group-hover:scale-105"
+            draggable={false}
           />
           <div className="flex flex-col">
-            <span className="font-heading text-2xl sm:text-3xl tracking-wider text-[#0A3161] uppercase leading-none">
+            <span className="font-heading text-2xl sm:text-3xl tracking-[0.06em] text-slate-900 uppercase leading-none">
               Back to Basics
             </span>
-            <span className="font-mono text-[10px] sm:text-[11.5px] font-bold uppercase tracking-[0.16em] text-[#B31942] leading-tight flex items-center gap-1">
+            <span className="font-mono text-[9.5px] sm:text-[11px] font-bold uppercase tracking-[0.16em] text-[#B31942] leading-tight flex items-center gap-1">
               WITH <BrandName variant="upper" />
             </span>
           </div>

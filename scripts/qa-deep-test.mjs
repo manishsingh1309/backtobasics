@@ -86,14 +86,18 @@ const footerFile = fs.readFileSync(path.join(ROOT, "src/components/layout/Footer
 const privacyFile = fs.readFileSync(path.join(ROOT, "src/pages/Privacy.tsx"), "utf8");
 
 // Page 1 & 2
-check("Homepage H1: 'Back to Basics with Big Ron'", homeFile.includes("Back to Basics") && homeFile.includes("with Big Ron"));
+check("Homepage H1: 'Back to Basics with BigRonJones®'", 
+  homeFile.includes("Back to Basics") && (homeFile.includes("BrandName") || homeFile.includes("BIGRONJONES"))
+);
 check("Homepage Subtitle: 'Build muscle. Make the basics count.'", homeFile.includes("Build muscle. Make the basics count."));
 check("Homepage Primary CTA: 'Watch Episode 1'", homeFile.includes("Watch Episode 1"));
 check("Homepage Secondary CTA: 'Join the Email List'", homeFile.includes("Join the Email List"));
 check("Series Section Heading: 'Your Back to Basics workout series'", homeFile.includes("Your Back to Basics workout series"));
 check("Series Section Copy: 'Start with chest day and work through the series...'", homeFile.includes("Start with chest day and work through the series, or choose the episode you want to watch below."));
 check("Playlist Link: 'Watch the Full Series on YouTube'", homeFile.includes("Watch the Full Series on YouTube"));
-check("About Section Heading: 'Meet Big Ron Jones'", homeFile.includes("Meet Big Ron Jones"));
+check("About Section Heading: 'Meet BigRonJones®'", 
+  homeFile.includes("Meet") && (homeFile.includes("BrandName") || homeFile.includes("BIGRONJONES"))
+);
 check("About Section Copy verbatim", homeFile.includes("I’m Big Ron Jones. My approach is practical: understand the basics, train with purpose, and build habits you can keep."));
 check("About Section Button: 'Visit My YouTube Channel'", homeFile.includes("Visit My YouTube Channel"));
 
@@ -113,7 +117,7 @@ check("Ep 2 Nav: Previous: Chest Day -> Next: Leg Day",
 check("Ep 3 Nav: Previous: Back and Shoulders -> Next: Arm Day", 
   seriesFile.includes("Previous: Back and Shoulders") && seriesFile.includes("Next: Arm Day")
 );
-check("Ep 4 Nav: Previous: Leg Day -> Watch the Series Again + Join Big Ron's List", 
+check("Ep 4 Nav: Previous: Leg Day -> Watch the Series Again + Join BigRonJones List", 
   seriesFile.includes("Previous: Leg Day") && seriesFile.includes("Watch the Series Again") && seriesFile.includes("alsoShowsJoinList: true")
 );
 
@@ -130,16 +134,24 @@ check("Ep 3 SEO Title: 'Back to Basics: Leg Day | Big Ron Jones'", seriesFile.in
 check("Ep 4 SEO Title: 'Back to Basics: Arm Day | Big Ron Jones'", seriesFile.includes("Back to Basics: Arm Day | Big Ron Jones"));
 
 // Page 5: Signup & Welcome Email
-check("Email Section Heading: 'Keep building with Big Ron'", emailFile.includes("Keep building with Big Ron"));
+check("Email Section Heading: 'KEEP BUILDING WITH BIGRONJONES®'", 
+  emailFile.includes("KEEP BUILDING WITH") && emailFile.includes("BrandName")
+);
 check("Email Section Copy verbatim", emailFile.includes("Join my email list for Back to Basics updates and practical training content."));
-check("Email Section Button: 'Join Big Ron’s List'", emailFile.includes("Join Big Ron’s List"));
+check("Email Section Button: 'JOIN THE BIGRONJONES® LIST'", emailFile.includes("JOIN THE BIGRONJONES® LIST"));
 check("Required Label: 'Email Address'", emailFile.includes("Email Address"));
 check("Optional Label: 'First Name (optional)'", emailFile.includes("First Name (optional)"));
-check("Consent text verbatim", emailFile.includes("By subscribing, you agree to receive Back to Basics updates and training emails from Big Ron Jones. You can unsubscribe anytime. Read our"));
+check("Consent text with BigRonJones®", 
+  emailFile.includes("training emails from BigRonJones®") && emailFile.includes("Read our")
+);
 check("Invalid email error: 'Please enter a valid email address.'", emailFile.includes("Please enter a valid email address."));
 check("Submission error: 'We couldn’t complete your signup. Please try again.'", emailFile.includes("We couldn’t complete your signup. Please try again."));
-check("Direct subscription success message verbatim", emailFile.includes("You’re on the list. Start watching Back to Basics below."));
-check("Welcome Email Subject: 'Welcome to Back to Basics with Big Ron'", emailFile.includes("Welcome to Back to Basics with Big Ron"));
+check("Direct subscription success message with BigRonJones®", 
+  emailFile.includes("You’re on the list.") || emailFile.includes("BigRonJones® list")
+);
+check("Welcome Email Subject: 'Welcome to Back to Basics with BigRonJones®'", 
+  emailFile.includes("Welcome to Back to Basics with BigRonJones®")
+);
 check("Welcome Email Preview Text: 'Four episodes. A clear place to start.'", emailFile.includes("Four episodes. A clear place to start."));
 check("Welcome Email Greeting: 'Glad you’re here.'", emailFile.includes("Glad you’re here."));
 

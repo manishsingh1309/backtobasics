@@ -19,43 +19,98 @@ export default function Home() {
         canonicalPath="/"
       />
 
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-slate-50 via-white to-white py-16 sm:py-24 lg:py-28 border-b border-slate-100">
-        {/* Subtle decorative athletic grid pattern */}
+      {/* Hero Section — Signature BigRonJones® Dark Cinematic Athletic Luxury */}
+      <section className="relative overflow-hidden bg-[#070A10] py-16 sm:py-24 lg:py-28 border-b border-slate-900">
+        {/* Ambient Brand Blue Glow behind headline */}
         <div
-          className="pointer-events-none absolute inset-0 -z-10 opacity-25 [mask-image:radial-gradient(ellipse_at_center,white,transparent)]"
+          className="pointer-events-none absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[580px] h-[580px] rounded-full z-0 opacity-80"
           style={{
-            backgroundImage: `radial-gradient(circle at 1px 1px, #0A3161 1px, transparent 0)`,
-            backgroundSize: "32px 32px",
+            background: "radial-gradient(circle, rgba(10, 49, 97, 0.48) 0%, rgba(10, 49, 97, 0.15) 50%, transparent 70%)",
+            filter: "blur(85px)",
           }}
           aria-hidden="true"
         />
 
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Ambient Brand Red Glow in bottom right */}
+        <div
+          className="pointer-events-none absolute bottom-10 right-10 w-[420px] h-[420px] rounded-full z-0 opacity-35"
+          style={{
+            background: "radial-gradient(circle, rgba(179, 25, 66, 0.3) 0%, transparent 70%)",
+            filter: "blur(90px)",
+          }}
+          aria-hidden="true"
+        />
+
+        {/* Desktop Widescreen Hero Image with Big Ron Jones & American Flag (>= 1024px) */}
+        <div className="hidden lg:block absolute inset-0 h-full w-full pointer-events-none select-none overflow-hidden z-10 opacity-70 mix-blend-screen">
+          <img
+            src="/brand/hero-desktop.png"
+            alt="BigRonJones®"
+            className="h-full w-full object-cover object-[80%_center] xl:object-[78%_center] select-none"
+            style={{ imageRendering: "-webkit-optimize-contrast" }}
+            fetchPriority="high"
+          />
+          {/* Feathered scrim over left text column to ensure 100% crisp text readability */}
+          <div
+            className="absolute inset-y-0 left-0 w-full lg:w-[62%] xl:w-[56%] pointer-events-none"
+            style={{
+              background:
+                "linear-gradient(to right, #070A10 0%, #070A10 35%, rgba(7, 10, 16, 0.94) 52%, rgba(7, 10, 16, 0.72) 72%, rgba(7, 10, 16, 0.25) 90%, transparent 100%)",
+            }}
+          />
+          {/* Soft bottom vignette to melt into next section */}
+          <div
+            className="absolute bottom-0 inset-x-0 h-28 pointer-events-none"
+            style={{
+              background: "linear-gradient(to top, #070A10 0%, rgba(7, 10, 16, 0.75) 40%, transparent 100%)",
+            }}
+          />
+          {/* Subtle top blend for navbar clearance */}
+          <div
+            className="absolute top-0 inset-x-0 h-20 pointer-events-none"
+            style={{
+              background: "linear-gradient(to bottom, #070A10 0%, rgba(7, 10, 16, 0.5) 50%, transparent 100%)",
+            }}
+          />
+        </div>
+
+        {/* Mobile & Tablet Hero Visual Layer (< 1024px) */}
+        <div className="block lg:hidden absolute inset-0 h-full w-full pointer-events-none select-none overflow-hidden z-10 opacity-25">
+          <img
+            src="/brand/hero-mobile.png"
+            alt="BigRonJones®"
+            className="h-full w-full object-cover object-top select-none"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#070A10]/80 via-[#070A10]/95 to-[#070A10]" />
+        </div>
+
+        <div className="relative z-20 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-10">
             {/* Left copy column */}
             <div className="lg:col-span-7 text-center lg:text-left">
-              {/* Eyebrow badge */}
-              <div className="inline-flex items-center gap-2 rounded-full bg-[#eff6ff] px-4 py-1.5 text-xs font-mono font-bold tracking-wider text-[#0A3161] border border-blue-200/70 mb-6 shadow-sm">
-                <Dumbbell className="h-3.5 w-3.5 text-[#B31942]" />
-                <span>OFFICIAL 4-PART WORKOUT SERIES</span>
+              {/* Eyebrow badge with signature crimson accent */}
+              <div className="inline-flex items-center gap-2 mb-6">
+                <span className="inline-block w-8 h-[2px] bg-[#B31942]" />
+                <span className="font-mono text-xs sm:text-[13px] font-bold tracking-[0.2em] text-[#B31942] uppercase">
+                  OFFICIAL 4-PART WORKOUT SERIES
+                </span>
               </div>
 
               {/* Wordmark / H1 */}
-              <h1 className="font-heading text-5xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight text-[#0A3161] uppercase leading-[0.95]">
+              <h1 className="font-heading text-5xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight text-white uppercase leading-[0.92]">
                 Back to Basics <br />
-                <span className="text-[#B31942]">
+                <span className="text-[#38bdf8] drop-shadow-sm">
                   with <BrandName variant="upper" />
                 </span>
               </h1>
 
               {/* Subtitle verbatim */}
-              <p className="mt-5 text-xl sm:text-2xl font-bold tracking-tight text-slate-900">
+              <p className="mt-5 text-xl sm:text-2xl font-bold tracking-tight text-white">
                 Build muscle. Make the basics count.
               </p>
 
               {/* Intro verbatim */}
-              <p className="mt-4 text-base sm:text-lg text-slate-700 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+              <p className="mt-4 text-base sm:text-lg text-slate-300 leading-relaxed max-w-2xl mx-auto lg:mx-0">
                 You don’t need to make training more complicated to take it seriously. Join me for a four-part workout series covering chest, back and shoulders, legs, and arms. Watch the videos, learn from the demonstrations, and bring a clear focus to your next workout.
               </p>
 
@@ -64,7 +119,7 @@ export default function Home() {
                 <Link
                   to="/chest-day/"
                   onClick={() => trackWatchEpisodeClick(1, "Episode 1: Chest Day")}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 rounded-lg bg-[#0A3161] px-8 py-4 text-base sm:text-lg font-bold text-white shadow-lg transition-all hover:bg-[#08274d] hover:shadow-xl active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0A3161]"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 rounded-lg bg-[#B31942] px-8 py-4 text-base sm:text-lg font-bold text-white shadow-xl shadow-red-900/35 transition-all hover:bg-[#8e1032] hover:shadow-2xl active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#B31942]"
                 >
                   <Play className="h-5 w-5 fill-current text-white" aria-hidden="true" />
                   <span>Watch Episode 1</span>
@@ -72,17 +127,27 @@ export default function Home() {
                 </Link>
 
                 <a
+                  href="https://bigronjones.com/assessment"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg border border-slate-700 bg-white/10 backdrop-blur-md px-7 py-3.5 text-base font-bold text-white transition-all hover:bg-white/15 hover:border-slate-500"
+                >
+                  <span className="h-2 w-2 rounded-full bg-[#B31942] animate-pulse" />
+                  <span>Take Free Assessment →</span>
+                </a>
+
+                <a
                   href="#join"
-                  className="w-full sm:w-auto inline-flex items-center justify-center rounded-lg border-2 border-slate-300 bg-white px-7 py-3.5 text-base font-bold text-slate-800 transition-colors hover:border-[#0A3161] hover:text-[#0A3161]"
+                  className="w-full sm:w-auto inline-flex items-center justify-center rounded-lg border border-slate-700 bg-slate-900/70 px-6 py-3.5 text-sm font-bold text-slate-300 hover:text-white hover:border-slate-500 transition-colors"
                 >
                   Join the Email List
                 </a>
               </div>
 
               {/* Trust Subtext */}
-              <div className="mt-6 flex flex-wrap items-center justify-center lg:justify-start gap-3 text-xs font-mono font-medium text-slate-500">
-                <span className="inline-flex items-center gap-1">
-                  <ShieldCheck className="h-3.5 w-3.5 text-[#0A3161]" />
+              <div className="mt-8 flex flex-wrap items-center justify-center lg:justify-start gap-3 text-xs font-mono font-medium text-slate-400">
+                <span className="inline-flex items-center gap-1.5 text-slate-300">
+                  <ShieldCheck className="h-4 w-4 text-[#38bdf8]" />
                   20+ Years Coaching
                 </span>
                 <span>•</span>
@@ -94,19 +159,19 @@ export default function Home() {
 
             {/* Right visual featured card */}
             <div className="lg:col-span-5">
-              <div className="relative mx-auto max-w-md lg:max-w-none rounded-2xl bg-white p-2.5 shadow-2xl ring-1 ring-slate-900/10 border border-slate-100">
+              <div className="relative mx-auto max-w-md lg:max-w-none rounded-2xl bg-[#0c1322]/90 p-3 shadow-2xl ring-1 ring-white/10 border border-slate-700/70 backdrop-blur-md">
                 <Link
                   to="/chest-day/"
                   onClick={() => trackWatchEpisodeClick(1, "Episode 1: Chest Day")}
-                  className="group relative block aspect-video overflow-hidden rounded-xl bg-slate-900"
+                  className="group relative block aspect-video overflow-hidden rounded-xl bg-slate-950"
                 >
                   <img
                     src="/thumbnails/ep1-chest.jpg"
                     alt="Back to Basics Episode 1: Chest Day"
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                  <div className="absolute top-3 left-3 rounded bg-[#0A3161] px-2.5 py-1 text-xs font-mono font-bold text-white uppercase tracking-wider">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
+                  <div className="absolute top-3 left-3 rounded bg-[#0A3161] px-2.5 py-1 text-xs font-mono font-bold text-white uppercase tracking-wider shadow">
                     START HERE • EPISODE 1
                   </div>
                   <div className="absolute inset-0 flex items-center justify-center">
@@ -119,6 +184,16 @@ export default function Home() {
                     <p className="text-xs text-slate-300 font-mono">5 Exercises to Build Your Chest (9:59)</p>
                   </div>
                 </Link>
+
+                <div className="mt-3 px-2 flex items-center justify-between text-xs font-mono text-slate-400">
+                  <span className="flex items-center gap-1.5 text-slate-300">
+                    <Dumbbell className="h-3.5 w-3.5 text-[#38bdf8]" />
+                    Full Coaching Breakdown
+                  </span>
+                  <Link to="/chest-day/" className="text-[#38bdf8] hover:underline font-bold">
+                    Watch Now →
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
@@ -195,10 +270,10 @@ export default function Home() {
                 />
                 <div className="mt-4 px-3 py-2 text-center border-t border-slate-100">
                   <p className="font-heading text-2xl text-[#0A3161] uppercase tracking-wide">
-                    Big Ron Jones
+                    <BrandName variant="upper" />
                   </p>
                   <p className="text-xs font-mono uppercase tracking-wider text-[#B31942] font-bold">
-                    <BrandName variant="upper" /> · FOUNDER & HEAD COACH
+                    FOUNDER & HEAD COACH
                   </p>
                   <p className="mt-1 text-[11px] font-mono text-slate-500">
                     Big Ron Jones LLC · Las Vegas, NV
@@ -215,9 +290,9 @@ export default function Home() {
 
               <h2
                 id="about-heading"
-                className="font-heading text-4xl sm:text-5xl text-[#0A3161] uppercase tracking-wide"
+                className="font-heading text-4xl sm:text-5xl text-[#0A3161] uppercase tracking-wide flex items-center justify-center lg:justify-start gap-2 flex-wrap"
               >
-                Meet Big Ron Jones
+                <span>Meet</span> <BrandName variant="upper" />
               </h2>
 
               <div className="mt-6 space-y-4 text-base sm:text-lg text-slate-700 leading-relaxed">

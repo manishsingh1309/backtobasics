@@ -35,7 +35,7 @@ export function CredibilityStrip() {
   return (
     <section
       aria-label="BigRonJones Coaching Standards"
-      className="relative bg-white border-y border-slate-200 py-8 sm:py-10"
+      className="relative bg-[#0A3161] border-y border-blue-900/60 py-7 sm:py-9 text-white shadow-inner"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-6">
@@ -44,10 +44,10 @@ export function CredibilityStrip() {
               key={label}
               className="flex flex-col items-center gap-2.5 text-center group"
             >
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-50 text-[#0A3161] ring-1 ring-slate-200 transition-all duration-300 group-hover:bg-[#0A3161] group-hover:text-white group-hover:shadow-md">
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#061f3d] text-[#38bdf8] ring-1 ring-blue-400/30 transition-all duration-300 group-hover:bg-[#B31942] group-hover:text-white group-hover:shadow-md">
                 <Icon className="h-5 w-5" strokeWidth={1.8} />
               </div>
-              <p className="font-mono text-[9.5px] sm:text-[10px] font-bold uppercase tracking-[0.16em] leading-tight text-slate-800">
+              <p className="font-mono text-[9.5px] sm:text-[10px] font-bold uppercase tracking-[0.16em] leading-tight text-white">
                 {label}
               </p>
             </div>

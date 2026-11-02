@@ -113,9 +113,9 @@ export function EmailSignupSection({
           {/* Section Heading */}
           <h2
             id="join-heading"
-            className="font-heading text-3xl sm:text-4xl text-[#0A3161] uppercase tracking-wide"
+            className="font-heading text-3xl sm:text-4xl text-[#0A3161] uppercase tracking-wide flex items-center justify-center gap-1.5 flex-wrap"
           >
-            Keep building with Big Ron
+            <span>KEEP BUILDING WITH</span> <BrandName variant="upper" />
           </h2>
 
           {/* Section Copy */}
@@ -132,7 +132,7 @@ export function EmailSignupSection({
 
               {isConfirmationRequired ? (
                 <p className="mt-4 text-base font-medium text-emerald-900">
-                  Check your inbox to confirm your email address. Once confirmed, you’ll be on Big Ron’s list.
+                  Check your inbox to confirm your email address. Once confirmed, you’ll be on the BigRonJones® list.
                 </p>
               ) : (
                 <p className="mt-4 text-base font-medium text-emerald-900">
@@ -235,12 +235,12 @@ export function EmailSignupSection({
                   disabled={loading}
                   className="w-full rounded-lg bg-[#0A3161] py-3.5 px-6 text-base font-bold text-white shadow-md transition-all hover:bg-[#08274d] active:bg-[#061f3d] disabled:opacity-70 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0A3161]"
                 >
-                  {loading ? "Joining..." : "Join Big Ron’s List"}
+                  {loading ? "Joining..." : "JOIN THE BIGRONJONES® LIST"}
                 </button>
 
                 {/* Consent text */}
                 <p className="text-xs text-slate-500 leading-relaxed text-center sm:text-left mt-3">
-                  By subscribing, you agree to receive Back to Basics updates and training emails from Big Ron Jones. You can unsubscribe anytime. Read our{" "}
+                  By subscribing, you agree to receive Back to Basics updates and training emails from BigRonJones®. You can unsubscribe anytime. Read our{" "}
                   <Link
                     to="/privacy/"
                     className="text-[#0A3161] underline hover:text-[#08274d] font-medium"
@@ -285,10 +285,10 @@ export function EmailSignupSection({
             {/* Email Headers */}
             <div className="bg-slate-50 border-b border-slate-200 px-6 py-3 text-xs text-slate-600 space-y-1">
               <div>
-                <strong className="text-slate-800">From:</strong> Big Ron Jones &lt;RonJones@BigRonJones.com&gt;
+                <strong className="text-slate-800">From:</strong> BigRonJones® &lt;RonJones@BigRonJones.com&gt;
               </div>
               <div>
-                <strong className="text-slate-800">Subject:</strong> Welcome to Back to Basics with Big Ron
+                <strong className="text-slate-800">Subject:</strong> Welcome to Back to Basics with BigRonJones®
               </div>
               <div>
                 <strong className="text-slate-800">Preview text:</strong> Four episodes. A clear place to start.
@@ -314,7 +314,9 @@ export function EmailSignupSection({
               <p>
                 I’ll share Back to Basics updates and practical training content here. Keep showing up and make the basics count.
               </p>
-              <p className="font-semibold text-slate-900 pt-2">Big Ron</p>
+              <div className="pt-2">
+                <BrandName variant="upper" className="font-heading text-lg text-slate-900" />
+              </div>
 
               <div className="mt-8 pt-4 border-t border-slate-200 text-[11px] text-slate-400">
                 <p><BrandName variant="upper" /> • PRACTICAL ADVICE FOR YOUR REAL WORLD GOALS.®</p>

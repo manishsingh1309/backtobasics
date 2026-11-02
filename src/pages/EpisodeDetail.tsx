@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { SEO } from "@/components/common/SEO";
 import { EmailSignupSection } from "@/components/common/EmailSignupSection";
+import BrandName from "@/components/shared/BrandName";
 import { Episode, ASSESSMENT_URL } from "@/data/seriesData";
 import { trackYouTubeOutboundClick, trackWatchEpisodeClick } from "@/lib/analytics";
 
@@ -49,7 +50,7 @@ export default function EpisodeDetail({ episode }: EpisodeDetailProps) {
           {/* Header & Exact Intro */}
           <header className="mb-8">
             <div className="flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-[#B31942] mb-2">
-              <span>Back to Basics with Big Ron Jones®</span>
+              <span>Back to Basics with <BrandName variant="upper" /></span>
               <span>•</span>
               <span>Episode {episode.id} of 4</span>
             </div>
@@ -174,7 +175,7 @@ export default function EpisodeDetail({ episode }: EpisodeDetailProps) {
               </h2>
 
               <p className="mt-4 text-base sm:text-lg text-slate-700 max-w-2xl mx-auto leading-relaxed">
-                You've completed all four foundational episodes. Now keep building your momentum — watch our partner workout collection, join Big Ron’s email list for training content, or get personalized guidance for your unique goals.
+                You've completed all four foundational episodes. Now keep building your momentum — watch our partner workout collection, join the BigRonJones® email list for training content, or get personalized guidance for your unique goals.
               </p>
 
               {/* Three CTA Buttons */}
@@ -248,7 +249,7 @@ export default function EpisodeDetail({ episode }: EpisodeDetailProps) {
                     className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-lg border-2 border-[#0A3161] bg-[#eff6ff] px-5 py-3 text-sm font-bold text-[#0A3161] hover:bg-blue-100 transition"
                   >
                     <Mail className="h-4 w-4" />
-                    <span>Join Big Ron’s List</span>
+                    <span>Join the BigRonJones® List</span>
                   </a>
                 </div>
               )}

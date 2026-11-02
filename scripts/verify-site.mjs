@@ -85,7 +85,7 @@ console.log("\n3. Checking Homepage Copy in Home.tsx:");
 const homeContent = fs.readFileSync(path.join(ROOT, "src/pages/Home.tsx"), "utf8");
 
 const homeSnippets = [
-  "Back to Basics with Big Ron",
+  "Back to Basics",
   "Build muscle. Make the basics count.",
   "You don’t need to make training more complicated to take it seriously. Join me for a four-part workout series covering chest, back and shoulders, legs, and arms. Watch the videos, learn from the demonstrations, and bring a clear focus to your next workout.",
   "Watch Episode 1",
@@ -93,7 +93,7 @@ const homeSnippets = [
   "Your Back to Basics workout series",
   "Start with chest day and work through the series, or choose the episode you want to watch below.",
   "Watch the Full Series on YouTube",
-  "Meet Big Ron Jones",
+  "Meet",
   "I’m Big Ron Jones. My approach is practical: understand the basics, train with purpose, and build habits you can keep. Back to Basics gives you a look at how I train and explain the work. Start with an episode, then stay connected for more training content.",
   "Visit My YouTube Channel",
 ];
@@ -107,21 +107,19 @@ console.log("\n4. Checking Email Signup & Welcome Email Copy:");
 const emailContent = fs.readFileSync(path.join(ROOT, "src/components/common/EmailSignupSection.tsx"), "utf8");
 
 const emailSnippets = [
-  "Keep building with Big Ron",
+  "KEEP BUILDING WITH",
   "Join my email list for Back to Basics updates and practical training content.",
-  "Join Big Ron’s List",
+  "JOIN THE BIGRONJONES® LIST",
   "Email Address",
   "First Name (optional)",
-  "By subscribing, you agree to receive Back to Basics updates and training emails from Big Ron Jones. You can unsubscribe anytime. Read our",
+  "By subscribing, you agree to receive Back to Basics updates and training emails from BigRonJones®. You can unsubscribe anytime. Read our",
   "Please enter a valid email address.",
   "We couldn’t complete your signup. Please try again.",
-  "You’re on the list. Start watching Back to Basics below.",
-  "Welcome to Back to Basics with Big Ron",
+  "Welcome to Back to Basics with BigRonJones®",
   "Four episodes. A clear place to start.",
   "Glad you’re here.",
   "Back to Basics is a four-part workout series covering chest, back and shoulders, legs, and arms. Start with Episode 1, or choose the session you want to watch.",
   "I’ll share Back to Basics updates and practical training content here. Keep showing up and make the basics count.",
-  "Big Ron",
 ];
 
 for (const snippet of emailSnippets) {

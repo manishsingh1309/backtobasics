@@ -37,9 +37,9 @@ export function Footer() {
           <div>
             <div className="flex items-center gap-3 mb-4">
               <img
-                src="/ron/profiles-headshot.jpg"
+                src="/brand/main.png"
                 alt="BigRonJones®"
-                className="h-11 w-11 select-none rounded-full ring-2 ring-[#0A3161] object-cover object-center shadow-sm"
+                className="h-11 w-11 select-none rounded-full border-2 border-[#0A3161]/70 object-cover object-center shadow-sm"
               />
               <div>
                 <span className="font-heading text-2xl tracking-[0.08em] text-[#0A3161] block leading-none">
