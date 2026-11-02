@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Play } from "lucide-react";
+import { Menu, X, Play, ExternalLink } from "lucide-react";
 import BrandName from "@/components/shared/BrandName";
+import { ASSESSMENT_URL } from "@/data/seriesData";
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -44,30 +45,51 @@ export function Header() {
 
         {/* Desktop Navigation */}
         <nav
-          className="hidden md:flex items-center gap-8"
+          className="hidden lg:flex items-center gap-6 xl:gap-8"
           aria-label="Main Navigation"
         >
           <a
             href={isHome ? "#watch" : "/#watch"}
-            className="text-sm font-bold uppercase tracking-wider text-slate-700 transition-colors hover:text-[#0A3161] focus-visible:rounded-md"
+            className="text-xs xl:text-sm font-bold uppercase tracking-wider text-slate-700 transition-colors hover:text-[#0A3161] focus-visible:rounded-md"
           >
-            Watch the Series
+            Series
+          </a>
+          <a
+            href={isHome ? "#his-and-her" : "/#his-and-her"}
+            className="text-xs xl:text-sm font-bold uppercase tracking-wider text-slate-700 transition-colors hover:text-[#0A3161] focus-visible:rounded-md"
+          >
+            His & Her
+          </a>
+          <a
+            href={ASSESSMENT_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 text-xs xl:text-sm font-bold uppercase tracking-wider text-[#0A3161] transition-colors hover:text-[#B31942] focus-visible:rounded-md"
+          >
+            <span>Free Assessment</span>
+            <ExternalLink className="h-3 w-3" />
+          </a>
+          <a
+            href={isHome ? "#coaching" : "/#coaching"}
+            className="text-xs xl:text-sm font-bold uppercase tracking-wider text-slate-700 transition-colors hover:text-[#0A3161] focus-visible:rounded-md"
+          >
+            Coaching
           </a>
           <a
             href={isHome ? "#about" : "/#about"}
-            className="text-sm font-bold uppercase tracking-wider text-slate-700 transition-colors hover:text-[#0A3161] focus-visible:rounded-md"
+            className="text-xs xl:text-sm font-bold uppercase tracking-wider text-slate-700 transition-colors hover:text-[#0A3161] focus-visible:rounded-md"
           >
-            Meet Big Ron Jones
+            Meet Ron
           </a>
           <a
             href={isHome ? "#join" : "/#join"}
-            className="text-sm font-bold uppercase tracking-wider text-slate-700 transition-colors hover:text-[#0A3161] focus-visible:rounded-md"
+            className="text-xs xl:text-sm font-bold uppercase tracking-wider text-slate-700 transition-colors hover:text-[#0A3161] focus-visible:rounded-md"
           >
-            Join the List
+            Join List
           </a>
           <Link
             to="/chest-day/"
-            className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#0A3161] px-5 py-2.5 text-sm font-bold text-white shadow-sm transition-all hover:bg-[#08274d] hover:shadow-md active:scale-95 focus-visible:ring-2 focus-visible:ring-[#0A3161]"
+            className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#0A3161] px-4 py-2 text-xs xl:text-sm font-bold text-white shadow-sm transition-all hover:bg-[#08274d] hover:shadow-md active:scale-95 focus-visible:ring-2 focus-visible:ring-[#0A3161]"
           >
             <Play className="h-3.5 w-3.5 fill-current text-white" aria-hidden="true" />
             <span>Watch Episode 1</span>
@@ -75,7 +97,7 @@ export function Header() {
         </nav>
 
         {/* Mobile menu trigger + prominent Watch Episode 1 button */}
-        <div className="flex items-center gap-2.5 md:hidden">
+        <div className="flex items-center gap-2.5 lg:hidden">
           <Link
             to="/chest-day/"
             className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-[#0A3161] px-3.5 py-2 text-xs font-bold text-white shadow-sm"
@@ -101,14 +123,38 @@ export function Header() {
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-b border-slate-200 bg-white px-5 pt-4 pb-6 shadow-xl animate-in slide-in-from-top-2 duration-200">
-          <nav className="flex flex-col space-y-4">
+        <div className="lg:hidden border-b border-slate-200 bg-white px-5 pt-4 pb-6 shadow-xl animate-in slide-in-from-top-2 duration-200">
+          <nav className="flex flex-col space-y-3">
             <a
               href={isHome ? "#watch" : "/#watch"}
               className="text-base font-bold uppercase tracking-wider text-slate-800 hover:text-[#0A3161] py-1 border-b border-slate-100"
               onClick={closeMobileMenu}
             >
               Watch the Series
+            </a>
+            <a
+              href={isHome ? "#his-and-her" : "/#his-and-her"}
+              className="text-base font-bold uppercase tracking-wider text-slate-800 hover:text-[#0A3161] py-1 border-b border-slate-100"
+              onClick={closeMobileMenu}
+            >
+              His & Her Routine
+            </a>
+            <a
+              href={ASSESSMENT_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-between text-base font-bold uppercase tracking-wider text-[#0A3161] hover:text-[#B31942] py-1 border-b border-slate-100"
+              onClick={closeMobileMenu}
+            >
+              <span>Take Free Assessment</span>
+              <ExternalLink className="h-4 w-4" />
+            </a>
+            <a
+              href={isHome ? "#coaching" : "/#coaching"}
+              className="text-base font-bold uppercase tracking-wider text-slate-800 hover:text-[#0A3161] py-1 border-b border-slate-100"
+              onClick={closeMobileMenu}
+            >
+              Coaching Guidance
             </a>
             <a
               href={isHome ? "#about" : "/#about"}

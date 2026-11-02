@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import BrandName from "@/components/shared/BrandName";
-import { CHANNEL_URL } from "@/data/seriesData";
+import { CHANNEL_URL, ASSESSMENT_URL, COACHING_URL } from "@/data/seriesData";
 import { trackYouTubeOutboundClick } from "@/lib/analytics";
 
 export function Footer() {
@@ -82,8 +82,8 @@ export function Footer() {
               </a>
             </div>
 
-            {/* Verbatim Footer Links: YouTube | Privacy Policy | Contact */}
-            <div className="mt-6 flex flex-wrap items-center md:justify-end gap-3 text-sm font-semibold text-slate-700">
+            {/* Navigation & Outbound Hub Links */}
+            <div className="mt-6 flex flex-wrap items-center md:justify-end gap-x-3 gap-y-2 text-sm font-semibold text-slate-700">
               <a
                 href={CHANNEL_URL}
                 target="_blank"
@@ -92,6 +92,31 @@ export function Footer() {
                 className="hover:text-[#0A3161] transition-colors"
               >
                 YouTube
+              </a>
+              <span className="text-slate-300" aria-hidden="true">|</span>
+              <a
+                href="/#his-and-her"
+                className="hover:text-[#0A3161] transition-colors"
+              >
+                His & Her Series
+              </a>
+              <span className="text-slate-300" aria-hidden="true">|</span>
+              <a
+                href={ASSESSMENT_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#0A3161] hover:text-[#B31942] transition-colors"
+              >
+                Free Assessment
+              </a>
+              <span className="text-slate-300" aria-hidden="true">|</span>
+              <a
+                href={COACHING_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-[#0A3161] transition-colors"
+              >
+                Coaching
               </a>
               <span className="text-slate-300" aria-hidden="true">|</span>
               <Link

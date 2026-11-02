@@ -8,10 +8,12 @@ import {
   CheckCircle,
   Clock,
   ListOrdered,
+  Play,
+  Sparkles,
 } from "lucide-react";
 import { SEO } from "@/components/common/SEO";
 import { EmailSignupSection } from "@/components/common/EmailSignupSection";
-import { Episode } from "@/data/seriesData";
+import { Episode, ASSESSMENT_URL } from "@/data/seriesData";
 import { trackYouTubeOutboundClick, trackWatchEpisodeClick } from "@/lib/analytics";
 
 interface EpisodeDetailProps {
@@ -152,6 +154,63 @@ export default function EpisodeDetail({ episode }: EpisodeDetailProps) {
               </div>
             </div>
           </section>
+
+          {/* Episode 4 Post-Series Next Steps (Checklist Item 4) */}
+          {episode.id === 4 && (
+            <section
+              className="mb-14 rounded-2xl border-2 border-blue-100 bg-gradient-to-b from-[#eff6ff]/80 via-white to-white p-8 sm:p-10 shadow-sm text-center"
+              aria-labelledby="whats-next-heading"
+            >
+              <div className="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-3.5 py-1 text-xs font-mono font-bold uppercase tracking-wider text-[#0A3161] mb-4">
+                <span>SERIES COMPLETE</span>
+              </div>
+
+              {/* Exact heading required: YOU'VE LEARNED THE BASICS. WHAT'S NEXT? */}
+              <h2
+                id="whats-next-heading"
+                className="font-heading text-3xl sm:text-4xl lg:text-5xl text-[#0A3161] uppercase tracking-wide leading-tight"
+              >
+                YOU'VE LEARNED THE BASICS. WHAT'S NEXT?
+              </h2>
+
+              <p className="mt-4 text-base sm:text-lg text-slate-700 max-w-2xl mx-auto leading-relaxed">
+                You've completed all four foundational episodes. Now keep building your momentum — watch our partner workout collection, join Big Ron’s email list for training content, or get personalized guidance for your unique goals.
+              </p>
+
+              {/* Three CTA Buttons */}
+              <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+                {/* Button 1: WATCH MORE WORKOUTS → His & Her collection */}
+                <Link
+                  to="/#his-and-her"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-[#0A3161] px-6 py-3.5 text-sm sm:text-base font-bold text-white shadow-md transition-all hover:bg-[#08274d] hover:shadow-lg active:scale-[0.99]"
+                >
+                  <Play className="h-4 w-4 fill-current text-white" aria-hidden="true" />
+                  <span>WATCH MORE WORKOUTS</span>
+                </Link>
+
+                {/* Button 2: JOIN MY EMAIL LIST → existing signup section */}
+                <a
+                  href="#join"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg border-2 border-slate-300 bg-white px-6 py-3.5 text-sm sm:text-base font-bold text-slate-800 transition-colors hover:border-[#0A3161] hover:text-[#0A3161]"
+                >
+                  <Mail className="h-4 w-4" aria-hidden="true" />
+                  <span>JOIN MY EMAIL LIST</span>
+                </a>
+
+                {/* Button 3: GET PERSONALIZED GUIDANCE → free assessment */}
+                <a
+                  href={ASSESSMENT_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-[#B31942] px-6 py-3.5 text-sm sm:text-base font-bold text-white shadow-md transition-all hover:bg-[#8e1032] hover:shadow-lg active:scale-[0.99]"
+                >
+                  <Sparkles className="h-4 w-4" aria-hidden="true" />
+                  <span>GET PERSONALIZED GUIDANCE</span>
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </a>
+              </div>
+            </section>
+          )}
 
           {/* Episode Navigation: Explicit previous / next step */}
           <nav

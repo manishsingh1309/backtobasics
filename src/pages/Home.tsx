@@ -4,6 +4,8 @@ import { SEO } from "@/components/common/SEO";
 import { EpisodeCard } from "@/components/common/EpisodeCard";
 import { EmailSignupSection } from "@/components/common/EmailSignupSection";
 import { CredibilityStrip } from "@/components/common/CredibilityStrip";
+import { HisAndHerSection } from "@/components/home/HisAndHerSection";
+import { CoachingSection } from "@/components/home/CoachingSection";
 import BrandName from "@/components/shared/BrandName";
 import { EPISODES, PLAYLIST_URL, CHANNEL_URL } from "@/data/seriesData";
 import { trackYouTubeOutboundClick, trackWatchEpisodeClick } from "@/lib/analytics";
@@ -167,6 +169,12 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* His & Her Workout Collection - Directly below original four-part series */}
+      <HisAndHerSection />
+
+      {/* Free Fitness Assessment & Premium Coaching Section - Below free workout content */}
+      <CoachingSection />
 
       {/* Meet Big Ron / #about */}
       <section

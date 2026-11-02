@@ -246,6 +246,68 @@ check("Mobile hamburger button has aria-expanded and aria-label",
 );
 
 // -------------------------------------------------------------
+// Test Suite 8: November 2026 Checklist Compliance Audit
+// -------------------------------------------------------------
+console.log("\n[SUITE 8] November 2026 Checklist Verification (Ron Jones Directives)");
+
+const coachingFile = fs.readFileSync(path.join(ROOT, "src/components/home/CoachingSection.tsx"), "utf8");
+const hisAndHerFile = fs.readFileSync(path.join(ROOT, "src/components/home/HisAndHerSection.tsx"), "utf8");
+
+// 1 | PREMIUM COACHING
+check("Checklist 1: Heading 'READY FOR MORE PERSONALIZED GUIDANCE?'", 
+  coachingFile.includes("READY FOR MORE PERSONALIZED GUIDANCE?")
+);
+check("Checklist 1: Explains structured individual coaching available", 
+  coachingFile.includes("structured, individual coaching")
+);
+check("Checklist 1: Button 'EXPLORE COACHING PROGRAMS'", 
+  coachingFile.includes("EXPLORE COACHING PROGRAMS")
+);
+
+// 2 | FREE FITNESS ASSESSMENT
+check("Checklist 2: Heading 'NOT SURE WHERE TO START?'", 
+  coachingFile.includes("NOT SURE WHERE TO START?")
+);
+check("Checklist 2: Button 'TAKE THE FREE ASSESSMENT'", 
+  coachingFile.includes("TAKE THE FREE ASSESSMENT")
+);
+check("Checklist 2: Link exactly https://bigronjones.com/assessment", 
+  seriesFile.includes("https://bigronjones.com/assessment") && coachingFile.includes("ASSESSMENT_URL")
+);
+
+// 3 | ADD HIS & HER WORKOUT COLLECTION
+check("Checklist 3: Section mounted in Home.tsx", 
+  homeFile.includes("<HisAndHerSection />")
+);
+check("Checklist 3: Title 'HIS & HER WORKOUT ROUTINE | Big Ron Jones & Sue'", 
+  hisAndHerFile.includes("HIS & HER WORKOUT ROUTINE") && hisAndHerFile.includes("Big Ron Jones & Sue")
+);
+check("Checklist 3: 4 His & Her Workout videos defined in seriesData", 
+  seriesFile.includes("HIS_AND_HER_VIDEOS") && 
+  seriesFile.includes("Back Workout | Back Exercise Variations with Ron & Sue") &&
+  seriesFile.includes("Shoulder Workout | Front, Side & Rear Delts") &&
+  seriesFile.includes("Perfect Triceps Workout") &&
+  seriesFile.includes("Biceps Workout | Curl Variations with Ron & Sue")
+);
+check("Checklist 3: Playlist link exact PLbxZT1M57opPoFM9v-1-x8GHTyQhrfrhh", 
+  seriesFile.includes("PLbxZT1M57opPoFM9v-1-x8GHTyQhrfrhh")
+);
+
+// 4 | NEXT STEPS AFTER EPISODE 4
+check("Checklist 4: Heading 'YOU'VE LEARNED THE BASICS. WHAT'S NEXT?'", 
+  epDetailFile.includes("YOU'VE LEARNED THE BASICS. WHAT'S NEXT?")
+);
+check("Checklist 4: Button 1 'WATCH MORE WORKOUTS' -> /#his-and-her", 
+  epDetailFile.includes("WATCH MORE WORKOUTS") && epDetailFile.includes("/#his-and-her")
+);
+check("Checklist 4: Button 2 'JOIN MY EMAIL LIST' -> #join", 
+  epDetailFile.includes("JOIN MY EMAIL LIST") && epDetailFile.includes('href="#join"')
+);
+check("Checklist 4: Button 3 'GET PERSONALIZED GUIDANCE' -> ASSESSMENT_URL", 
+  epDetailFile.includes("GET PERSONALIZED GUIDANCE") && epDetailFile.includes("ASSESSMENT_URL")
+);
+
+// -------------------------------------------------------------
 // Summary
 // -------------------------------------------------------------
 console.log("\n===================================================================");

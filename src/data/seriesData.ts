@@ -32,9 +32,83 @@ export interface Episode {
   summary: string;
 }
 
+export interface BonusVideo {
+  id: string;
+  title: string;
+  subtitle: string;
+  videoId: string;
+  videoUrl: string;
+  embedUrl: string;
+  durationFormatted: string;
+  thumbnail: string;
+  summary: string;
+  focus: string;
+}
+
 export const PLAYLIST_URL =
   "https://www.youtube.com/playlist?list=PLbxZT1M57opNMSVb2oPyfE4on4lkWvZCB";
 export const CHANNEL_URL = "https://www.youtube.com/@Bigronjones";
+
+// Ron's Checklist Links
+export const HIS_AND_HER_PLAYLIST_URL =
+  "https://www.youtube.com/playlist?list=PLbxZT1M57opPoFM9v-1-x8GHTyQhrfrhh";
+export const ASSESSMENT_URL = "https://bigronjones.com/assessment";
+export const COACHING_URL = "https://bigronjones.com/programs/series";
+
+export const HIS_AND_HER_VIDEOS: BonusVideo[] = [
+  {
+    id: "back-workout",
+    title: "Back Workout | Back Exercise Variations with Ron & Sue",
+    subtitle: "Lat Pulldown & Rowing Variations",
+    videoId: "V68GFImxqYE",
+    videoUrl: "https://www.youtube.com/watch?v=V68GFImxqYE",
+    embedUrl: "https://www.youtube-nocookie.com/embed/V68GFImxqYE",
+    durationFormatted: "10:28",
+    thumbnail: "https://img.youtube.com/vi/V68GFImxqYE/hqdefault.jpg",
+    summary:
+      "Ron and Sue demonstrate back exercise variations, showing how partners can train side-by-side with appropriate adjustments for height, grip, and loading.",
+    focus: "Back Width & Thickness",
+  },
+  {
+    id: "shoulder-workout",
+    title: "Shoulder Workout | Front, Side & Rear Delts",
+    subtitle: "Complete 3D Deltoid Development",
+    videoId: "TwOHLoEf2KQ",
+    videoUrl: "https://www.youtube.com/watch?v=TwOHLoEf2KQ",
+    embedUrl: "https://www.youtube-nocookie.com/embed/TwOHLoEf2KQ",
+    durationFormatted: "11:15",
+    thumbnail: "https://img.youtube.com/vi/TwOHLoEf2KQ/hqdefault.jpg",
+    summary:
+      "A complete shoulder routine breaking down front, lateral, and rear delt exercises to build balanced, healthy, and injury-resistant shoulders.",
+    focus: "Front, Side & Rear Delts",
+  },
+  {
+    id: "perfect-triceps",
+    title: "Perfect Triceps Workout",
+    subtitle: "Long, Lateral & Medial Head Focus",
+    videoId: "taqb7rxwwuU",
+    videoUrl: "https://www.youtube.com/watch?v=taqb7rxwwuU",
+    embedUrl: "https://www.youtube-nocookie.com/embed/taqb7rxwwuU",
+    durationFormatted: "9:42",
+    thumbnail: "https://img.youtube.com/vi/taqb7rxwwuU/hqdefault.jpg",
+    summary:
+      "Detailed breakdown of the most effective triceps movements to maximize lock-out strength, elbow stability, and arm definition.",
+    focus: "Triceps Lockout & Strength",
+  },
+  {
+    id: "biceps-workout",
+    title: "Biceps Workout | Curl Variations with Ron & Sue",
+    subtitle: "Peak & Arm Thickness Variations",
+    videoId: "TJCEsbx0Btw",
+    videoUrl: "https://www.youtube.com/watch?v=TJCEsbx0Btw",
+    embedUrl: "https://www.youtube-nocookie.com/embed/TJCEsbx0Btw",
+    durationFormatted: "8:54",
+    thumbnail: "https://img.youtube.com/vi/TJCEsbx0Btw/hqdefault.jpg",
+    summary:
+      "Ron and Sue share practical dumbbell and cable curl variations designed to build arm strength without putting excessive strain on the wrists or elbows.",
+    focus: "Biceps Curls & Grip Variations",
+  },
+];
 
 export const EPISODES: Episode[] = [
   {
