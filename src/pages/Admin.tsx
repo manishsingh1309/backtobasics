@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { Link } from "react-router-dom";
 import {
   Users,
@@ -17,11 +17,20 @@ import {
   AlertCircle,
   Smartphone,
   Compass,
+  Globe,
+  Database,
+  BarChart3,
+  Calendar,
 } from "lucide-react";
 import { SEO } from "@/components/common/SEO";
-import { AnalyticsEvent } from "@/lib/analytics";
+import {
+  AnalyticsEvent,
+  TrafficSummary,
+  getRealDynamicTrafficSummary,
+} from "@/lib/analytics";
+import { supabase } from "@/lib/supabase";
 
-interface Subscriber {
+export interface Subscriber {
   id: string;
   firstName: string;
   lastName: string;
@@ -34,7 +43,7 @@ interface Subscriber {
   timestamp: string;
 }
 
-// Default credentials for authorized administrator access
+// Credentials for authorized administrator access
 const ADMIN_EMAIL = "admin@bigronjones.com";
 const ADMIN_PASSWORD = "BigRonJones2026!";
 
@@ -57,9 +66,17 @@ export default function Admin() {
   const [activeTab, setActiveTab] = useState<"leads" | "traffic" | "events">("leads");
   const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
   const [events, setEvents] = useState<AnalyticsEvent[]>([]);
+  const [trafficSummary, setTrafficSummary] = useState<TrafficSummary>({
+    totalPages: 0,
+    byPage: [],
+    devices: [],
+    referrers: [],
+  });
   const [searchQuery, setSearchQuery] = useState("");
   const [filterPhoneOnly, setFilterPhoneOnly] = useState(false);
   const [showAddLeadModal, setShowAddLeadModal] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [dbSyncStatus, setDbSyncStatus] = useState<"synced" | "syncing" | "local">("local");
 
   // New lead manual form state
   const [newFirstName, setNewFirstName] = useState("");
@@ -67,18 +84,27 @@ export default function Admin() {
   const [newEmail, setNewEmail] = useState("");
   const [newPhone, setNewPhone] = useState("");
   const [manualAddMessage, setManualAddMessage] = useState("");
+  const [isSubmittingLead, setIsSubmittingLead] = useState(false);
 
-  // Load data from persistent storage
-  const loadData = () => {
-    // 1. Load subscribers
+  // Load 100% real, dynamic data from persistent storage and Supabase
+  const loadData = useCallback(async () => {
+    setIsRefreshing(true);
+    setDbSyncStatus("syncing");
+
+    // 1. Load local subscribers
+    let localSubs: Subscriber[] = [];
     try {
       const storedSubs = localStorage.getItem("b2b_subscribers");
       if (storedSubs) {
         const parsed = JSON.parse(storedSubs);
-        // Normalize any older subscriber records lacking last name
-        const normalized: Subscriber[] = parsed.map((s: Partial<Subscriber>, idx: number) => {
+        localSubs = parsed.map((s: Partial<Subscriber>, idx: number) => {
           const fName = s.firstName || (s.fullName ? s.fullName.split(" ")[0] : "") || "Subscriber";
-          const lName = s.lastName || (s.fullName && s.fullName.split(" ").length > 1 ? s.fullName.split(" ").slice(1).join(" ") : "") || "";
+          const lName =
+            s.lastName ||
+            (s.fullName && s.fullName.split(" ").length > 1
+              ? s.fullName.split(" ").slice(1).join(" ")
+              : "") ||
+            "";
           return {
             id: s.id || `sub_${idx}_${Date.now()}`,
             firstName: fName,
@@ -92,117 +118,129 @@ export default function Admin() {
             timestamp: s.timestamp || new Date().toISOString(),
           };
         });
-        setSubscribers(normalized);
-      } else {
-        // Seed initial demo subscribers for Ron's review if empty
-        const initialSeed: Subscriber[] = [
-          {
-            id: "sub_seed_1",
-            firstName: "Marcus",
-            lastName: "Vance",
-            fullName: "Marcus Vance",
-            email: "marcus.vance@example.com",
-            phone: "(702) 555-0142",
-            source: "back-to-basics",
-            page: "/chest-day/",
-            status: "active",
-            timestamp: new Date(Date.now() - 3600000 * 2).toISOString(),
-          },
-          {
-            id: "sub_seed_2",
-            firstName: "Elena",
-            lastName: "Rodriguez",
-            fullName: "Elena Rodriguez",
-            email: "elena.fit@example.com",
-            phone: "(312) 555-8831",
-            source: "back-to-basics",
-            page: "/#his-and-her",
-            status: "active",
-            timestamp: new Date(Date.now() - 3600000 * 6).toISOString(),
-          },
-          {
-            id: "sub_seed_3",
-            firstName: "Derek",
-            lastName: "Miller",
-            fullName: "Derek Miller",
-            email: "derek.m@example.com",
-            phone: "",
-            source: "back-to-basics",
-            page: "/arm-day/",
-            status: "active",
-            timestamp: new Date(Date.now() - 3600000 * 18).toISOString(),
-          },
-        ];
-        localStorage.setItem("b2b_subscribers", JSON.stringify(initialSeed));
-        setSubscribers(initialSeed);
       }
     } catch {
-      // Fallback
+      localSubs = [];
     }
 
-    // 2. Load analytics events
+    // 2. Query Supabase for remote leads from BigRonJones central database
+    try {
+      const { data: dbLeads, error } = await supabase
+        .from("leads")
+        .select("id, full_name, email, phone, source, utm_source, status, created_at")
+        .or("source.eq.back-to-basics,utm_source.eq.back-to-basics,lead_magnet_slug.eq.back-to-basics")
+        .order("created_at", { ascending: false });
+
+      if (!error && Array.isArray(dbLeads) && dbLeads.length > 0) {
+        setDbSyncStatus("synced");
+        // Convert DB leads to Subscriber type
+        const remoteSubs: Subscriber[] = dbLeads.map((dl) => {
+          const names = (dl.full_name || "").trim().split(" ");
+          const fName = names[0] || "Subscriber";
+          const lName = names.slice(1).join(" ") || "";
+          return {
+            id: dl.id,
+            firstName: fName,
+            lastName: lName,
+            fullName: dl.full_name || fName,
+            email: dl.email,
+            phone: dl.phone || "",
+            source: dl.source || "back-to-basics",
+            page: "/",
+            status: dl.status || "active",
+            timestamp: dl.created_at || new Date().toISOString(),
+          };
+        });
+
+        // Merge without duplicating emails
+        const mergedMap = new Map<string, Subscriber>();
+        for (const s of localSubs) {
+          if (s.email) mergedMap.set(s.email.toLowerCase(), s);
+        }
+        for (const r of remoteSubs) {
+          if (r.email) {
+            const existing = mergedMap.get(r.email.toLowerCase());
+            mergedMap.set(r.email.toLowerCase(), {
+              ...r,
+              phone: r.phone || (existing ? existing.phone : ""),
+              page: existing ? existing.page : r.page,
+            });
+          }
+        }
+        const mergedList = Array.from(mergedMap.values()).sort(
+          (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+        );
+        setSubscribers(mergedList);
+        localStorage.setItem("b2b_subscribers", JSON.stringify(mergedList));
+      } else {
+        setDbSyncStatus("local");
+        setSubscribers(localSubs);
+      }
+    } catch {
+      setDbSyncStatus("local");
+      setSubscribers(localSubs);
+    }
+
+    // 3. Load real analytics events
     try {
       const storedEvents = localStorage.getItem("b2b_analytics_events");
       if (storedEvents) {
         setEvents(JSON.parse(storedEvents));
       } else {
-        // Seed representative action events
-        const demoEvents: AnalyticsEvent[] = [
-          {
-            event: "watch_episode_click",
-            timestamp: new Date(Date.now() - 60000 * 5).toISOString(),
-            payload: { episode_number: 1, episode_title: "Episode 1: Chest Day" },
-          },
-          {
-            event: "outbound_click",
-            timestamp: new Date(Date.now() - 60000 * 15).toISOString(),
-            payload: { target: "assessment", url: "https://bigronjones.com/assessment" },
-          },
-          {
-            event: "youtube_outbound_click",
-            timestamp: new Date(Date.now() - 60000 * 35).toISOString(),
-            payload: { destination: "video", target_url: "https://www.youtube.com/watch?v=V68GFImxqYE" },
-          },
-          {
-            event: "signup_accepted",
-            timestamp: new Date(Date.now() - 60000 * 45).toISOString(),
-            payload: { source: "back-to-basics", page: "/chest-day/" },
-          },
-        ];
-        localStorage.setItem("b2b_analytics_events", JSON.stringify(demoEvents));
-        setEvents(demoEvents);
+        setEvents([]);
       }
     } catch {
-      // Fallback
+      setEvents([]);
     }
-  };
 
-  useEffect(() => {
-    loadData();
+    // 4. Load real dynamic traffic summary
+    const summary = getRealDynamicTrafficSummary();
+    setTrafficSummary(summary);
 
-    // Listen for new subscribers added while dashboard is open
-    const handleNewSub = () => loadData();
-    window.addEventListener("b2b_subscriber_added", handleNewSub);
-    window.addEventListener("b2b_analytics", handleNewSub);
-    return () => {
-      window.removeEventListener("b2b_subscriber_added", handleNewSub);
-      window.removeEventListener("b2b_analytics", handleNewSub);
-    };
+    setIsRefreshing(false);
   }, []);
 
+  useEffect(() => {
+    if (isAuthenticated) {
+      loadData();
+
+      // Listen for incoming dynamic events
+      const handleAnalytics = (e: Event) => {
+        const customEv = e as CustomEvent<AnalyticsEvent>;
+        if (customEv.detail) {
+          setEvents((prev) => [customEv.detail, ...prev.slice(0, 499)]);
+          setTrafficSummary(getRealDynamicTrafficSummary());
+        }
+      };
+
+      const handleSubscriber = (e: Event) => {
+        const customEv = e as CustomEvent<Subscriber>;
+        if (customEv.detail) {
+          setSubscribers((prev) => {
+            const updated = [customEv.detail, ...prev.filter((s) => s.email !== customEv.detail.email)];
+            localStorage.setItem("b2b_subscribers", JSON.stringify(updated));
+            return updated;
+          });
+        }
+      };
+
+      window.addEventListener("b2b_analytics", handleAnalytics);
+      window.addEventListener("b2b_subscriber_added", handleSubscriber);
+
+      return () => {
+        window.removeEventListener("b2b_analytics", handleAnalytics);
+        window.removeEventListener("b2b_subscriber_added", handleSubscriber);
+      };
+    }
+  }, [isAuthenticated, loadData]);
+
+  // Handle Login Authentication
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     setLoginError("");
 
-    const emailTrim = loginEmail.trim().toLowerCase();
-    const passTrim = loginPassword.trim();
-
-    if (
-      (emailTrim === ADMIN_EMAIL.toLowerCase() ||
-        emailTrim === "coach@bigronjones.com" ||
-        emailTrim === "admin") &&
-      passTrim === ADMIN_PASSWORD
-    ) {
+    const cleanEmail = loginEmail.trim().toLowerCase();
+    if (cleanEmail === ADMIN_EMAIL.toLowerCase() && loginPassword === ADMIN_PASSWORD) {
       setIsAuthenticated(true);
       if (rememberMe) {
         localStorage.setItem("b2b_admin_auth", "true");
@@ -210,7 +248,7 @@ export default function Admin() {
         sessionStorage.setItem("b2b_admin_auth", "true");
       }
     } else {
-      setLoginError("Invalid administrator credentials. Access restricted.");
+      setLoginError("Invalid administrator credentials. Access is restricted to BigRonJonesLLC management.");
     }
   };
 
@@ -220,329 +258,327 @@ export default function Admin() {
     localStorage.removeItem("b2b_admin_auth");
   };
 
-  const handleAutofillDemo = () => {
-    setLoginEmail(ADMIN_EMAIL);
-    setLoginPassword(ADMIN_PASSWORD);
-  };
-
-  const handleDeleteSubscriber = (id: string) => {
-    if (confirm("Delete this subscriber record from Back to Basics?")) {
+  // Delete a subscriber record
+  const handleDeleteSubscriber = async (id: string) => {
+    if (window.confirm("Are you sure you want to delete this subscriber record?")) {
       const updated = subscribers.filter((s) => s.id !== id);
       setSubscribers(updated);
       localStorage.setItem("b2b_subscribers", JSON.stringify(updated));
+
+      // Attempt remote delete from Supabase if lead exists
+      try {
+        await supabase.from("leads").delete().eq("id", id);
+      } catch {
+        // Non-fatal
+      }
     }
   };
 
-  const handleAddManualLead = (e: React.FormEvent) => {
+  // Add Manual Lead
+  const handleAddManualLead = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newEmail.trim() || !newFirstName.trim() || !newLastName.trim()) {
-      setManualAddMessage("First Name, Last Name, and Email are required.");
+    if (!newFirstName.trim() || !newLastName.trim() || !newEmail.trim()) {
+      setManualAddMessage("Please enter First Name, Last Name, and Email Address.");
       return;
     }
 
+    setIsSubmittingLead(true);
+    setManualAddMessage("");
+
     const newSub: Subscriber = {
-      id: `manual_${Date.now()}`,
+      id: `sub_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
       firstName: newFirstName.trim(),
       lastName: newLastName.trim(),
       fullName: `${newFirstName.trim()} ${newLastName.trim()}`,
       email: newEmail.trim().toLowerCase(),
       phone: newPhone.trim(),
-      source: "back-to-basics-manual-admin",
+      source: "back-to-basics",
       page: "/admin",
       status: "active",
       timestamp: new Date().toISOString(),
     };
 
-    const updated = [newSub, ...subscribers];
+    // Save locally
+    const updated = [newSub, ...subscribers.filter((s) => s.email.toLowerCase() !== newSub.email)];
     setSubscribers(updated);
     localStorage.setItem("b2b_subscribers", JSON.stringify(updated));
 
+    // Post to central BigRonJones backend
+    try {
+      const webhookUrl =
+        import.meta.env.VITE_EMAIL_WEBHOOK_URL ||
+        "https://bigronjones-2ah1.onrender.com/api/newsletter";
+
+      await fetch(webhookUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: newSub.email,
+          firstName: newSub.firstName,
+          lastName: newSub.lastName,
+          phone: newSub.phone || undefined,
+          source: "back-to-basics",
+          page: "/admin",
+        }),
+      });
+    } catch {
+      // Backend handles fallback
+    }
+
+    setIsSubmittingLead(false);
     setNewFirstName("");
     setNewLastName("");
     setNewEmail("");
     setNewPhone("");
-    setManualAddMessage("Lead successfully added!");
-    setTimeout(() => {
-      setShowAddLeadModal(false);
-      setManualAddMessage("");
-    }, 1000);
+    setShowAddLeadModal(false);
   };
 
+  // Export Leads to CSV
   const handleExportCSV = () => {
-    const headers = [
-      "ID",
-      "First Name",
-      "Last Name",
-      "Full Name",
-      "Email Address",
-      "Mobile Number",
-      "Source",
-      "Signup Page",
-      "Status",
-      "Timestamp",
-    ];
+    if (subscribers.length === 0) {
+      alert("No subscribers to export.");
+      return;
+    }
 
-    const escape = (val: string) =>
-      val ? `"${val.replace(/"/g, '""')}"` : '""';
-
+    const headers = ["ID", "First Name", "Last Name", "Full Name", "Email", "Phone", "Source", "Origin Page", "Status", "Date Captured"];
     const rows = filteredSubscribers.map((s) => [
-      escape(s.id),
-      escape(s.firstName),
-      escape(s.lastName),
-      escape(s.fullName),
-      escape(s.email),
-      escape(s.phone),
-      escape(s.source),
-      escape(s.page),
-      escape(s.status),
-      escape(new Date(s.timestamp).toLocaleString()),
+      s.id,
+      `"${s.firstName.replace(/"/g, '""')}"`,
+      `"${s.lastName.replace(/"/g, '""')}"`,
+      `"${s.fullName.replace(/"/g, '""')}"`,
+      `"${s.email.replace(/"/g, '""')}"`,
+      `"${(s.phone || "").replace(/"/g, '""')}"`,
+      `"${s.source}"`,
+      `"${s.page}"`,
+      `"${s.status}"`,
+      `"${s.timestamp}"`,
     ]);
 
-    const csvContent = [headers.join(","), ...rows.map((r) => r.join(","))].join("\n");
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
+    const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map((e) => e.join(","))].join("\n");
+    const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
-    link.href = url;
-    link.download = `backtobasics-leads-${new Date().toISOString().split("T")[0]}.csv`;
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `backtobasics_leads_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
     link.click();
-    URL.revokeObjectURL(url);
+    document.body.removeChild(link);
   };
 
-  // Filtered subscribers for list display
+  // Clear live activity log
+  const handleClearActivityLog = () => {
+    if (window.confirm("Are you sure you want to clear the local activity log? Real subscriber records will remain unaffected.")) {
+      localStorage.removeItem("b2b_analytics_events");
+      setEvents([]);
+    }
+  };
+
+  // Filtered subscribers based on live search & phone toggle
   const filteredSubscribers = useMemo(() => {
-    return subscribers.filter((s) => {
+    return subscribers.filter((sub) => {
       const q = searchQuery.toLowerCase().trim();
       const matchesSearch =
         !q ||
-        s.fullName.toLowerCase().includes(q) ||
-        s.email.toLowerCase().includes(q) ||
-        s.phone.toLowerCase().includes(q) ||
-        s.page.toLowerCase().includes(q);
+        sub.firstName.toLowerCase().includes(q) ||
+        sub.lastName.toLowerCase().includes(q) ||
+        sub.fullName.toLowerCase().includes(q) ||
+        sub.email.toLowerCase().includes(q) ||
+        (sub.phone && sub.phone.includes(q));
 
-      const matchesPhone = !filterPhoneOnly || Boolean(s.phone && s.phone.trim());
-
+      const matchesPhone = !filterPhoneOnly || Boolean(sub.phone && sub.phone.trim().length > 0);
       return matchesSearch && matchesPhone;
     });
   }, [subscribers, searchQuery, filterPhoneOnly]);
 
-  // Aggregate stats
+  // Dynamic KPI Metrics (100% computed from real records)
   const totalSubscribers = subscribers.length;
-  const withPhoneCount = subscribers.filter((s) => s.phone && s.phone.trim()).length;
+  const withPhoneCount = subscribers.filter((s) => s.phone && s.phone.trim().length > 0).length;
   const phoneCaptureRate = totalSubscribers > 0 ? Math.round((withPhoneCount / totalSubscribers) * 100) : 0;
 
   const episodeClickCount = events.filter((e) => e.event === "watch_episode_click").length;
+  const youtubeClickCount = events.filter((e) => e.event === "youtube_outbound_click").length;
   const assessmentClickCount = events.filter(
-    (e) => e.event === "outbound_click" && (e.payload?.target === "assessment" || String(e.payload?.url).includes("assessment")),
+    (e) => e.event === "outbound_click" && e.payload?.target === "assessment"
   ).length;
   const coachingClickCount = events.filter(
-    (e) => e.event === "outbound_click" && (e.payload?.target === "coaching" || String(e.payload?.url).includes("coaching")),
+    (e) => e.event === "outbound_click" && e.payload?.target === "coaching"
   ).length;
-  const youtubeClickCount = events.filter((e) => e.event === "youtube_outbound_click").length;
 
-  // Unauthenticated Login Gate
+  // -------------------------------------------------------------
+  // Render Login Gate
+  // -------------------------------------------------------------
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-[#070A10] flex flex-col justify-center items-center px-4 py-12 relative overflow-hidden text-white font-sans">
+      <div className="min-h-screen bg-[#070A10] flex items-center justify-center p-4">
         <SEO title="Admin Access | BigRonJones®" noIndex={true} />
+        <div className="w-full max-w-md rounded-2xl border border-slate-800 bg-[#0c1322] p-8 shadow-2xl">
+          <div className="text-center mb-8">
+            <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-[#0A3161] text-[#38bdf8] mb-4 border border-[#38bdf8]/30 shadow-lg shadow-blue-950/50">
+              <Lock className="h-7 w-7 text-white" />
+            </div>
+            <h1 className="font-heading text-3xl text-white tracking-wide uppercase">
+              Admin Portal
+            </h1>
+            <p className="mt-1 text-xs font-mono uppercase tracking-widest text-[#B31942] font-bold">
+              BigRonJonesLLC · Back to Basics Hub
+            </p>
+            <p className="mt-2 text-xs text-slate-400">
+              Restricted management portal. Enter authorized credentials to inspect leads and telemetry.
+            </p>
+          </div>
 
-        {/* Ambient Glows */}
-        <div
-          className="pointer-events-none absolute top-1/4 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full z-0 opacity-40"
-          style={{
-            background: "radial-gradient(circle, rgba(10, 49, 97, 0.6) 0%, transparent 70%)",
-            filter: "blur(90px)",
-          }}
-        />
-        <div
-          className="pointer-events-none absolute bottom-1/4 right-1/3 w-[400px] h-[400px] rounded-full z-0 opacity-30"
-          style={{
-            background: "radial-gradient(circle, rgba(179, 25, 66, 0.4) 0%, transparent 70%)",
-            filter: "blur(90px)",
-          }}
-        />
+          {loginError && (
+            <div className="mb-6 rounded-lg border border-red-800/60 bg-red-950/40 p-3.5 text-xs text-red-300 flex items-start gap-2.5">
+              <AlertCircle className="h-4 w-4 shrink-0 text-red-400 mt-0.5" />
+              <span>{loginError}</span>
+            </div>
+          )}
 
-        <div className="relative z-10 w-full max-w-md">
-          {/* Card Container */}
-          <div className="rounded-2xl border border-slate-800 bg-[#0c1322]/95 p-8 sm:p-10 shadow-2xl backdrop-blur-md">
-            {/* Header Badge */}
-            <div className="text-center mb-8">
-              <div className="inline-flex items-center justify-center h-16 w-16 rounded-full border-2 border-[#0A3161] bg-[#070A10] p-1 shadow-lg mx-auto mb-4">
-                <img
-                  src="/brand/main.png"
-                  alt="BigRonJones®"
-                  className="h-full w-full rounded-full object-cover"
-                />
-              </div>
-
-              <h1 className="font-heading text-3xl tracking-wide uppercase text-white">
-                Back to Basics
-              </h1>
-              <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#B31942] font-bold mt-1">
-                Admin Command Suite • BigRonJones®
-              </p>
-              <p className="text-xs text-slate-400 mt-2">
-                Sign in to manage Back to Basics subscribers and site telemetry.
-              </p>
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div>
+              <label className="block text-xs font-mono font-bold uppercase text-slate-300 mb-1.5">
+                Administrator Email
+              </label>
+              <input
+                type="email"
+                value={loginEmail}
+                onChange={(e) => setLoginEmail(e.target.value)}
+                placeholder="admin@bigronjones.com"
+                required
+                className="w-full rounded-lg border border-slate-700 bg-slate-900/80 px-4 py-3 text-sm text-white placeholder:text-slate-600 focus:border-[#38bdf8] focus:outline-none focus:ring-1 focus:ring-[#38bdf8]"
+              />
             </div>
 
-            {loginError && (
-              <div className="mb-6 flex items-center gap-2 rounded-lg bg-red-950/60 border border-red-800 p-3 text-xs text-red-200">
-                <AlertCircle className="h-4 w-4 shrink-0 text-red-400" />
-                <span>{loginError}</span>
-              </div>
-            )}
-
-            <form onSubmit={handleLogin} className="space-y-4">
-              <div>
-                <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-300 mb-1">
-                  Admin Email / Username
-                </label>
-                <div className="relative">
-                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500">
-                    <Mail className="h-4 w-4" />
-                  </div>
-                  <input
-                    type="text"
-                    required
-                    value={loginEmail}
-                    onChange={(e) => setLoginEmail(e.target.value)}
-                    placeholder="admin@bigronjones.com"
-                    className="w-full rounded-lg border border-slate-700 bg-slate-900/80 py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-slate-500 focus:border-[#38bdf8] focus:ring-1 focus:ring-[#38bdf8] outline-none transition"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-300 mb-1">
-                  Password
-                </label>
-                <div className="relative">
-                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500">
-                    <Lock className="h-4 w-4" />
-                  </div>
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    required
-                    value={loginPassword}
-                    onChange={(e) => setLoginPassword(e.target.value)}
-                    placeholder="••••••••••••"
-                    className="w-full rounded-lg border border-slate-700 bg-slate-900/80 py-2.5 pl-10 pr-10 text-sm text-white placeholder:text-slate-500 focus:border-[#38bdf8] focus:ring-1 focus:ring-[#38bdf8] outline-none transition"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-0 flex items-center pr-3 text-xs text-slate-400 hover:text-white"
-                  >
-                    {showPassword ? "Hide" : "Show"}
-                  </button>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between text-xs pt-1">
-                <label className="flex items-center gap-2 cursor-pointer text-slate-400 hover:text-slate-300">
-                  <input
-                    type="checkbox"
-                    checked={rememberMe}
-                    onChange={(e) => setRememberMe(e.target.checked)}
-                    className="rounded border-slate-700 bg-slate-900 text-[#0A3161] focus:ring-0"
-                  />
-                  <span>Keep signed in</span>
-                </label>
-
+            <div>
+              <label className="block text-xs font-mono font-bold uppercase text-slate-300 mb-1.5">
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  value={loginPassword}
+                  onChange={(e) => setLoginPassword(e.target.value)}
+                  placeholder="••••••••••••"
+                  required
+                  className="w-full rounded-lg border border-slate-700 bg-slate-900/80 px-4 py-3 text-sm text-white placeholder:text-slate-600 focus:border-[#38bdf8] focus:outline-none focus:ring-1 focus:ring-[#38bdf8]"
+                />
                 <button
                   type="button"
-                  onClick={handleAutofillDemo}
-                  className="font-mono text-[#38bdf8] hover:underline"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-3 text-xs font-mono text-slate-500 hover:text-slate-300"
                 >
-                  Autofill Credentials
+                  {showPassword ? "HIDE" : "SHOW"}
                 </button>
               </div>
-
-              <button
-                type="submit"
-                className="w-full mt-2 rounded-lg bg-[#B31942] py-3 text-sm font-bold uppercase tracking-wider text-white shadow-lg transition-all hover:bg-[#8e1032] active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-[#B31942]"
-              >
-                Sign In to Admin Portal
-              </button>
-            </form>
-
-            <div className="mt-8 border-t border-slate-800/80 pt-4 text-center">
-              <Link
-                to="/"
-                className="text-xs text-slate-400 hover:text-white transition-colors"
-              >
-                ← Return to Public Website
-              </Link>
             </div>
+
+            <div className="flex items-center justify-between text-xs text-slate-400 pt-1">
+              <label className="flex items-center gap-2 cursor-pointer hover:text-white">
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="rounded border-slate-700 bg-slate-900 text-[#0A3161]"
+                />
+                <span>Keep me signed in</span>
+              </label>
+              <span className="font-mono text-[11px] text-slate-500">256-Bit SSL</span>
+            </div>
+
+            <button
+              type="submit"
+              className="mt-6 w-full rounded-lg bg-[#B31942] py-3.5 text-sm font-bold uppercase tracking-wider text-white shadow-lg shadow-red-950/50 hover:bg-[#8e1032] transition-colors focus:outline-none focus:ring-2 focus:ring-[#B31942]"
+            >
+              Access Dashboard
+            </button>
+          </form>
+
+          <div className="mt-8 border-t border-slate-800/80 pt-4 text-center">
+            <Link
+              to="/"
+              className="text-xs font-mono text-slate-500 hover:text-slate-300 transition-colors inline-flex items-center gap-1"
+            >
+              ← Return to public website
+            </Link>
           </div>
         </div>
       </div>
     );
   }
 
-  // Authenticated Admin Dashboard View
+  // -------------------------------------------------------------
+  // Render Authenticated Admin Dashboard
+  // -------------------------------------------------------------
   return (
-    <div className="min-h-screen bg-[#070A10] text-slate-100 font-sans pb-20">
+    <div className="min-h-screen bg-[#070A10] text-slate-200">
       <SEO title="Back to Basics Admin Dashboard | BigRonJones®" noIndex={true} />
 
-      {/* Admin Top Command Header */}
-      <header className="sticky top-0 z-40 border-b border-slate-800 bg-[#0c1322]/95 backdrop-blur-md px-4 sm:px-6 lg:px-8 py-3.5">
-        <div className="mx-auto max-w-7xl flex flex-wrap items-center justify-between gap-4">
+      {/* Top Admin Header Bar */}
+      <header className="border-b border-slate-800 bg-[#0c1322]/90 backdrop-blur-md sticky top-0 z-40">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img
-              src="/brand/main.png"
-              alt="BigRonJones®"
-              className="h-10 w-10 rounded-full border-2 border-[#0A3161] object-cover"
-            />
+            <div className="h-8 w-8 rounded-lg bg-[#0A3161] flex items-center justify-center font-heading text-lg text-white border border-[#38bdf8]/40">
+              B
+            </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-heading text-xl tracking-wider text-white uppercase">
-                  Back to Basics Admin
+                <span className="font-heading text-lg tracking-wider text-white uppercase">
+                  Back to Basics · Admin Hub
                 </span>
-                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-950/80 border border-emerald-600/50 px-2.5 py-0.5 text-[10px] font-mono font-bold text-emerald-400">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  LIVE TELEMETRY
+                <span className="rounded bg-emerald-950 px-2 py-0.5 text-[10px] font-mono font-bold text-emerald-400 border border-emerald-800/50">
+                  LIVE DYNAMIC
                 </span>
               </div>
-              <p className="font-mono text-[10px] uppercase tracking-wider text-slate-400">
-                BigRonJonesLLC • Hahira, GA 31632 • Direct Leads Engine
+              <p className="text-[11px] font-mono text-slate-400">
+                Official Tracking & Lead Capture Portal · BigRonJonesLLC
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-3">
+            {/* Supabase Sync Badge */}
+            <div
+              className={`hidden md:inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-mono border ${
+                dbSyncStatus === "synced"
+                  ? "bg-emerald-950/50 border-emerald-800/60 text-emerald-300"
+                  : "bg-blue-950/50 border-blue-800/60 text-blue-300"
+              }`}
+            >
+              <Database className="h-3 w-3" />
+              <span>{dbSyncStatus === "synced" ? "Supabase Live Connected" : "Local Storage Synced"}</span>
+            </div>
+
+            <button
+              onClick={loadData}
+              disabled={isRefreshing}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-800/80 px-3 py-1.5 text-xs font-mono font-bold text-slate-300 hover:bg-slate-700 hover:text-white transition-colors"
+              title="Refresh real-time data"
+            >
+              <RefreshCw className={`h-3.5 w-3.5 ${isRefreshing ? "animate-spin text-[#38bdf8]" : ""}`} />
+              <span className="hidden sm:inline">Refresh Data</span>
+            </button>
+
             <Link
               to="/"
               target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-800/70 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:text-white hover:border-slate-500 transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-800/80 px-3 py-1.5 text-xs font-mono font-bold text-slate-300 hover:bg-slate-700 hover:text-white transition-colors"
             >
-              <span>View Site</span>
               <ExternalLink className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">View Site</span>
             </Link>
 
             <button
-              onClick={handleExportCSV}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-800/70 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:text-white hover:border-slate-500 transition-colors"
-            >
-              <Download className="h-3.5 w-3.5" />
-              <span>Export CSV</span>
-            </button>
-
-            <button
               onClick={handleLogout}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-red-900/60 bg-red-950/30 px-3 py-1.5 text-xs font-semibold text-red-300 hover:bg-red-900/50 hover:text-white transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-red-900/60 bg-red-950/40 px-3 py-1.5 text-xs font-mono font-bold text-red-300 hover:bg-red-900/60 transition-colors"
             >
               <LogOut className="h-3.5 w-3.5" />
-              <span>Logout</span>
+              <span className="hidden sm:inline">Sign Out</span>
             </button>
           </div>
         </div>
       </header>
 
-      {/* Main Admin Content Container */}
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-8">
-        {/* KPI Metric Cards */}
+      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+        {/* Dynamic KPI Overview Cards (All Computed in Real Time) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {/* Card 1: Total Leads */}
           <div className="rounded-xl border border-slate-800 bg-[#0c1322] p-5 shadow-lg">
@@ -554,7 +590,7 @@ export default function Admin() {
             </div>
             <div className="flex items-baseline gap-2">
               <span className="font-heading text-4xl text-white">{totalSubscribers}</span>
-              <span className="text-xs font-mono text-emerald-400">100% verified</span>
+              <span className="text-xs font-mono text-emerald-400">real leads</span>
             </div>
             <p className="mt-1 text-[11px] font-mono text-slate-400">
               Synced with BigRonJones.com central leads
@@ -574,7 +610,7 @@ export default function Admin() {
               <span className="text-xs font-mono text-emerald-400">({phoneCaptureRate}% conversion)</span>
             </div>
             <p className="mt-1 text-[11px] font-mono text-slate-400">
-              Direct phone contacts for coaching follow-up
+              Direct phone contacts for coaching follow up
             </p>
           </div>
 
@@ -588,7 +624,7 @@ export default function Admin() {
             </div>
             <div className="flex items-baseline gap-2">
               <span className="font-heading text-4xl text-white">{episodeClickCount + youtubeClickCount}</span>
-              <span className="text-xs font-mono text-slate-400">episodes & partner sessions</span>
+              <span className="text-xs font-mono text-slate-400">actual plays</span>
             </div>
             <p className="mt-1 text-[11px] font-mono text-slate-400">
               Chest, Back/Shoulders, Legs, Arms & Sue videos
@@ -636,7 +672,7 @@ export default function Admin() {
                   : "border-transparent text-slate-400 hover:text-slate-200"
               }`}
             >
-              Traffic & Pageviews
+              Traffic & Pageviews ({trafficSummary.totalPages})
             </button>
             <button
               onClick={() => setActiveTab("events")}
@@ -650,17 +686,36 @@ export default function Admin() {
             </button>
           </div>
 
-          {activeTab === "leads" && (
-            <div className="pb-3 flex items-center gap-2">
+          <div className="pb-3 flex items-center gap-2">
+            {activeTab === "leads" && (
+              <>
+                <button
+                  onClick={handleExportCSV}
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-800 px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-slate-300 hover:bg-slate-700 hover:text-white transition-colors"
+                >
+                  <Download className="h-3.5 w-3.5" />
+                  <span>Download CSV</span>
+                </button>
+                <button
+                  onClick={() => setShowAddLeadModal(true)}
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A3161] px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#08274d] transition-colors"
+                >
+                  <Plus className="h-3.5 w-3.5" />
+                  <span>Add Manual Lead</span>
+                </button>
+              </>
+            )}
+
+            {activeTab === "events" && events.length > 0 && (
               <button
-                onClick={() => setShowAddLeadModal(true)}
-                className="inline-flex items-center gap-1.5 rounded-lg bg-[#0A3161] px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#08274d] transition-colors"
+                onClick={handleClearActivityLog}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-800 bg-slate-900 px-3 py-1.5 text-xs font-mono text-slate-400 hover:text-red-400 hover:border-red-900/60 transition-colors"
               >
-                <Plus className="h-3.5 w-3.5" />
-                <span>Add Manual Lead</span>
+                <Trash2 className="h-3.5 w-3.5" />
+                <span>Clear Activity Log</span>
               </button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
         {/* TAB 1: EMAIL LEADS */}
@@ -712,16 +767,17 @@ export default function Admin() {
                   <tbody className="divide-y divide-slate-800/60 font-sans">
                     {filteredSubscribers.length === 0 ? (
                       <tr>
-                        <td colSpan={7} className="py-12 text-center text-slate-500 font-mono text-xs">
-                          No subscribers match your filter.
+                        <td colSpan={7} className="py-16 text-center text-slate-500 font-mono text-xs">
+                          <Users className="mx-auto h-8 w-8 text-slate-600 mb-2" />
+                          <p className="text-sm font-semibold text-slate-400 mb-1">No subscribers captured yet</p>
+                          <p className="text-slate-500 max-w-sm mx-auto">
+                            When visitors submit their first name, last name, and email on the site, their records will dynamically appear here in real time.
+                          </p>
                         </td>
                       </tr>
                     ) : (
                       filteredSubscribers.map((sub) => (
-                        <tr
-                          key={sub.id}
-                          className="hover:bg-slate-800/40 transition-colors"
-                        >
+                        <tr key={sub.id} className="hover:bg-slate-800/40 transition-colors">
                           <td className="py-3 px-4 font-semibold text-white">
                             <div className="flex items-center gap-2.5">
                               <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#0A3161] text-[11px] font-mono font-bold text-white uppercase">
@@ -736,10 +792,7 @@ export default function Admin() {
                             </div>
                           </td>
                           <td className="py-3 px-4 font-mono text-xs text-[#38bdf8]">
-                            <a
-                              href={`mailto:${sub.email}`}
-                              className="hover:underline flex items-center gap-1.5"
-                            >
+                            <a href={`mailto:${sub.email}`} className="hover:underline flex items-center gap-1.5">
                               <Mail className="h-3 w-3 text-slate-500" />
                               <span>{sub.email}</span>
                             </a>
@@ -792,92 +845,114 @@ export default function Admin() {
           </div>
         )}
 
-        {/* TAB 2: TRAFFIC & SESSIONS */}
+        {/* TAB 2: TRAFFIC & SESSIONS (100% Dynamic from Real Visits) */}
         {activeTab === "traffic" && (
           <div className="space-y-6">
             {/* Pageview Breakdown */}
             <div className="rounded-xl border border-slate-800 bg-[#0c1322] p-6 shadow-xl">
-              <h3 className="font-heading text-2xl text-white uppercase tracking-wide mb-4">
-                Page Traffic & Series Engagement
-              </h3>
-              <div className="space-y-3 font-mono text-xs">
-                {[
-                  { path: "/", label: "Homepage (Back to Basics Hub)", views: 412, pct: 45 },
-                  { path: "/chest-day/", label: "Episode 1: Chest Day", views: 248, pct: 27 },
-                  { path: "/back-and-shoulders/", label: "Episode 2: Back & Shoulders", views: 114, pct: 12 },
-                  { path: "/leg-day/", label: "Episode 3: Leg Day", views: 88, pct: 9 },
-                  { path: "/arm-day/", label: "Episode 4: Arm Day", views: 65, pct: 7 },
-                ].map((row) => (
-                  <div key={row.path} className="flex items-center justify-between gap-4 p-2 rounded bg-slate-900/60">
-                    <div className="flex-1">
-                      <div className="flex justify-between mb-1">
-                        <span className="text-white font-semibold">{row.label}</span>
-                        <span className="text-slate-400">{row.views} views ({row.pct}%)</span>
-                      </div>
-                      <div className="h-2 w-full rounded-full bg-slate-800 overflow-hidden">
-                        <div
-                          className="h-full bg-[#0A3161]"
-                          style={{ width: `${row.pct}%` }}
-                        />
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h3 className="font-heading text-2xl text-white uppercase tracking-wide">
+                    Page Traffic & Series Engagement
+                  </h3>
+                  <p className="text-xs text-slate-400 font-mono mt-0.5">
+                    Real-time aggregated view counts computed from visitors across all canonical routes
+                  </p>
+                </div>
+                <div className="text-right">
+                  <span className="text-xs font-mono uppercase text-slate-400">Total Pageviews</span>
+                  <p className="font-heading text-3xl text-white">{trafficSummary.totalPages}</p>
+                </div>
+              </div>
+
+              {trafficSummary.totalPages === 0 ? (
+                <div className="py-12 text-center text-slate-500 font-mono text-xs">
+                  <BarChart3 className="mx-auto h-8 w-8 text-slate-600 mb-2" />
+                  <p className="text-sm font-semibold text-slate-400 mb-1">No page views recorded yet</p>
+                  <p className="text-slate-500 max-w-sm mx-auto">
+                    Visit the public episode and home pages to see live traffic breakdowns, device metrics, and referrer data compute here.
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-3 font-mono text-xs">
+                  {trafficSummary.byPage.map((row) => (
+                    <div key={row.path} className="flex items-center justify-between gap-4 p-3 rounded-lg bg-slate-900/60 border border-slate-800/60">
+                      <div className="flex-1">
+                        <div className="flex justify-between mb-1.5">
+                          <span className="text-white font-semibold text-sm">{row.label}</span>
+                          <span className="text-[#38bdf8] font-bold">
+                            {row.views} views ({row.pct}%)
+                          </span>
+                        </div>
+                        <div className="h-2 w-full rounded-full bg-slate-800 overflow-hidden">
+                          <div
+                            className="h-full bg-gradient-to-r from-[#0A3161] to-[#38bdf8] transition-all duration-500"
+                            style={{ width: `${Math.max(row.pct, row.views > 0 ? 5 : 0)}%` }}
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
 
-            {/* Devices & Referrers Grid */}
+            {/* Devices & Referrers Grid (Dynamic) */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Devices Card */}
               <div className="rounded-xl border border-slate-800 bg-[#0c1322] p-6 shadow-xl">
                 <h4 className="font-heading text-xl text-white uppercase tracking-wide mb-3 flex items-center gap-2">
                   <Smartphone className="h-5 w-5 text-[#38bdf8]" />
-                  <span>Device Breakdown</span>
+                  <span>Device Breakdown (Dynamic)</span>
                 </h4>
-                <div className="space-y-2 text-xs font-mono">
-                  <div className="flex justify-between p-2 rounded bg-slate-900/40">
-                    <span>Mobile (iOS / Android)</span>
-                    <span className="text-white font-bold">64%</span>
+                {trafficSummary.devices.length === 0 || trafficSummary.totalPages === 0 ? (
+                  <p className="text-xs font-mono text-slate-500 py-6 text-center">
+                    Awaiting initial visitor sessions...
+                  </p>
+                ) : (
+                  <div className="space-y-2.5 text-xs font-mono">
+                    {trafficSummary.devices.map((d) => (
+                      <div key={d.type} className="flex items-center justify-between p-2.5 rounded bg-slate-900/40 border border-slate-800/40">
+                        <span className="text-slate-300">{d.type} Devices</span>
+                        <div className="flex items-center gap-3">
+                          <span className="text-slate-400">{d.count} sessions</span>
+                          <span className="text-white font-bold bg-slate-800 px-2 py-0.5 rounded">{d.pct}%</span>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                  <div className="flex justify-between p-2 rounded bg-slate-900/40">
-                    <span>Desktop (Mac / Windows)</span>
-                    <span className="text-white font-bold">31%</span>
-                  </div>
-                  <div className="flex justify-between p-2 rounded bg-slate-900/40">
-                    <span>Tablet (iPad)</span>
-                    <span className="text-white font-bold">5%</span>
-                  </div>
-                </div>
+                )}
               </div>
 
+              {/* Referrers Card */}
               <div className="rounded-xl border border-slate-800 bg-[#0c1322] p-6 shadow-xl">
                 <h4 className="font-heading text-xl text-white uppercase tracking-wide mb-3 flex items-center gap-2">
                   <Compass className="h-5 w-5 text-[#B31942]" />
-                  <span>Traffic Referrers</span>
+                  <span>Traffic Referrers (Dynamic)</span>
                 </h4>
-                <div className="space-y-2 text-xs font-mono">
-                  <div className="flex justify-between p-2 rounded bg-slate-900/40">
-                    <span>Direct / Bookmarks</span>
-                    <span className="text-white font-bold">42%</span>
+                {trafficSummary.referrers.length === 0 || trafficSummary.totalPages === 0 ? (
+                  <p className="text-xs font-mono text-slate-500 py-6 text-center">
+                    Awaiting initial inbound referrers...
+                  </p>
+                ) : (
+                  <div className="space-y-2.5 text-xs font-mono">
+                    {trafficSummary.referrers.map((r) => (
+                      <div key={r.source} className="flex items-center justify-between p-2.5 rounded bg-slate-900/40 border border-slate-800/40">
+                        <span className="text-slate-300">{r.source}</span>
+                        <div className="flex items-center gap-3">
+                          <span className="text-slate-400">{r.count} visits</span>
+                          <span className="text-white font-bold bg-slate-800 px-2 py-0.5 rounded">{r.pct}%</span>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                  <div className="flex justify-between p-2 rounded bg-slate-900/40">
-                    <span>BigRonJones.com Navigation</span>
-                    <span className="text-white font-bold">28%</span>
-                  </div>
-                  <div className="flex justify-between p-2 rounded bg-slate-900/40">
-                    <span>YouTube (@Bigronjones channel)</span>
-                    <span className="text-white font-bold">21%</span>
-                  </div>
-                  <div className="flex justify-between p-2 rounded bg-slate-900/40">
-                    <span>Social (Instagram / Link in Bio)</span>
-                    <span className="text-white font-bold">9%</span>
-                  </div>
-                </div>
+                )}
               </div>
             </div>
           </div>
         )}
 
-        {/* TAB 3: USER ACTIVITY STREAM */}
+        {/* TAB 3: USER ACTIVITY STREAM (100% Dynamic Real-Time Actions) */}
         {activeTab === "events" && (
           <div className="overflow-hidden rounded-xl border border-slate-800 bg-[#0c1322] shadow-xl">
             <div className="p-4 border-b border-slate-800 bg-[#070A10] flex items-center justify-between">
@@ -886,7 +961,7 @@ export default function Admin() {
                   Live Action Stream
                 </h3>
                 <p className="text-xs text-slate-400 font-mono">
-                  Real-time feed of what visitors do when they visit Back to Basics
+                  Real-time chronological feed of actions performed by visitors on Back to Basics
                 </p>
               </div>
               <button
@@ -898,111 +973,152 @@ export default function Admin() {
               </button>
             </div>
 
-            <div className="divide-y divide-slate-800/60 font-mono text-xs">
-              {events.length === 0 ? (
-                <div className="p-8 text-center text-slate-500">No events captured yet.</div>
-              ) : (
-                events.map((evt, idx) => (
-                  <div key={idx} className="p-3.5 hover:bg-slate-800/30 flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-3">
-                      <span className="h-2 w-2 rounded-full bg-[#38bdf8]" />
-                      <span className="font-bold text-white uppercase">{evt.event}</span>
-                      <span className="text-slate-400">
-                        {evt.payload && Object.keys(evt.payload).length > 0
-                          ? JSON.stringify(evt.payload)
-                          : "—"}
-                      </span>
+            {events.length === 0 ? (
+              <div className="py-16 text-center text-slate-500 font-mono text-xs">
+                <Globe className="mx-auto h-8 w-8 text-slate-600 mb-2" />
+                <p className="text-sm font-semibold text-slate-400 mb-1">No user actions logged yet</p>
+                <p className="text-slate-500 max-w-sm mx-auto">
+                  When visitors watch episodes, click YouTube links, take the assessment, or subscribe, real action payloads will stream into this console.
+                </p>
+              </div>
+            ) : (
+              <div className="divide-y divide-slate-800/60 font-mono text-xs">
+                {events.map((evt, idx) => {
+                  let badgeColor = "bg-slate-800 text-slate-300";
+                  if (evt.event === "watch_episode_click") badgeColor = "bg-blue-950 text-[#38bdf8] border border-blue-800/50";
+                  if (evt.event === "youtube_outbound_click") badgeColor = "bg-red-950 text-red-400 border border-red-800/50";
+                  if (evt.event === "signup_accepted" || evt.event === "subscription_confirmed")
+                    badgeColor = "bg-emerald-950 text-emerald-400 border border-emerald-800/50";
+                  if (evt.event === "outbound_click") badgeColor = "bg-amber-950 text-amber-300 border border-amber-800/50";
+
+                  return (
+                    <div key={`${evt.timestamp}_${idx}`} className="p-4 hover:bg-slate-800/30 transition-colors">
+                      <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                        <div className="flex items-center gap-2">
+                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${badgeColor}`}>
+                            {evt.event.replace(/_/g, " ")}
+                          </span>
+                          {Boolean(evt.payload?.device) && (
+                            <span className="text-[10px] text-slate-500 bg-slate-900 px-1.5 py-0.5 rounded">
+                              {String(evt.payload.device)}
+                            </span>
+                          )}
+                        </div>
+                        <span className="text-[11px] text-slate-500 flex items-center gap-1">
+                          <Calendar className="h-3 w-3" />
+                          <span>{new Date(evt.timestamp).toLocaleString()}</span>
+                        </span>
+                      </div>
+                      <div className="bg-[#070A10] p-2.5 rounded border border-slate-800/80 text-[11px] text-slate-400 overflow-x-auto">
+                        <pre className="font-mono">{JSON.stringify(evt.payload, null, 2)}</pre>
+                      </div>
                     </div>
-                    <span className="text-[11px] text-slate-500 shrink-0">
-                      {new Date(evt.timestamp).toLocaleTimeString()}
-                    </span>
-                  </div>
-                ))
-              )}
-            </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         )}
       </main>
 
       {/* Manual Add Lead Modal */}
       {showAddLeadModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm">
-          <div className="relative w-full max-w-md rounded-2xl border border-slate-800 bg-[#0c1322] p-6 shadow-2xl">
-            <h3 className="font-heading text-2xl text-white uppercase tracking-wide mb-1">
-              Add Back to Basics Lead
-            </h3>
-            <p className="text-xs text-slate-400 font-mono mb-4">
-              Direct entry for email list subscribers
-            </p>
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+        >
+          <div className="w-full max-w-md rounded-2xl border border-slate-800 bg-[#0c1322] p-6 shadow-2xl">
+            <div className="flex items-center justify-between pb-4 border-b border-slate-800 mb-4">
+              <h3 className="font-heading text-xl text-white uppercase tracking-wide">
+                Add Manual Lead
+              </h3>
+              <button
+                type="button"
+                onClick={() => setShowAddLeadModal(false)}
+                className="text-slate-500 hover:text-white"
+              >
+                ✕
+              </button>
+            </div>
 
             {manualAddMessage && (
-              <div className="mb-4 rounded-lg bg-emerald-950/80 border border-emerald-700 p-2.5 text-xs text-emerald-200">
+              <div className="mb-4 rounded p-2.5 text-xs text-amber-300 bg-amber-950/40 border border-amber-900/60">
                 {manualAddMessage}
               </div>
             )}
 
-            <form onSubmit={handleAddManualLead} className="space-y-3">
-              <div className="grid grid-cols-2 gap-2">
+            <form onSubmit={handleAddManualLead} className="space-y-3 font-sans">
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-mono font-bold text-slate-300 mb-1">First Name</label>
+                  <label className="block text-xs font-mono font-bold uppercase text-slate-300 mb-1">
+                    First Name
+                  </label>
                   <input
                     type="text"
-                    required
                     value={newFirstName}
                     onChange={(e) => setNewFirstName(e.target.value)}
-                    placeholder="First name"
-                    className="w-full rounded border border-slate-700 bg-slate-900 py-2 px-3 text-xs text-white outline-none"
+                    required
+                    placeholder="e.g. Michael"
+                    className="w-full rounded border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white outline-none focus:border-[#38bdf8]"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-mono font-bold text-slate-300 mb-1">Last Name</label>
+                  <label className="block text-xs font-mono font-bold uppercase text-slate-300 mb-1">
+                    Last Name
+                  </label>
                   <input
                     type="text"
-                    required
                     value={newLastName}
                     onChange={(e) => setNewLastName(e.target.value)}
-                    placeholder="Last name"
-                    className="w-full rounded border border-slate-700 bg-slate-900 py-2 px-3 text-xs text-white outline-none"
+                    required
+                    placeholder="e.g. Cole"
+                    className="w-full rounded border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white outline-none focus:border-[#38bdf8]"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-mono font-bold text-slate-300 mb-1">Email Address</label>
+                <label className="block text-xs font-mono font-bold uppercase text-slate-300 mb-1">
+                  Email Address
+                </label>
                 <input
                   type="email"
-                  required
                   value={newEmail}
                   onChange={(e) => setNewEmail(e.target.value)}
-                  placeholder="subscriber@example.com"
-                  className="w-full rounded border border-slate-700 bg-slate-900 py-2 px-3 text-xs text-white outline-none"
+                  required
+                  placeholder="michael.cole@example.com"
+                  className="w-full rounded border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white outline-none focus:border-[#38bdf8]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-mono font-bold text-slate-300 mb-1">Mobile Number</label>
+                <label className="block text-xs font-mono font-bold uppercase text-slate-300 mb-1">
+                  Mobile Number
+                </label>
                 <input
                   type="tel"
                   value={newPhone}
                   onChange={(e) => setNewPhone(e.target.value)}
-                  placeholder="(555) 000-0000"
-                  className="w-full rounded border border-slate-700 bg-slate-900 py-2 px-3 text-xs text-white outline-none"
+                  placeholder="(702) 555-0199"
+                  className="w-full rounded border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white outline-none focus:border-[#38bdf8]"
                 />
               </div>
 
-              <div className="mt-5 flex justify-end gap-2 pt-2">
+              <div className="pt-4 flex justify-end gap-2 border-t border-slate-800 mt-4">
                 <button
                   type="button"
                   onClick={() => setShowAddLeadModal(false)}
-                  className="rounded px-4 py-2 text-xs font-semibold text-slate-400 hover:text-white"
+                  className="px-4 py-2 text-xs font-mono text-slate-400 hover:text-white"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="rounded bg-[#B31942] px-4 py-2 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#8e1032]"
+                  disabled={isSubmittingLead}
+                  className="px-5 py-2 text-xs font-bold uppercase tracking-wider rounded bg-[#0A3161] text-white hover:bg-[#08274d] transition-colors"
                 >
-                  Save Lead
+                  {isSubmittingLead ? "Saving..." : "Save Lead"}
                 </button>
               </div>
             </form>
