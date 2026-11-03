@@ -41,28 +41,32 @@ export default function Home() {
           aria-hidden="true"
         />
 
-        {/* Desktop Widescreen Hero Image with Big Ron Jones & American Flag (>= 1024px) */}
-        <div className="hidden lg:block absolute inset-0 h-full w-full pointer-events-none select-none overflow-hidden z-10 opacity-70 mix-blend-screen">
-          <img
-            src="/brand/hero-desktop.png"
-            alt="BigRonJones®"
-            className="h-full w-full object-cover object-[80%_center] xl:object-[78%_center] select-none"
-            style={{ imageRendering: "-webkit-optimize-contrast" }}
-            fetchPriority="high"
-          />
+        {/* Desktop Widescreen Hero Image with Big Ron Jones, American Flag & Gym Action (>= 1024px) */}
+        <div className="hidden lg:block absolute inset-0 h-full w-full pointer-events-none select-none overflow-hidden z-10">
+          <picture>
+            <source type="image/webp" srcSet="/brand/hero.webp" />
+            <img
+              src="/brand/hero.png"
+              alt="Back to Basics with BigRonJones®"
+              className="h-full w-full object-cover object-[82%_center] xl:object-[80%_center] select-none opacity-90"
+              style={{ imageRendering: "-webkit-optimize-contrast" }}
+              fetchPriority="high"
+              decoding="async"
+            />
+          </picture>
           {/* Feathered scrim over left text column to ensure 100% crisp text readability */}
           <div
             className="absolute inset-y-0 left-0 w-full lg:w-[62%] xl:w-[56%] pointer-events-none"
             style={{
               background:
-                "linear-gradient(to right, #070A10 0%, #070A10 35%, rgba(7, 10, 16, 0.94) 52%, rgba(7, 10, 16, 0.72) 72%, rgba(7, 10, 16, 0.25) 90%, transparent 100%)",
+                "linear-gradient(to right, #070A10 0%, #070A10 32%, rgba(7, 10, 16, 0.95) 48%, rgba(7, 10, 16, 0.7) 68%, rgba(7, 10, 16, 0.2) 88%, transparent 100%)",
             }}
           />
           {/* Soft bottom vignette to melt into next section */}
           <div
             className="absolute bottom-0 inset-x-0 h-28 pointer-events-none"
             style={{
-              background: "linear-gradient(to top, #070A10 0%, rgba(7, 10, 16, 0.75) 40%, transparent 100%)",
+              background: "linear-gradient(to top, #070A10 0%, rgba(7, 10, 16, 0.8) 45%, transparent 100%)",
             }}
           />
           {/* Subtle top blend for navbar clearance */}
@@ -74,18 +78,22 @@ export default function Home() {
           />
         </div>
 
-        {/* Mobile & Tablet Hero Visual Layer (< 1024px) */}
-        <div className="block lg:hidden absolute inset-0 h-full w-full pointer-events-none select-none overflow-hidden z-10 opacity-25">
-          <img
-            src="/brand/hero-mobile.png"
-            alt="BigRonJones®"
-            className="h-full w-full object-cover object-top select-none"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#070A10]/80 via-[#070A10]/95 to-[#070A10]" />
+        {/* Mobile & Tablet Hero Visual Background Atmosphere (< 1024px) */}
+        <div className="block lg:hidden absolute inset-0 h-full w-full pointer-events-none select-none overflow-hidden z-10 opacity-30">
+          <picture>
+            <source type="image/webp" srcSet="/brand/hero.webp" />
+            <img
+              src="/brand/hero.png"
+              alt="BigRonJones®"
+              className="h-full w-full object-cover object-[75%_center] select-none"
+              loading="eager"
+            />
+          </picture>
+          <div className="absolute inset-0 bg-gradient-to-b from-[#070A10]/75 via-[#070A10]/90 to-[#070A10]" />
         </div>
 
         <div className="relative z-20 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl lg:max-w-2xl text-center lg:text-left">
+          <div className="max-w-3xl lg:max-w-xl xl:max-w-2xl text-center lg:text-left">
             {/* Eyebrow badge with signature crimson accent */}
             <div className="inline-flex items-center gap-2 mb-6">
               <span className="inline-block w-8 h-[2px] bg-[#B31942]" />
@@ -95,7 +103,7 @@ export default function Home() {
             </div>
 
             {/* Wordmark / H1 */}
-            <h1 className="font-heading text-5xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight text-white uppercase leading-[0.92]">
+            <h1 className="font-heading text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight text-white uppercase leading-[0.94]">
               Back to Basics <br />
               <span className="text-[#38bdf8] drop-shadow-sm">
                 with <BrandName variant="upper" />
@@ -113,11 +121,11 @@ export default function Home() {
             </p>
 
             {/* Action Buttons */}
-            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5">
               <Link
                 to="/chest-day/"
                 onClick={() => trackWatchEpisodeClick(1, "Episode 1: Chest Day")}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 rounded-lg bg-[#B31942] px-8 py-4 text-base sm:text-lg font-bold text-white shadow-xl shadow-red-900/35 transition-all hover:bg-[#8e1032] hover:shadow-2xl active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#B31942]"
+                className="w-full sm:w-auto min-h-[48px] inline-flex items-center justify-center gap-2.5 rounded-lg bg-[#B31942] px-8 py-3.5 text-base sm:text-lg font-bold text-white shadow-xl shadow-red-900/35 transition-all hover:bg-[#8e1032] hover:shadow-2xl active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#B31942]"
               >
                 <Play className="h-5 w-5 fill-current text-white" aria-hidden="true" />
                 <span>Watch Episode 1</span>
@@ -128,7 +136,7 @@ export default function Home() {
                 href="https://bigronjones.com/assessment"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg border border-slate-700 bg-white/10 backdrop-blur-md px-7 py-3.5 text-base font-bold text-white transition-all hover:bg-white/15 hover:border-slate-500"
+                className="w-full sm:w-auto min-h-[48px] inline-flex items-center justify-center gap-2 rounded-lg border border-slate-700 bg-white/10 backdrop-blur-md px-6 py-3.5 text-base font-bold text-white transition-all hover:bg-white/15 hover:border-slate-500"
               >
                 <span className="h-2 w-2 rounded-full bg-[#B31942] animate-pulse" />
                 <span>Take Free Assessment →</span>
@@ -136,14 +144,14 @@ export default function Home() {
 
               <a
                 href="#join"
-                className="w-full sm:w-auto inline-flex items-center justify-center rounded-lg border border-slate-700 bg-slate-900/70 px-6 py-3.5 text-sm font-bold text-slate-300 hover:text-white hover:border-slate-500 transition-colors"
+                className="w-full sm:w-auto min-h-[48px] inline-flex items-center justify-center rounded-lg border border-slate-700 bg-slate-900/70 px-6 py-3.5 text-sm font-bold text-slate-300 hover:text-white hover:border-slate-500 transition-colors"
               >
                 Join the Email List
               </a>
             </div>
 
             {/* Trust Subtext */}
-            <div className="mt-8 flex flex-wrap items-center justify-center lg:justify-start gap-3 text-xs font-mono font-medium text-slate-400">
+            <div className="mt-7 flex flex-wrap items-center justify-center lg:justify-start gap-3 text-xs font-mono font-medium text-slate-400">
               <span className="inline-flex items-center gap-1.5 text-slate-300">
                 <ShieldCheck className="h-4 w-4 text-[#38bdf8]" />
                 20+ Years Coaching
@@ -152,6 +160,44 @@ export default function Home() {
               <span>4 Free Complete Sessions</span>
               <span>•</span>
               <span>No Subscription Required</span>
+            </div>
+
+            {/* Mobile & iPhone Dedicated Hero Visual Card (< 1024px) */}
+            <div className="lg:hidden mt-8 w-full max-w-lg mx-auto sm:max-w-xl">
+              <Link
+                to="/chest-day/"
+                onClick={() => trackWatchEpisodeClick(1, "Hero Mobile Card - Episode 1")}
+                className="group relative block aspect-[16/9] w-full overflow-hidden rounded-2xl border border-slate-800 bg-[#0c1322] shadow-2xl shadow-blue-950/60 transition-transform active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-[#38bdf8]"
+                aria-label="Watch Back to Basics Series Episode 1"
+              >
+                <picture>
+                  <source type="image/webp" srcSet="/brand/hero.webp" />
+                  <img
+                    src="/brand/hero.png"
+                    alt="Back to Basics with BigRonJones®"
+                    className="h-full w-full object-cover object-center select-none transition-transform duration-500 group-hover:scale-105"
+                    loading="eager"
+                    fetchPriority="high"
+                    decoding="async"
+                  />
+                </picture>
+
+                {/* Center Play Button Overlay */}
+                <div className="absolute inset-0 flex items-center justify-center bg-black/25 group-hover:bg-black/15 transition-colors">
+                  <div className="flex h-13 w-13 sm:h-15 sm:w-15 items-center justify-center rounded-full bg-[#0A3161]/90 text-white shadow-2xl border-2 border-white/30 backdrop-blur-sm group-hover:scale-110 transition-transform">
+                    <Play className="h-6 w-6 sm:h-7 sm:w-7 fill-current text-white ml-0.5" aria-hidden="true" />
+                  </div>
+                </div>
+
+                {/* Floating Bottom Glass Banner */}
+                <div className="absolute bottom-2.5 inset-x-2.5 flex items-center justify-between text-[10px] sm:text-[11px] font-mono font-bold uppercase tracking-wider text-white bg-[#070A10]/85 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10 shadow-lg">
+                  <span className="flex items-center gap-1.5">
+                    <span className="h-2 w-2 rounded-full bg-[#B31942] animate-pulse" />
+                    <span>START WATCHING FREE</span>
+                  </span>
+                  <span className="text-[#38bdf8]">Episode 1: Chest Day →</span>
+                </div>
+              </Link>
             </div>
           </div>
         </div>
