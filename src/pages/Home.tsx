@@ -78,18 +78,33 @@ export default function Home() {
           />
         </div>
 
-        {/* Mobile & Tablet Hero Visual Background Atmosphere (< 1024px) */}
-        <div className="block lg:hidden absolute inset-0 h-full w-full pointer-events-none select-none overflow-hidden z-10 opacity-30">
+        {/* Mobile & Tablet Hero Visual Background (< 1024px) */}
+        <div className="block lg:hidden absolute inset-0 h-full w-full pointer-events-none select-none overflow-hidden z-10">
           <picture>
             <source type="image/webp" srcSet="/brand/hero.webp" />
             <img
               src="/brand/hero.png"
-              alt="BigRonJones®"
-              className="h-full w-full object-cover object-[75%_center] select-none"
-              loading="eager"
+              alt="Back to Basics with BigRonJones®"
+              className="h-full w-full object-cover object-[70%_top] sm:object-[72%_center] select-none opacity-80"
+              fetchPriority="high"
+              decoding="async"
             />
           </picture>
-          <div className="absolute inset-0 bg-gradient-to-b from-[#070A10]/75 via-[#070A10]/90 to-[#070A10]" />
+          {/* Mobile gradient overlay: balanced so hero image is clearly visible while text pops */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(7, 10, 16, 0.40) 0%, rgba(7, 10, 16, 0.65) 35%, rgba(7, 10, 16, 0.85) 75%, #070A10 100%)",
+            }}
+          />
+          {/* Subtle top clearance */}
+          <div
+            className="absolute top-0 inset-x-0 h-16 pointer-events-none"
+            style={{
+              background: "linear-gradient(to bottom, #070A10 0%, transparent 100%)",
+            }}
+          />
         </div>
 
         <div className="relative z-20 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -103,7 +118,7 @@ export default function Home() {
             </div>
 
             {/* Wordmark / H1 */}
-            <h1 className="font-heading text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight text-white uppercase leading-[0.94]">
+            <h1 className="font-heading text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight text-white uppercase leading-[0.94] drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
               Back to Basics <br />
               <span className="text-[#38bdf8] drop-shadow-sm">
                 with <BrandName variant="upper" />
@@ -111,12 +126,12 @@ export default function Home() {
             </h1>
 
             {/* Subtitle verbatim */}
-            <p className="mt-5 text-xl sm:text-2xl font-bold tracking-tight text-white">
+            <p className="mt-5 text-xl sm:text-2xl font-bold tracking-tight text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
               Build muscle. Make the basics count.
             </p>
 
             {/* Intro verbatim */}
-            <p className="mt-4 text-base sm:text-lg text-slate-300 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+            <p className="mt-4 text-base sm:text-lg text-slate-200 leading-relaxed max-w-2xl mx-auto lg:mx-0 drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]">
               You don’t need to make training more complicated to take it seriously. Join me for a four part workout series covering chest, back and shoulders, legs, and arms. Watch the videos, learn from the demonstrations, and bring a clear focus to your next workout.
             </p>
 
@@ -151,8 +166,8 @@ export default function Home() {
             </div>
 
             {/* Trust Subtext */}
-            <div className="mt-7 flex flex-wrap items-center justify-center lg:justify-start gap-3 text-xs font-mono font-medium text-slate-400">
-              <span className="inline-flex items-center gap-1.5 text-slate-300">
+            <div className="mt-7 flex flex-wrap items-center justify-center lg:justify-start gap-3 text-xs font-mono font-medium text-slate-300">
+              <span className="inline-flex items-center gap-1.5 text-slate-200">
                 <ShieldCheck className="h-4 w-4 text-[#38bdf8]" />
                 20+ Years Coaching
               </span>
@@ -160,44 +175,6 @@ export default function Home() {
               <span>4 Free Complete Sessions</span>
               <span>•</span>
               <span>No Subscription Required</span>
-            </div>
-
-            {/* Mobile & iPhone Dedicated Hero Visual Card (< 1024px) */}
-            <div className="lg:hidden mt-8 w-full max-w-lg mx-auto sm:max-w-xl">
-              <Link
-                to="/chest-day/"
-                onClick={() => trackWatchEpisodeClick(1, "Hero Mobile Card - Episode 1")}
-                className="group relative block aspect-[16/9] w-full overflow-hidden rounded-2xl border border-slate-800 bg-[#0c1322] shadow-2xl shadow-blue-950/60 transition-transform active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-[#38bdf8]"
-                aria-label="Watch Back to Basics Series Episode 1"
-              >
-                <picture>
-                  <source type="image/webp" srcSet="/brand/hero.webp" />
-                  <img
-                    src="/brand/hero.png"
-                    alt="Back to Basics with BigRonJones®"
-                    className="h-full w-full object-cover object-center select-none transition-transform duration-500 group-hover:scale-105"
-                    loading="eager"
-                    fetchPriority="high"
-                    decoding="async"
-                  />
-                </picture>
-
-                {/* Center Play Button Overlay */}
-                <div className="absolute inset-0 flex items-center justify-center bg-black/25 group-hover:bg-black/15 transition-colors">
-                  <div className="flex h-13 w-13 sm:h-15 sm:w-15 items-center justify-center rounded-full bg-[#0A3161]/90 text-white shadow-2xl border-2 border-white/30 backdrop-blur-sm group-hover:scale-110 transition-transform">
-                    <Play className="h-6 w-6 sm:h-7 sm:w-7 fill-current text-white ml-0.5" aria-hidden="true" />
-                  </div>
-                </div>
-
-                {/* Floating Bottom Glass Banner */}
-                <div className="absolute bottom-2.5 inset-x-2.5 flex items-center justify-between text-[10px] sm:text-[11px] font-mono font-bold uppercase tracking-wider text-white bg-[#070A10]/85 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10 shadow-lg">
-                  <span className="flex items-center gap-1.5">
-                    <span className="h-2 w-2 rounded-full bg-[#B31942] animate-pulse" />
-                    <span>START WATCHING FREE</span>
-                  </span>
-                  <span className="text-[#38bdf8]">Episode 1: Chest Day →</span>
-                </div>
-              </Link>
             </div>
           </div>
         </div>
