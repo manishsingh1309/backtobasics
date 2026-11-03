@@ -78,24 +78,24 @@ export default function Home() {
           />
         </div>
 
-        {/* Mobile & Tablet Hero Visual Background (< 1024px) */}
+        {/* Mobile & Tablet Hero Visual Background (< 1024px) using hero_mobile.png */}
         <div className="block lg:hidden absolute inset-0 h-full w-full pointer-events-none select-none overflow-hidden z-10">
           <picture>
-            <source type="image/webp" srcSet="/brand/hero.webp" />
+            <source type="image/webp" srcSet="/brand/hero_mobile.webp" />
             <img
-              src="/brand/hero.png"
+              src="/brand/hero_mobile.png"
               alt="Back to Basics with BigRonJones®"
-              className="h-full w-full object-cover object-[70%_top] sm:object-[72%_center] select-none opacity-80"
+              className="h-full w-full object-cover object-top select-none opacity-90"
               fetchPriority="high"
               decoding="async"
             />
           </picture>
-          {/* Mobile gradient overlay: balanced so hero image is clearly visible while text pops */}
+          {/* Mobile gradient overlay: balanced so hero_mobile artwork shines through while text remains 100% crisp */}
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
               background:
-                "linear-gradient(180deg, rgba(7, 10, 16, 0.40) 0%, rgba(7, 10, 16, 0.65) 35%, rgba(7, 10, 16, 0.85) 75%, #070A10 100%)",
+                "linear-gradient(180deg, rgba(7, 10, 16, 0.35) 0%, rgba(7, 10, 16, 0.50) 30%, rgba(7, 10, 16, 0.78) 65%, #070A10 100%)",
             }}
           />
           {/* Subtle top clearance */}
